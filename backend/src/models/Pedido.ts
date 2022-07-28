@@ -42,7 +42,7 @@ const PedidosSchema = new Schema<IPedidos>({
 export const AddressModel = model<IPedidos>("Pedidos", PedidosSchema); 
 */
 import { Schema, model } from "mongoose";
-
+import MercadoPagoDatos from './MercadoPagoDatos'
 
 const PedidosSchema = new Schema({
     fecha: {
@@ -72,7 +72,26 @@ const PedidosSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User",
         required: true
+    },
+    domicilioid: {
+        type: Schema.Types.ObjectId,
+        ref: 'Address'
+    },
+    facturaid: {
+        type: Schema.Types.ObjectId,
+        ref: 'Factura'
+    },
+    detallepedidoid: [{
+        type:Schema.Types.ObjectId,
+        ref: 'DetallePedido',
+        required: true
+    }],
+    MercadoPagoDatos: 
+    {
+        type: MercadoPagoDatos.schema,
+        ref: 'MercadoPagoDatos'  
     }
+
 })
 
 export default model("Pedidos", PedidosSchema);

@@ -114,7 +114,7 @@ const UserSchema = new Schema({
         default: false,
     },
 
-   /* domicilios:
+   /* domicilios: //con este atributo, lo que hacìa era incrustar el objeto completo dentro del objeto User pero en la bd no lo creaba en Addresses solo quedaba en Users
     {
         type: [Address.schema],
         // ref: 'Address'  no cambia nada a la funcionalidad, no me está creando las fechas created/updated de los array dlios
