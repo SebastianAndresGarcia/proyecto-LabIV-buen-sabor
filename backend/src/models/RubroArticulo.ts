@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+/*import { Schema, model } from "mongoose";
 
 const RubroArticuloSchema = new Schema({
     denominacion: {
@@ -23,4 +23,53 @@ const RubroArticuloSchema = new Schema({
     }]   
 })
 
-export default model("RubroArticulo", RubroArticuloSchema);
+export default model("RubroArticulo", RubroArticuloSchema); */
+
+
+//https://stackoverflow.com/questions/39231091/how-to-create-nested-object-in-mongodb-schema
+/*import { Schema, model } from "mongoose";
+const rubroartSchema = new Schema({
+    denominacion: {
+        type: String,
+        unique: true
+    },
+    rubroData: Array
+});
+const SavedRubro = model('rubroart', rubroartSchema);
+// });
+
+const RubroArticuloSchema = new Schema({
+    denominacion: { type: String, unique: true },
+    rubrosarticulos: [rubroartSchema]
+
+})
+export default model('RubroArticulo', RubroArticuloSchema);
+
+-------------------------------
+*/
+import { Schema, model } from "mongoose";
+var rubrochildSchema = new Schema({
+    denominacionRubroHijo : {
+       type: String,
+       unique: true
+    },
+    rubropadreid : {
+        type : Schema.Types.ObjectId,
+        ref : 'RubroArticulo',
+        required: true,
+        default: null
+     }, 
+     articulos : [Object]
+ });
+ 
+ 
+ var RubroArticuloSchema = new Schema({  //parentSchema
+     denominacionRubroPadre: { 
+        type: String,
+        unique: true
+    },
+     rubrohijo :  [rubrochildSchema],
+     articulos: [Object]
+    
+ });
+ export default model('RubroArticulo', RubroArticuloSchema);
