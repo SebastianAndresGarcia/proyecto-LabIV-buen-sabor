@@ -1,6 +1,7 @@
-import { Schema, model } from "mongoose";
-
-const RubroGeneralSchema = new Schema({
+const mongoose = require("mongoose");
+const RubroGeneral = mongoose.model(
+    "RubroGeneral",
+    new mongoose.Schema({
     denominacion: {
         type: String,
         required: true,
@@ -12,6 +13,6 @@ const RubroGeneralSchema = new Schema({
         ref: 'ArticuloManufacturado'
     }]
 
-})
+}))
 
-export default model("RubroGeneral", RubroGeneralSchema);
+exports.module=RubroGeneral

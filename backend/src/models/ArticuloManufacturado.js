@@ -1,7 +1,9 @@
-import { Schema, model } from "mongoose";
-import RubroGeneral from './RubroGeneral';
+const mongoose = require("mongoose");
+const RubroGeneral = require ( './RubroGeneral');
 
-const ArticuloManufacturadoSchema = new Schema({
+const ArticuloManufacturado = mongoose.model(
+    "ArticuloManufacturado",
+    new mongoose.Schema({
     
     tiempoEstimadoCocina: { //en minutos
         type: Number,
@@ -24,15 +26,15 @@ const ArticuloManufacturadoSchema = new Schema({
         default: null
     },
     detallefacturaid: [{
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'DetalleFactura'
     }],
     detallepedidoid: [{
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'DetallePedido'
     }],
     detallearticulomanufacturadoid: [{
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'DetalleArticuloManufacturado',
         required: true
     }],
@@ -42,6 +44,6 @@ const ArticuloManufacturadoSchema = new Schema({
         ref: 'RubroGeneral'  
     }
 
-})
+}))
 
-export default model("ArticuloManufacturado", ArticuloManufacturadoSchema);
+exports.module= ArticuloManufacturado

@@ -42,7 +42,7 @@ const PedidosSchema = new Schema<IPedidos>({
 export const AddressModel = model<IPedidos>("Pedidos", PedidosSchema); 
 */
 import { Schema, model } from "mongoose";
-import MercadoPagoDatos from './MercadoPagoDatos'
+//import MercadoPagoDatos from './MercadoPagoDatos'
 
 const PedidosSchema = new Schema({
     fecha: {

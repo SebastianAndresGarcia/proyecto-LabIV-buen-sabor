@@ -1,3 +1,35 @@
+const mongoose = require("mongoose");
+
+const rubrochild = mongoose.model(
+    "rubrochild",
+    new mongoose.Schema({
+    denominacionRubroHijo : {
+       type: String,
+       unique: true
+    },
+    rubropadreid : {
+        type : Schema.Types.ObjectId,
+        ref : 'RubroArticulo',
+        required: true,
+        default: null
+     }, 
+     articulos : [Object]
+ }));
+ 
+ 
+ const RubroArticulo = mongoose.model(
+    "RubroArticulo",
+    new mongoose.Schema({
+
+     denominacionRubroPadre: { 
+        type: String,
+        unique: true
+    },
+     rubrohijo :  [rubrochild],
+     articulos: [Object]
+    
+ }));
+ exports.module= RubroArticulo;
 /*import { Schema, model } from "mongoose";
 
 const RubroArticuloSchema = new Schema({
@@ -46,7 +78,7 @@ const RubroArticuloSchema = new Schema({
 export default model('RubroArticulo', RubroArticuloSchema);
 
 -------------------------------
-*/
+
 import { Schema, model } from "mongoose";
 var rubrochildSchema = new Schema({
     denominacionRubroHijo : {
@@ -73,3 +105,4 @@ var rubrochildSchema = new Schema({
     
  });
  export default model('RubroArticulo', RubroArticuloSchema);
+*/

@@ -1,7 +1,10 @@
-import { Schema, model } from "mongoose";
-import RubroArticulo from "./RubroArticulo";
-const ArticuloInsumoSchema = new Schema({
-         
+const mongoose = require("mongoose");
+const RubroArticulo =require("./RubroArticulo");
+
+const ArticuloInsumo = mongoose.model(
+    "ArticuloInsumo",
+    new mongoose.Schema({
+
     denominación: {
         type: String,
         default:null,
@@ -56,6 +59,6 @@ const ArticuloInsumoSchema = new Schema({
         ref: 'RubroArticulo'  
     }
 
-})
+}))
 
-export default model("ArticuloInsumo", ArticuloInsumoSchema);
+exports.module=ArticuloInsumo;
