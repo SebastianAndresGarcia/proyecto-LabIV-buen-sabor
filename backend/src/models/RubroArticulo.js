@@ -1,35 +1,37 @@
+//https://stackoverflow.com/questions/44968248/how-to-populate-documents-with-unlimited-nested-levels-using-mongoose
 const mongoose = require("mongoose");
+//const ArticuloInsumo=require('./ArticuloInsumo')
 
-const rubrochild = mongoose.model(
-    "rubrochild",
+
+const rubrochild = 
     new mongoose.Schema({
     denominacionRubroHijo : {
        type: String,
        unique: true
     },
     rubropadreid : {
-        type : Schema.Types.ObjectId,
+        type : mongoose.Schema.Types.ObjectId,
         ref : 'RubroArticulo',
         required: true,
         default: null
      }, 
-     articulos : [Object]
- }));
+     //articulos : [Object]
+ });
  
  
  const RubroArticulo = mongoose.model(
     "RubroArticulo",
     new mongoose.Schema({
 
-     denominacionRubroPadre: { 
+    denominacion: { 
         type: String,
         unique: true
     },
-     rubrohijo :  [rubrochild],
-     articulos: [Object]
+    Rubrohijo: [{ type: mongoose.Schema.ObjectId, ref: "RubroArticulo"}],
+    //articulos: [ArticuloInsumo]
     
  }));
- exports.module= RubroArticulo;
+ module.exports= RubroArticulo; 
 /*import { Schema, model } from "mongoose";
 
 const RubroArticuloSchema = new Schema({

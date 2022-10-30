@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const RubroGeneral = require ( './RubroGeneral');
+const DetalleArticuloManufacturado = require ( './DetalleArticuloManufacturado');
 
 const ArticuloManufacturado = mongoose.model(
     "ArticuloManufacturado",
@@ -11,7 +11,8 @@ const ArticuloManufacturado = mongoose.model(
     },    
     denominación: {
         type: String,
-        default:null
+        default:null,
+        unique: true
     },
     precioVenta: {
         type: Number,
@@ -35,15 +36,15 @@ const ArticuloManufacturado = mongoose.model(
     }],
     detallearticulomanufacturadoid: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'DetalleArticuloManufacturado',
-        required: true
-    }],
-    RubroGeneral: 
-    {
-        type: RubroGeneral.schema,
-        ref: 'RubroGeneral'  
+        ref: 'DetalleArticuloManufacturado'
+        //required: true
+    }], 
+    rubrogeneralid: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'RubroGeneral'
     }
+    
 
 }))
 
-exports.module= ArticuloManufacturado
+module.exports = ArticuloManufacturado

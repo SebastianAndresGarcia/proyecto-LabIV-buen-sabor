@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+
 const RubroGeneral = mongoose.model(
     "RubroGeneral",
     new mongoose.Schema({
@@ -9,10 +10,10 @@ const RubroGeneral = mongoose.model(
         default: null
     },
     articulomanufacturadoid: [{
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'ArticuloManufacturado'
     }]
 
-}))
+}));
 
-exports.module=RubroGeneral
+module.exports =RubroGeneral;

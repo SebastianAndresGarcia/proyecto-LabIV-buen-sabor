@@ -1,6 +1,7 @@
-import { Schema, model } from "mongoose";
-
-const DetallePedidoSchema = new Schema({
+const mongoose = require("mongoose");
+const DetallePedido = mongoose.model(
+    "DetallePedido",
+    new mongoose.Schema({  
    
     cantidad: {
         type: Number,
@@ -25,6 +26,6 @@ const DetallePedidoSchema = new Schema({
         ref: 'Pedido'
     }
 
-})
+}));
 
-export default model("DetallePedido", DetallePedidoSchema);
+module.exports=DetallePedido;

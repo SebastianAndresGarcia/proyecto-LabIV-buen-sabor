@@ -40,6 +40,12 @@ const User = mongoose.model(
         ref: "Role"
       }
     ],
+    domicilios:[
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Address"
+      }
+    ]
 
   }, {
     timestamps: true  //va a crear los campos createdAt y updatedAt

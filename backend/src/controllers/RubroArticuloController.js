@@ -1,17 +1,19 @@
-import { RequestHandler, Request, Response } from "express";
-import Rubro from '../models/RubroArticulo'
+//import { RequestHandler, Request, Response } from "express";
+//import Rubro from '../models/RubroArticulo'
+const RubroArticulo = require("../models/RubroArticulo");
 
-export const createRubroArticulo: RequestHandler = async (req: Request, res: Response) => {
-    const rubroFound = await Rubro.findOne({ "denominacionRubroPadre": req.body.denominacionRubroPadre })
+
+exports.createRubroArticulo = async (req, res) =>  {
+    /*const rubroFound = await Rubro.findOne({ "denominacionRubroPadre": req.body.denominacionRubroPadre })
     if (rubroFound)
-        return res.status(301).json({ message: 'The rubro already exists' })
-    const rubro = new Rubro(req.body)
+        return res.status(301).json({ message: 'The rubro already exists' }) */
+    const rubro = new RubroArticulo(req.body)
     console.log(rubro)
     const savedRubro = await rubro.save()
     res.json(savedRubro)
 }
 
-export const agregarSubRubro: RequestHandler = async (req: Request, res: Response) => {
+exports.agregarSubRubro = async (req, res) => {
     const rubroFound = await Rubro.findOne({ "rubropadreid": req.body.rubropadreid })
     console.log("subrubro :", rubroFound)
     if (rubroFound) {
@@ -23,7 +25,8 @@ export const agregarSubRubro: RequestHandler = async (req: Request, res: Respons
         return res.status(301).json({ message: 'Rubroid no encontrado' })
     }
 }
-export const agregarArticuloRubro: RequestHandler = async (req: Request, res: Response) => {
+
+exports.agregarArticuloRubro = async (req, res) => {
     const rubroFound = await Rubro.findOne({ "_id": req.body._id })
      if (rubroFound) {
          console.log("entró")
@@ -49,18 +52,22 @@ export const agregarArticuloRubro: RequestHandler = async (req: Request, res: Re
     }
 } */
 
-export const getRubros: RequestHandler = async (req, res) => {
+exports.getRubros = async (req, res) => {
     const rubros = await Rubro.find()
     console.log(rubros)
     return res.json(rubros)
 }
-export const getRubro: RequestHandler = async (req, res) => {
+
+
+exports.getRubro = async (req, res) => {
     const rubroFound = await Rubro.findById(req.params.id)
     if (!rubroFound)
         return res.status(204).json();
     return res.json(rubroFound)
 }
-export const updateRubro: RequestHandler = async (req, res) => {
+
+
+exports.updateRubro = async (req, res) => {
     const rubroUpdated = await Rubro.findByIdAndUpdate(req.params.id, req.body)
     res.json(rubroUpdated)
 }

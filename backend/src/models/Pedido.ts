@@ -40,7 +40,7 @@ const PedidosSchema = new Schema<IPedidos>({
 
 // create and export post model
 export const AddressModel = model<IPedidos>("Pedidos", PedidosSchema); 
-*/
+
 import { Schema, model } from "mongoose";
 //import MercadoPagoDatos from './MercadoPagoDatos'
 
@@ -95,3 +95,4 @@ const PedidosSchema = new Schema({
 })
 
 export default model("Pedidos", PedidosSchema);
+*/

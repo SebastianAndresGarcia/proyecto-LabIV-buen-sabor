@@ -42,15 +42,15 @@ const ArticuloInsumo = mongoose.model(
         default: null
     },
     detallefacturaid: [{
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'DetalleFactura'
     }],
     detallepedidoid: [{
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'DetallePedido'
     }],
     detallearticulomanufacturadoid: [{
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'DetalleArticuloManufacturado',
     }],
     RubroArticulo: 
@@ -61,4 +61,4 @@ const ArticuloInsumo = mongoose.model(
 
 }))
 
-exports.module=ArticuloInsumo;
+module.exports=ArticuloInsumo;
