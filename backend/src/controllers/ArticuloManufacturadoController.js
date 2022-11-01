@@ -1,9 +1,23 @@
 const ArticuloManufacturado = require('../models/ArticuloManufacturado');
+const DetalleArticuloManufacturado = require('../models/DetalleArticuloManufacturado');
+const ArticuloInsumo=require('../models/ArticuloInsumo');
 const RubroGeneral = require('../models/RubroGeneral');
 
 
 exports.createArticuloManufacturado = async (req, res) => {
-    //const AddressFound = await Address.findOne({ usuario: req.body.usuario })
+const insumo = new ArticuloInsumo({ 
+    denominacion: req.body.denominacion,
+    precioCompra: req.body.precioCompra,
+	precioVenta: req.body.precioVenta,
+    stockActual: req.body.stockActual,
+	stockMinimo: req.body.stockMinimo,
+	unidadMedida: req.body.unidadMedida,
+	esInsumo: req.body.esInsumo  
+})
+const detalle = new DetalleArticuloManufacturado({
+    cantidad: req.body.cantidad, 
+    unidadMedida: req.body.unidadMedida
+})
     //const user = await User.findById(req.body.id)
     const articulo = new ArticuloManufacturado(req.body)
     console.log(articulo)

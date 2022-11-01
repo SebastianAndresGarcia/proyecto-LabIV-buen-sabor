@@ -5,7 +5,7 @@ const ArticuloInsumo = mongoose.model(
     "ArticuloInsumo",
     new mongoose.Schema({
 
-    denominación: {
+    denominacion: {
         type: String,
         default:null,
         required: true,
@@ -53,9 +53,9 @@ const ArticuloInsumo = mongoose.model(
         type: mongoose.Schema.Types.ObjectId,
         ref: 'DetalleArticuloManufacturado',
     }],
-    RubroArticulo: 
+    RubroArticuloid: 
     {
-        type: RubroArticulo.schema,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'RubroArticulo'  
     }
 

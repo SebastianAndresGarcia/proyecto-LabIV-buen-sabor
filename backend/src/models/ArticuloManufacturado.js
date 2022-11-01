@@ -36,8 +36,8 @@ const ArticuloManufacturado = mongoose.model(
     }],
     detallearticulomanufacturadoid: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'DetalleArticuloManufacturado'
-        //required: true
+        ref: 'DetalleArticuloManufacturado',
+        required: true
     }], 
     rubrogeneralid: {
         type: mongoose.Schema.Types.ObjectId,
