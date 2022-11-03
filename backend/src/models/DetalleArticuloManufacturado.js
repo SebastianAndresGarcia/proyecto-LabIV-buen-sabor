@@ -8,8 +8,8 @@ const DetalleArticuloManufacturado = mongoose.model(
         default: null
     },
     
-    unidadMedina: {
-        type: Number,
+    unidadMedida: {
+        type: String,
         default:null
     },
     ArticuloManufacturadoid: {
