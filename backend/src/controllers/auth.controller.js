@@ -10,11 +10,17 @@ exports.signup = (req, res) => {
   const user = new User({
     username: req.body.username,
     email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8)
+    password: bcrypt.hashSync(req.body.password, 8),
+    nombre: req.body.nombre,
+    apellido: req.body.apellido,
+    fechaNacimiento: req.body.fechaNacimiento,
+    telefono: req.body.telefono,
+    borrado: req.body.borrado
   });
 
   user.save((err, user) => {
     if (err) {
+      console.log(err)
       res.status(500).send({ message: err });
       return;
     }
@@ -103,7 +109,8 @@ exports.signin = (req, res) => {
         username: user.username,
         email: user.email,
         roles: authorities,
-        accessToken: token
+        accessToken: token,
+        message: "User logged on sucessfuly!"
       });
     });
 };
