@@ -4,13 +4,12 @@ const DetalleArticuloManufacturado = require('../models/DetalleArticuloManufactu
 const ArticuloInsumo = require('../models/ArticuloInsumo');
 const RubroGeneral = require('../models/RubroGeneral');
 
-
 exports.createArticuloManufacturado = async (req, res) => {
-
+    const ArticuloFound = await ArticuloManufacturado.findOne({ denominacion: req.body.ArticuloManufacturado[0].denominacion })
+    if (ArticuloFound)
+        return res.status(301).json({ message: 'The article already exists' })
     const insumosJson = req.body.insumos
     console.log(insumosJson)
-
-
 
     const insumos = [];
     const keys = Object.keys(insumosJson);
@@ -19,18 +18,9 @@ exports.createArticuloManufacturado = async (req, res) => {
     };
     console.log("insumos array", insumos)
 
-
-    //insumos= new ArticuloInsumo(JSON.Parse(req.body.insumos))
-    /*for (const [key, value] of Object.entries(insumoJson)) {
-        insumos.push([`${key}`, `${value}`]);
-    }*/
-
-
     console.log(req.body.ArticuloManufacturado);
     const artmanufacturado = new ArticuloManufacturado(req.body.ArticuloManufacturado[0])
-    //console.log(insumo);
-    /*const producto = req.body.ArticuloManufacturado
-    console.log(producto) */
+   
     const savedArtmanufacturado = await artmanufacturado.save()
     console.log(savedArtmanufacturado)
     console.log("array " + insumos.length)
@@ -53,24 +43,5 @@ exports.createArticuloManufacturado = async (req, res) => {
          // `doc` is the document _before_ `update` was applied
      let doc = await Character.findOneAndUpdate(filter, update)
  */
-
-    /*const insumo = await ArticuloInsumo.findOne({ denominacion: req.body.denominacion })
-    const detalle = new DetalleArticuloManufacturado({
-        cantidad: req.body.cantidad,
-        unidadMedida: req.body.unidadMedida
-    })
-    //const user = await User.findById(req.body.id)
-    if (insumo) {
-        const articulo = new ArticuloManufacturado(req.body)
-        console.log(articulo)
-        try {
-            const savedArticulo = await articulo.save()
-            const rubroGralUpdated = await RubroGeneral.findByIdAndUpdate(req.body.rubrogeneralid, { $addToSet: { "articulomanufacturadoid": savedArticulo._id } })
-            console.log(savedArticulo)
-            res.json(rubroGralUpdated)
-
-        } catch (error) {
-            console.log(error)
-        }
-    } */
+   
 }

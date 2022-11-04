@@ -40,7 +40,7 @@ const User = mongoose.model(
         ref: "Role"
       }
     ],
-    domicilios:[
+    domicilios: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Address"
