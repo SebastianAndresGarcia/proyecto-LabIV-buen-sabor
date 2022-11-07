@@ -3,31 +3,31 @@
   <v-toolbar color="black" dark>
     <v-toolbar-title>
       <v-btn text href="/home">
-        Home
+        HOME
       </v-btn>
     </v-toolbar-title>
 
     <v-divider class="mx-6" vertical></v-divider>
 
-    <span class="subheading"> Welcome to Musical Hendrix</span>
+    <span class="subheading">EL BUEN SABOR</span>
 
     <v-spacer></v-spacer>
 
     <v-toolbar-items class="hidden-sm-and-down">
       <v-btn text href="/instrumentos">
-        Productos
+        Menu
       </v-btn>
 
       <v-divider vertical></v-divider>
 
       <v-btn text href="/DondeEstamos">
-        Donde Estamos
+        Sobre Nosotros
       </v-btn>
 
       <v-divider vertical></v-divider>
 
       <v-btn text href="/GrillaInstrumentos">
-        ABM
+        Mi Carrito
       </v-btn>
 
       <v-divider vertical></v-divider>

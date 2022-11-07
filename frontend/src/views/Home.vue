@@ -1,8 +1,14 @@
 <template>
-    <v-container>
-      <div>      <carousel-item></carousel-item></div>
-            <foo-ter></foo-ter>
-         </v-container>
+    <v-container fluid style="align-content: center" >
+        
+        <v-row >
+        <carousel-item></carousel-item> 
+        </v-row>
+        <v-row >
+        <foo-ter></foo-ter>
+        </v-row>
+       
+    </v-container>
 </template>
 <script >
 import carousel from "@/components/Carousel.vue";

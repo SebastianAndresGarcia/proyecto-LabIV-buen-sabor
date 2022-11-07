@@ -1,7 +1,7 @@
 <template>
-    <v-carousel hide-delimiters>
+    <v-carousel  hide-delimiters >
         <v-carousel-item v-for="(item, i) in items" :key="i" :src="item.src">
-           <v-row class="fill-height"  justify="center">
+           <v-row justify="center">
                 <div class="text-h2" style="font-weight: bold" >
                     Promo {{ i + 1 }}
                 </div>
@@ -39,4 +39,5 @@ export default {
     padding: 20px;
     font-weight: bold;
 }
+
 </style>
