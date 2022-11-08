@@ -1,16 +1,14 @@
 <template>
   <v-app>
-   
-   <div class="navigation"> 
-   <top-nav-bar></top-nav-bar>
-   </div>
-  
+    <div class="navigation">
+      <top-nav-bar></top-nav-bar>
+    </div>
+
     <v-main>
-      <router-view/>
+      <router-view />
     </v-main>
-   
+
   </v-app>
-   
 </template>
 
 <script lang="ts">
