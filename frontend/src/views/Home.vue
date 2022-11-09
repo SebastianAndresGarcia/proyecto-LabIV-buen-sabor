@@ -6,7 +6,7 @@
     <v-row>
       <foo-ter id="dondeestamos"></foo-ter>
     </v-row>
-    <register-item></register-item>
+    
   </v-container>
 </template>
 <script >
@@ -29,7 +29,7 @@ export default {
       this.ejecutarmodal = true;
     },
   },
-  /* mounted() {
+  /* mounted() { 
          this.getInstrumentos()
      },
      data() {

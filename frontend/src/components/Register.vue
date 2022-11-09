@@ -1,11 +1,11 @@
 <template>
   <v-row justify="center">
     <v-dialog v-model="dialog" persistent max-width="600px">
-      <!--<template v-slot:activator="{ on, attrs }">
-        <v-btn color="primary" dark v-bind="attrs" v-on="on">
-          Open Dialog
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn text v-bind="attrs" v-on="on">
+          Registrarse
         </v-btn>
-      </template>-->
+      </template>
       <v-card>
         <v-card-title>
           <span class="text-h5">User Profile</span>
@@ -83,11 +83,12 @@
 </template>
 <script>
 export default {
-  data: () => ({
-    dialog: true,
-  }),
-  props:{
-    valorrecibido: null,
-  }
+  name: "register-item",
+ 
+  data() {
+    return {
+      dialog: false,
+    };
+  },
 };
 </script>
