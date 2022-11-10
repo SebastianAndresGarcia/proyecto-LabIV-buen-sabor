@@ -39,46 +39,51 @@ https://kinsta.com/es/blog/vue-js/
             </v-menu>
           </v-tab>
           <v-tab>
-            <a style="text-decoration: none; color: white;" href="./#dondeestamos">Sobre Nosotros</a>
+            <a
+              style="text-decoration: none; color: white"
+              href="./#dondeestamos"
+              >Sobre Nosotros</a
+            >
           </v-tab>
         </v-tabs>
       </template>
     </v-app-bar>
     <v-navigation-drawer class="app" v-model="drawer" app absolute temporary>
       <v-list nav dense>
-        <v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
+        <v-list-item-group
+          v-model="group"
+          active-class="deep-purple--text text--accent-4"
+        >
           <v-list-item :href="'./'">
             <v-list-item-icon>
               <v-icon>mdi-home</v-icon>
             </v-list-item-icon>
-            <v-list-item-title>
-              Home
-            </v-list-item-title>
+            <v-list-item-title> Home </v-list-item-title>
           </v-list-item>
 
           <v-list-item>
             <v-list-item-icon>
               <v-icon>mdi-account</v-icon>
             </v-list-item-icon>
-            <v-list-item-title>
-              <login-item></login-item>
-            </v-list-item-title>
+            <login-item></login-item>
           </v-list-item>
+
           <v-list-item>
             <v-list-item-icon>
               <v-icon>mdi-account</v-icon>
             </v-list-item-icon>
             <register-item></register-item>
           </v-list-item>
+          
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import register from "@/components/Register.vue";
-import login from "@/components/Login.vue"
+import login from "@/components/Login.vue";
 export default {
   name: "App",
   data() {
@@ -92,12 +97,12 @@ export default {
         { title: "Hamburguesas" },
         { title: "Bebidas" },
         { title: "Ver Todo" },
-      ],
+      ] as Array<Object>,
     };
   },
   components: {
     "register-item": register,
-    "login-item": login
+    "login-item": login,
   },
 };
 </script>

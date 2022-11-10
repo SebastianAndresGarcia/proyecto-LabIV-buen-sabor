@@ -6,7 +6,6 @@
     <v-row>
       <foo-ter id="dondeestamos"></foo-ter>
     </v-row>
-    
   </v-container>
 </template>
 <script >
@@ -21,14 +20,7 @@ export default {
     "register-item": Register,
   },
 
-  return: {
-    ejecutarmodal: null,
-  },
-  methods: {
-    registrar() {
-      this.ejecutarmodal = true;
-    },
-  },
+ 
   /* mounted() { 
          this.getInstrumentos()
      },

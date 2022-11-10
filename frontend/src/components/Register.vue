@@ -2,9 +2,7 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" persistent max-width="600px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn text v-bind="attrs" v-on="on">
-          Registrarse
-        </v-btn>
+        <v-btn text v-bind="attrs" v-on="on"> Registrarse </v-btn>
       </template>
       <v-card>
         <v-card-title>
@@ -12,47 +10,94 @@
         </v-card-title>
         <v-card-text>
           <v-container>
-            <v-row>
-              <v-col cols="12" sm="6" md="6">
-                <v-text-field label="Nombres*" required></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="6">
-                <v-text-field label="Apellidos*" hint="example of helper text only on focus"></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field label="Nombre de usuario en la App*" required></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field label="Email*" required></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field label="Contraseña*" type="password" required></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field label="Confirmar Contraseña*" type="password" required></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="12">
-                
-                  <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="date"
-                    transition="scale-transition" offset-y min-width="auto">
+            <v-form>
+              <v-row>
+                <v-col cols="12" sm="6" md="6">
+                  <v-text-field
+                    label="Nombres*"
+                    v-model="usuarioNuevo.nombre"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="6" md="6">
+                  <v-text-field
+                    label="Apellidos*"
+                    v-model="usuarioNuevo.apellido"
+                    hint="example of helper text only on focus"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    label="Nombre de usuario en la App*"
+                    v-model="usuarioNuevo.username"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    label="Email*"
+                    v-model="usuarioNuevo.email"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    label="Contraseña*"
+                    v-model="usuarioNuevo.password"
+                    type="password"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    label="Confirmar Contraseña*"
+                    v-model="usuarioNuevo.password"
+                    type="password"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="12">
+                  <v-menu
+                    ref="menu"
+                    v-model="menu"
+                    :close-on-content-click="false"
+                    :return-value.sync="fechaNacimiento"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="auto"
+                  >
                     <template v-slot:activator="{ on, attrs }">
-                      <v-text-field v-model="date" label="Fecha de Nacimiento" prepend-icon="mdi-calendar" readonly
-                        v-bind="attrs" v-on="on"></v-text-field>
+                      <v-text-field
+                        v-model="fechaNacimiento"
+                        label="Fecha de Nacimiento"
+                        prepend-icon="mdi-calendar"
+                        readonly
+                        v-bind="attrs"
+                        v-on="on"
+                      ></v-text-field>
                     </template>
-                    <v-date-picker v-model="date" no-title scrollable>
+                    <v-date-picker
+                      v-model="fechaNacimiento"
+                      no-title
+                      scrollable
+                    >
                       <v-spacer></v-spacer>
                       <v-btn text color="primary" @click="menu = false">
                         Salir
                       </v-btn>
-                      <v-btn text color="primary" @click="$refs.menu.save(date)">
+                      <v-btn
+                        text
+                        color="primary"
+                        @click="$refs.menu.save(fechaNacimiento)"
+                      >
                         OK
                       </v-btn>
                     </v-date-picker>
                   </v-menu>
-                
-              </v-col>
-             
-            </v-row>
+                </v-col>
+              </v-row>
+            </v-form>
           </v-container>
           <small>*campos obligatorios</small>
         </v-card-text>
@@ -61,7 +106,7 @@
           <v-btn color="blue darken-1" text @click="dialog = false">
             Salir
           </v-btn>
-          <v-btn color="blue darken-1" text @click="dialog = false">
+          <v-btn color="blue darken-1" text @click="registrar()">
             Guardar
           </v-btn>
         </v-card-actions>
@@ -76,12 +121,45 @@ export default {
   data() {
     return {
       dialog: false,
-      date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+      fechaNacimiento: null,
       menu: false,
       modal: false,
       menu2: false,
-    }
+      usuarioNuevo: {
+        username: "",
+        email: "",
+        password: "",
+        nombre: "",
+        apellido: "",
+        fechaNacimiento: new Date(
+          Date.now() - new Date().getTimezoneOffset() * 60000
+        )
+          .toISOString()
+          .substr(0, 10),
+        telefono: null,
+        borrado: false,
+      },
+    };
   },
- 
+  
+  methods: {
+    async registrar() {
+      
+      console.log("entró");
+      console.log(this.usuarioNuevo);
+      let urlServer = "http://localhost:3000/api/auth/signup";
+      let method = "POST";
+
+      await fetch(urlServer, {
+        method: method,
+        body: JSON.stringify(this.usuarioNuevo),
+        headers: {
+          "Content-type": "application/json",
+        },
+        mode: "cors",
+      });
+      this.dialog = false;
+    },
+  },
 };
 </script>
