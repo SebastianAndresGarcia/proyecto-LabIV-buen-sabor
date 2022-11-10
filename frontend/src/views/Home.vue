@@ -1,7 +1,7 @@
 <template>
   <v-container fluid style="align-content: center">
     <v-row>
-      <carousel-item></carousel-item>
+      <carousel-item id="carousel"></carousel-item>
     </v-row>
     <v-row>
       <foo-ter id="dondeestamos"></foo-ter>

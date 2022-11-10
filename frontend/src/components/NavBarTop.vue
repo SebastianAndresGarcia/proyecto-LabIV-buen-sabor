@@ -5,7 +5,9 @@ https://kinsta.com/es/blog/vue-js/
 <template>
   <div class="app">
     <v-app-bar app color="black" dark>
-      <v-app-bar-nav-icon @click="drawer = true"><v-icon> mdi-account</v-icon></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click="drawer = true">
+        <v-icon> mdi-account</v-icon>
+      </v-app-bar-nav-icon>
       <v-toolbar-title>EL BUEN SABOR</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon>
@@ -21,7 +23,9 @@ https://kinsta.com/es/blog/vue-js/
 
       <template v-slot:extension>
         <v-tabs align-with-title>
-          <v-tab><v-btn text href="./">Ofertas del Día</v-btn></v-tab>
+          <v-tab>
+            <v-btn text href="./#carousel">Ofertas del Día</v-btn>
+          </v-tab>
           <v-tab>
             <v-menu bottom offset-y>
               <template v-slot:activator="{ on, attrs }">
@@ -34,38 +38,31 @@ https://kinsta.com/es/blog/vue-js/
               </v-list>
             </v-menu>
           </v-tab>
-          <v-tab
-            ><v-btn text href="./#dondeestamos">Sobre Nosotros</v-btn></v-tab
-          >
+          <v-tab>
+            <a style="text-decoration: none; color: white;" href="./#dondeestamos">Sobre Nosotros</a>
+          </v-tab>
         </v-tabs>
       </template>
     </v-app-bar>
     <v-navigation-drawer class="app" v-model="drawer" app absolute temporary>
       <v-list nav dense>
-        <v-list-item-group
-          v-model="group"
-          active-class="deep-purple--text text--accent-4"
-        >
-          <v-list-item>
+        <v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
+          <v-list-item :href="'./'">
             <v-list-item-icon>
               <v-icon>mdi-home</v-icon>
             </v-list-item-icon>
-            <v-list-item-title
-              ><v-btn text  :href="'./'" style="text-decoration: none"
-                >Home</v-btn
-              ></v-list-item-title
-            >
+            <v-list-item-title>
+              Home
+            </v-list-item-title>
           </v-list-item>
 
           <v-list-item>
             <v-list-item-icon>
               <v-icon>mdi-account</v-icon>
             </v-list-item-icon>
-            <v-list-item-title
-              ><v-btn text  :href="'./'" style="text-decoration: none"
-                >Ingresar</v-btn
-              ></v-list-item-title
-            >
+            <v-list-item-title>
+              <login-item></login-item>
+            </v-list-item-title>
           </v-list-item>
           <v-list-item>
             <v-list-item-icon>
@@ -81,6 +78,7 @@ https://kinsta.com/es/blog/vue-js/
 
 <script>
 import register from "@/components/Register.vue";
+import login from "@/components/Login.vue"
 export default {
   name: "App",
   data() {
@@ -99,6 +97,7 @@ export default {
   },
   components: {
     "register-item": register,
+    "login-item": login
   },
 };
 </script>
