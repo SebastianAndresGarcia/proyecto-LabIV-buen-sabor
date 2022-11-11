@@ -5,20 +5,7 @@ import HomeView from '../views/HomeView.vue'
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
-  /* {
-     path: '/',
-     name: 'homeview',
-     component: HomeView
-   },
-  {
-    path: '/',
-    name: 'home',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about"  '../views/Home.vue')
-  },
-  */
+ 
   {
     path: '/about',
     name: 'about',
@@ -28,7 +15,15 @@ const routes: Array<RouteConfig> = [
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
   {
-    path: '/*',
+    path: '/AbmArticulos',
+    name: 'AbmArticulos',
+     // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */'../views/AbmArticulos.vue')
+  },
+  {
+    path: '/*',   //tiene que quedar en último lugar, sino no me toma las rutas siguientes
     name: 'home',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route

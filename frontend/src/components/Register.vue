@@ -38,10 +38,11 @@
                 <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="fechaNacimiento"
                   transition="scale-transition" offset-y min-width="auto">
                   <template v-slot:activator="{ on, attrs }">
-                    <v-text-field v-model="usuarioNuevo.fechaNacimiento" label="Fecha de Nacimiento" prepend-icon="mdi-calendar"
-                      readonly v-bind="attrs" v-on="on" :rules="[v => !!v || 'Obligatorio']" required></v-text-field>
+                    <v-text-field v-model="usuarioNuevo.fechaNacimiento" label="Fecha de Nacimiento"
+                      prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" :rules="[v => !!v || 'Obligatorio']"
+                      required></v-text-field>
                   </template>
-                  <v-date-picker v-model="usuarioNuevo.fechaNacimiento"  no-title scrollable required>
+                  <v-date-picker v-model="usuarioNuevo.fechaNacimiento" no-title scrollable required>
                     <v-spacer></v-spacer>
                     <v-btn text color="primary" @click="menu = false">
                       Salir
