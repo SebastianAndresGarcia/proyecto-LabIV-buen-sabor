@@ -43,5 +43,14 @@ exports.createArticuloManufacturado = async (req, res) => {
          // `doc` is the document _before_ `update` was applied
      let doc = await Character.findOneAndUpdate(filter, update)
  */
-   
+}
+exports.getArticulosManufacturados = async (req, res) => {
+    const manufacturados = await ArticuloManufacturado.find()
+    if (!manufacturados)
+        return res.status(204).json();
+    return res.json(manufacturados)
+}
+exports.updateArticulosManufacturados = async (req, res) => {
+    const addressUpdated = await Address.findByIdAndUpdate(req.params.id, req.body)
+    res.json(addressUpdated)
 }

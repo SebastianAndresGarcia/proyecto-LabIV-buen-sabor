@@ -19,3 +19,11 @@ exports.createArticuloInsumo = async (req, res) => {
     }
 
 }
+
+exports.getArticulosInsumos = async (req, res) => {
+    const insumos = await ArticuloInsumo.find()
+    if (!insumos)
+        return res.status(204).json();
+    console.log(insumos);
+    return res.json(insumos)
+}

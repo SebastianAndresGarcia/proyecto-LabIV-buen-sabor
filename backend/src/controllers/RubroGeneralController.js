@@ -9,4 +9,9 @@ exports.createRubroGeneral = async (req, res) =>  {
     console.log(rubro)
     const savedRubro = await rubro.save()
     res.json(savedRubro)
+},
+exports.getRubrosGeneral = async (req, res) => {
+    const rubros = await RubroGeneral.find()
+    console.log(rubros)
+    return res.json(rubros)
 }
