@@ -1,134 +1,81 @@
 <template>
-    <v-card>
-        <v-card-title>
-            Articulos Manufacturados
-        
-            <v-spacer></v-spacer>
-            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on" :href="'/Formulario/0'">
-                Cargar Nuevo
-            </v-btn>
-        </v-card-title>
-        <v-simple-table class="tabla">
-            <template v-slot:default>
-                <thead>
-                    <tr>
-                        <th class="text-left">
-                            <b>ID</b>
-                        </th>
-                        <th class="text-left">
-                            <b>Nombre</b>
-                        </th>
-                        <th class="text-left">
-                            <b>Marca</b>
-                        </th>
-                        <th class="text-left">
-                            <b>Modelo</b>
-                        </th>
-                        <th class="text-left">
-                            <b>Imagen</b>
-                        </th>
-                        <th class="text-left">
-                            <b>Precio</b>
-                        </th>
-                        <th class="text-left">
-                            <b>Costo de Envío</b>
-                        </th>
-                        <th class="text-left">
-                            <b>Vendidos</b>
-                        </th>
+    <v-card elevation="4">
+        <v-card-title>GESTION DE ARTICULOS</v-card-title>
 
-                        <th class="text-left">
+        <v-card-text>
+            <v-expansion-panels>
+                <v-expansion-panel>
+                    <v-expansion-panel-header style="height: 100px; background-color:aqua">
+                        <template v-slot:default="{ open }">
+                            <v-row no-gutters>
+                                <v-col cols="4">
+                                    Articulo Manufacturado
+                                </v-col>
 
-                        </th>
-                        <th class="text-left">
+                            </v-row>
+                        </template>
+                    </v-expansion-panel-header>
+                    <v-expansion-panel-content>
+                        <!--<v-select v-for="manufacturado in manufacturadosData" :key="manufacturado.id" :items="rubros" label="Outlined style" outlined></v-select>-->
+                        <v-select v-model="rubros" label="Outlined style" outlined id="rubro" v-for="rubro in rubros" :items="rubros"></v-select>
+                        <articulomanufacturado-item></articulomanufacturado-item>
+                    </v-expansion-panel-content>
+                </v-expansion-panel>
 
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                <!--    <tr v-for="instrumento in instrumentosData" :key="instrumento.id" style="padding-top: 5px;">
-                 
-                        <td>
-                            {{ instrumento.id }}
-                        </td>
-                        <td>
-                            {{ instrumento.instrumento }}
-                        </td>
-                        <td>
-                            {{ instrumento.marca }}
-                        </td>
-                        <td>
-                            {{ instrumento.modelo }}
-                        </td>
-                        <td>
-                            <span v-if="instrumento.imagen.indexOf('http') >= 0">
-                                <img :src="instrumento.imagen" style="max-width: 60px;" :alt="instrumento.imagen" />
-                            </span>
-                            <span v-else>
-                                <img :src="'/images/' + instrumento.imagen" style="max-width: 60px;"
-                                    :alt="instrumento.imagen" />
-                            </span>
+                <v-expansion-panel>
+                    <v-expansion-panel-header v-slot="{ open }" style="height: 100px; background-color:greenyellow">
+                        <v-row no-gutters>
+                            <v-col cols="4">
+                                Articulo Insumo
+                            </v-col>
 
-                        </td>
-                        <td>
-                            {{ instrumento.precio }}
-                        </td>
-                        <td>
-                            {{ instrumento.costoEnvio }}
-                        </td>
-                        <td>
-                            {{ instrumento.cantidadVendida }}
-                        </td>
+                        </v-row>
+                    </v-expansion-panel-header>
+                    <v-expansion-panel-content>
+                        <v-row no-gutters justify="center">
+                            <articuloinsumo-item></articuloinsumo-item>
+                        </v-row>
 
-                        <td>
-                            <a :href="'/Formulario/' + instrumento.id">
-                                <v-icon small class="mr-2">
-                                    mdi-pencil
-                                </v-icon>
-                            </a>
-                        </td>
-                        <td>
-                            <v-icon small @click="deleteinstrumento(instrumento.id)">
-                                mdi-delete
-                            </v-icon>
-                        </td>
-                        
-                    </tr>-->
-                </tbody>
-            </template>
-        </v-simple-table>
+                    </v-expansion-panel-content>
+                </v-expansion-panel>
+
+
+            </v-expansion-panels>
+        </v-card-text>
     </v-card>
+
 </template>
 <script >
-//import articuloManufacturado from "@/components/ArticuloManufacturado.vue";
-//import articuloInsumo from "@/components/ArticuloInsumo.vue";
+import articuloManufacturado from "@/components/ArticuloManufacturado.vue";
+import articuloInsumo from "@/components/ArticuloInsumo.vue";
 export default {
     name: "abm-articulos",
     components: {
-        //"manufacturado-item": articuloManufacturado,
-        //"insumo-item": articuloInsumo
+        "articulomanufacturado-item": articuloManufacturado,
+        "articuloinsumo-item": articuloInsumo
+    },
+    data(){
+        return{
+            rubros: [],
+            rubroSeleccionado: ""
+        }
     },
     mounted() {
-       // this.getManufacturados(),
-       // this.getInsumos()
+        this.getRubrosGeneral()
     },
-    data() {
-        return {
-            //manufacturadosData: [],
-            //insumosData: []
-        };
-    },
+
     methods: {
-        async getInstrumentos() {
+        async getRubrosGeneral() {
             const res = await fetch(
-                "http://localhost:3001/instrumentos"
+                "http://localhost:3000/rubrosgeneral"
             );
             const resJson = await res.json();
-            console.log(resJson);
-            this.instrumentosData = resJson;
+            
+            this.rubros = resJson;
+            console.log("RUBROS ",this.rubros);
         },
 
-        async deleteinstrumento(idinstrumento) {
+      /*  async deleteinstrumento(idinstrumento) {
 
             let urlServer = `http://localhost:3001/eliminarInstrumento/${idinstrumento}/`;
 
@@ -144,7 +91,7 @@ export default {
 
             });
             window.location.reload();
-        },
+        },*/
         /* async editarinstrumento(idinstrumento){
             href('/Formulario/' + instrumento.id),
          */
