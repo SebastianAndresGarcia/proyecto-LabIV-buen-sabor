@@ -49,6 +49,13 @@ exports.getArticulosManufacturados = async (req, res) => {
     if (!manufacturados)
         return res.status(204).json();
     return res.json(manufacturados)
+},
+exports.getArticulosManufacturadosxrubro = async (req, res) => {
+    const rubro = (req.params.parametro);
+    const manufacturados = await ArticuloManufacturado.find({ denominacion: rubro}).exec();
+    if (!manufacturados)
+        return res.status(204).json();
+    return res.json(manufacturados)
 }
 exports.updateArticulosManufacturados = async (req, res) => {
     const addressUpdated = await Address.findByIdAndUpdate(req.params.id, req.body)
