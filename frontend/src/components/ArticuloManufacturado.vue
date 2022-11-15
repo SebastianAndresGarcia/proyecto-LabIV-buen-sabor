@@ -1,5 +1,5 @@
 <template>
-    <v-card style="margin-top: 10px">
+    <v-card v-if="manufacturadoParam.length > 0" style="margin-top: 10px">
         <v-card-title>
             Articulos Manufacturados
 
@@ -12,7 +12,6 @@
             <template v-slot:default>
                 <thead>
                     <tr>
-
                         <th class="text-left">
                             <b>Denominacion</b>
                         </th>
@@ -70,6 +69,9 @@
             </template>
         </v-simple-table>
     </v-card>
+    <div v-else>
+        <h1 class="text-center">Sin detalle</h1>
+    </div>
 </template>
 <script >
 
@@ -91,9 +93,16 @@ export default {
         }
     },
 
-    mounted() {
-        this.getManufacturados()
+    beforeUpdate(){ 
+        console.log("asdasdasdasdasdsa")
     },
+    props: ["manufacturadoParam"],
+    mounted() {
+        console.log("manufacturadoParam", this.manufacturadoParam),
+        this.getManufacturados()
+        //this.getManufacturadosxrubro(this.manufacturadoParam)
+    },
+
 
     methods: {
         async getManufacturados() {
@@ -104,27 +113,15 @@ export default {
             console.log(resJson);
             this.manufacturadosData = resJson;
         },
-
-      /*  async deleteinstrumento(idinstrumento) {
-
-            let urlServer = `http://localhost:3001/eliminarInstrumento/${idinstrumento}/`;
-
-
-            await fetch(urlServer, {
-                "method": 'DELETE',
-
-                "headers": {
-                    "Content-type": 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
-                mode: 'cors'
-
-            });
-            window.location.reload();
-        },*/
-        /* async editarinstrumento(idinstrumento){
-            href('/Formulario/' + instrumento.id),
-         */
-    }
+        async getManufacturadosxrubro(parametro) {
+            const res = await fetch(
+                "http://localhost:3000/articulosmanufacturadosxrubro/"+ parametro
+            );
+            const resJson = await res.json();
+            console.log(resJson);
+            this.manufacturadosData = resJson;
+        },
+        
+    }   
 }
 </script >

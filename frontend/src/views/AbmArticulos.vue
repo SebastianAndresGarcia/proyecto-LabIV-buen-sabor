@@ -16,9 +16,29 @@
                         </template>
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
-                        <!--<v-select v-for="manufacturado in manufacturadosData" :key="manufacturado.id" :items="rubros" label="Outlined style" outlined></v-select>-->
-                        <v-select v-model="rubros" label="Outlined style" outlined id="rubro" v-for="rubro in rubros" :items="rubros"></v-select>
-                        <articulomanufacturado-item></articulomanufacturado-item>
+
+                        <v-select multiple label="Rubros" outlined v-model="rubroSeleccionado" :items="rubros"
+                            item-value="denominacion" item-text="denominacion">
+                            <template v-slot:prepend-item>
+                                <v-list-item ripple @mousedown.prevent @click="toggle">
+                                    <v-list-item-action>
+                                        <v-icon :color="rubroSeleccionado.length > 0 ? 'indigo darken-4' : ''">
+                                            {{ icon }}
+                                        </v-icon>
+                                    </v-list-item-action>
+                                    <v-list-item-content>
+                                        <v-list-item-title>
+                                            Select All
+                                        </v-list-item-title>
+                                    </v-list-item-content>
+                                </v-list-item>
+                                <v-divider class="mt-2"></v-divider>
+                            </template>
+                          
+                        </v-select>
+                        <p>{{ rubroSeleccionado }}</p>
+
+                        <articulomanufacturado-item :manufacturadoParam="rubroSeleccionado"></articulomanufacturado-item>
                     </v-expansion-panel-content>
                 </v-expansion-panel>
 
@@ -54,10 +74,13 @@ export default {
         "articulomanufacturado-item": articuloManufacturado,
         "articuloinsumo-item": articuloInsumo
     },
-    data(){
-        return{
+    data() {
+        return {
             rubros: [],
-            rubroSeleccionado: ""
+            rubroSeleccionado: [{
+                denominacion:"",
+                articulomanufacturadoid:null
+            }]
         }
     },
     mounted() {
@@ -70,32 +93,56 @@ export default {
                 "http://localhost:3000/rubrosgeneral"
             );
             const resJson = await res.json();
-            
+
             this.rubros = resJson;
-            console.log("RUBROS ",this.rubros);
+            console.log("RUBROS ", this.rubros);
+            console.log("RUBROS tamaño", this.rubros.length);
+
         },
 
-      /*  async deleteinstrumento(idinstrumento) {
-
-            let urlServer = `http://localhost:3001/eliminarInstrumento/${idinstrumento}/`;
-
-
-            await fetch(urlServer, {
-                "method": 'DELETE',
-
-                "headers": {
-                    "Content-type": 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
-                mode: 'cors'
-
-            });
-            window.location.reload();
-        },*/
+        toggle () {
+        this.$nextTick(() => {
+          if (this.likesAllFruit) {
+            this.rubroSeleccionado = []
+          } else {
+            this.rubroSeleccionado = this.rubros.slice()
+          }
+        })
+      },
+        /*  async deleteinstrumento(idinstrumento) {
+  
+              let urlServer = `http://localhost:3001/eliminarInstrumento/${idinstrumento}/`;
+  
+  
+              await fetch(urlServer, {
+                  "method": 'DELETE',
+  
+                  "headers": {
+                      "Content-type": 'application/json',
+                      'Access-Control-Allow-Origin': '*'
+                  },
+                  mode: 'cors'
+  
+              });
+              window.location.reload();
+          },*/
         /* async editarinstrumento(idinstrumento){
             href('/Formulario/' + instrumento.id),
          */
-    }
+    },
+    computed: {
+      likesAllFruit () {
+        return this.rubroSeleccionado.length === this.rubros.length
+      },
+      likesSomeFruit () {
+        return this.rubroSeleccionado.length > 0 && !this.likesAllFruit
+      },
+      icon () {
+        if (this.likesAllFruit) return 'mdi-close-box'
+        if (this.likesSomeFruit) return 'mdi-minus-box'
+        return 'mdi-checkbox-blank-outline'
+      },
+    },
 };
 </script>
 <style scoped>
