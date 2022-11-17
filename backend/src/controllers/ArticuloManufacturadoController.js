@@ -51,13 +51,17 @@ exports.getArticulosManufacturados = async (req, res) => {
     return res.json(manufacturados)
 },
 exports.getArticulosManufacturadosxrubro = async (req, res) => {
-    const rubro = (req.params.parametro);
-    const manufacturados = await ArticuloManufacturado.find({ denominacion: rubro}).exec();
+    const busqueda = req.params.id;
+    /*console.log("parametroRubro: ",req.params.id)
+    const rubrogral = await RubroGeneral.find({ denominacion: [busqueda]});
+    console.log(rubrogral) */
+    var array = [] = busqueda.split(",")
+    const manufacturados = await ArticuloManufacturado.find({ rubrogeneralid: array});
     if (!manufacturados)
         return res.status(204).json();
     return res.json(manufacturados)
 }
-exports.updateArticulosManufacturados = async (req, res) => {
+exports.updateArticulosManufacturados = async (req, res) => { 
     const addressUpdated = await Address.findByIdAndUpdate(req.params.id, req.body)
     res.json(addressUpdated)
 }

@@ -1,5 +1,5 @@
 //import { RequestHandler, Request, Response } from "express";
-//import Rubro from '../models/RubroArticulo'
+const Rubro = require('../models/RubroArticulo');
 const RubroArticulo = require("../models/RubroArticulo");
 
 
