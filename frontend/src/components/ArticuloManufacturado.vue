@@ -70,7 +70,7 @@
         </v-simple-table>
     </v-card>
     <div v-else>
-        <h1 class="text-center">Sin detalle</h1>
+        <h1 class="text-center">Seleccione un Rubro</h1>
     </div>
 </template>
 <script >
@@ -94,12 +94,15 @@ export default {
     },
 
     beforeUpdate(){ 
-        console.log("asdasdasdasdasdsa")
+        console.log("asdasdasdasdasdsa"),
+        console.log("manufacturadoParam", this.manufacturadoParam)
+        if(this.manufacturadoParam)
+            this.getManufacturadosxrubro(this.manufacturadoParam)
     },
     props: ["manufacturadoParam"],
     mounted() {
-        console.log("manufacturadoParam", this.manufacturadoParam),
-        this.getManufacturados()
+        console.log("manufacturadoParam", this.manufacturadoParam)
+        //this.getManufacturados()
         //this.getManufacturadosxrubro(this.manufacturadoParam)
     },
 
@@ -114,14 +117,15 @@ export default {
             this.manufacturadosData = resJson;
         },
         async getManufacturadosxrubro(parametro) {
+           
+            console.log("parametro: "+parametro)
             const res = await fetch(
                 "http://localhost:3000/articulosmanufacturadosxrubro/"+ parametro
             );
             const resJson = await res.json();
             console.log(resJson);
             this.manufacturadosData = resJson;
-        },
-        
+           }
     }   
 }
 </script >

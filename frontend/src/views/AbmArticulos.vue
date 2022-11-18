@@ -18,7 +18,7 @@
                     <v-expansion-panel-content>
 
                         <v-select multiple label="Rubros" outlined v-model="rubroSeleccionado" :items="rubros"
-                            item-value="denominacion" item-text="denominacion">
+                            item-value="_id" item-text="denominacion">
                             <template v-slot:prepend-item>
                                 <v-list-item ripple @mousedown.prevent @click="toggle">
                                     <v-list-item-action>
@@ -34,11 +34,11 @@
                                 </v-list-item>
                                 <v-divider class="mt-2"></v-divider>
                             </template>
-                          
                         </v-select>
                         <p>{{ rubroSeleccionado }}</p>
 
-                        <articulomanufacturado-item :manufacturadoParam="rubroSeleccionado"></articulomanufacturado-item>
+                        <articulomanufacturado-item :manufacturadoParam="rubroSeleccionado">
+                        </articulomanufacturado-item>
                     </v-expansion-panel-content>
                 </v-expansion-panel>
 
@@ -52,9 +52,27 @@
                         </v-row>
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
-                        <v-row no-gutters justify="center">
-                            <articuloinsumo-item></articuloinsumo-item>
-                        </v-row>
+                        
+                            <v-select multiple label="Insumos" outlined v-model="insumoSeleccionado" :items="insumos"
+                                item-value="_id" item-text="denominacion">
+                                <template v-slot:prepend-item>
+                                    <v-list-item ripple @mousedown.prevent @click="toggleInsumos">
+                                        <v-list-item-action>
+                                            <v-icon :color="insumoSeleccionado.length > 0 ? 'indigo darken-4' : ''">
+                                                {{ icon }}
+                                            </v-icon>
+                                        </v-list-item-action>
+                                        <v-list-item-content>
+                                            <v-list-item-title>
+                                                Select All
+                                            </v-list-item-title>
+                                        </v-list-item-content>
+                                    </v-list-item>
+                                    <v-divider class="mt-2"></v-divider>
+                                </template>
+                            </v-select>
+                            <articuloinsumo-item :insumoParam="insumoSeleccionado"></articuloinsumo-item>
+                       
 
                     </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -77,14 +95,14 @@ export default {
     data() {
         return {
             rubros: [],
-            rubroSeleccionado: [{
-                denominacion:"",
-                articulomanufacturadoid:null
-            }]
+            rubroSeleccionado: [],
+            insumos: [],
+            insumoSeleccionado: []
         }
     },
     mounted() {
-        this.getRubrosGeneral()
+        this.getRubrosGeneral(),
+        this.getRubrosArticulos()
     },
 
     methods: {
@@ -99,17 +117,62 @@ export default {
             console.log("RUBROS tamaño", this.rubros.length);
 
         },
+        async getRubrosArticulos() {
+            const res = await fetch(
+                "http://localhost:3000/rubros"
+            );
+            const resJson = await res.json();
 
-        toggle () {
-        this.$nextTick(() => {
-          if (this.likesAllFruit) {
-            this.rubroSeleccionado = []
-          } else {
-            this.rubroSeleccionado = this.rubros.slice()
-          }
-        })
-      },
-        /*  async deleteinstrumento(idinstrumento) {
+            this.insumos = resJson;
+            console.log("RubrosArticulos ", this.insumos);
+            console.log("tamaño", this.insumos.length);
+
+        },
+        toggle() {
+            this.$nextTick(() => {
+                if (this.selectAll) {
+                    this.rubroSeleccionado = []
+                } else {
+                    this.rubroSeleccionado = this.rubros.slice()
+                }
+            })
+        },
+        toggleInsumos() {
+            this.$nextTick(() => {
+                if (this.selectAllinsumos) {
+                    this.insumoSeleccionado = []
+                } else {
+                    this.insumoSeleccionado = this.insumos.slice()
+                }
+            })
+        },
+    },
+    computed: {
+        selectAll() {
+            return this.rubroSeleccionado.length === this.rubros.length
+        },
+        selectSome() {
+            return this.rubroSeleccionado.length > 0 && !this.selectAll
+        },
+        icon() {
+            if (this.selectAll) return 'mdi-close-box'
+            if (this.selectSome) return 'mdi-minus-box'
+            return 'mdi-checkbox-blank-outline'
+        },
+        selectAllinsumos() {
+            return this.insumoSeleccionado.length === this.insumos.length
+        },
+        selectSomeInsumo() {
+            return this.insumoSeleccionado.length > 0 && !this.selectAllinsumos
+        },
+        icon() {
+            if (this.selectAllinsumos) return 'mdi-close-box'
+            if (this.selectSomeInsumo) return 'mdi-minus-box'
+            return 'mdi-checkbox-blank-outline'
+        },
+    },
+};
+/*  async deleteinstrumento(idinstrumento) {
   
               let urlServer = `http://localhost:3001/eliminarInstrumento/${idinstrumento}/`;
   
@@ -129,21 +192,6 @@ export default {
         /* async editarinstrumento(idinstrumento){
             href('/Formulario/' + instrumento.id),
          */
-    },
-    computed: {
-      likesAllFruit () {
-        return this.rubroSeleccionado.length === this.rubros.length
-      },
-      likesSomeFruit () {
-        return this.rubroSeleccionado.length > 0 && !this.likesAllFruit
-      },
-      icon () {
-        if (this.likesAllFruit) return 'mdi-close-box'
-        if (this.likesSomeFruit) return 'mdi-minus-box'
-        return 'mdi-checkbox-blank-outline'
-      },
-    },
-};
 </script>
 <style scoped>
 .tabla {

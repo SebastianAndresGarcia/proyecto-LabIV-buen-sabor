@@ -116,9 +116,15 @@ export default {
             }],
         }
     },
-
+    beforeUpdate(){ 
+        console.log("asdasdasdasdasdsa"),
+        console.log("manufacturadoParam", this.manufacturadoParam)
+        if(this.manufacturadoParam)
+            this.getManufacturadosxrubro(this.manufacturadoParam)
+    },
+    props: ["manufacturadoParam"],
     mounted() {
-               this.getInsumos()
+            //   this.getInsumos()
     },
 
     methods: {
