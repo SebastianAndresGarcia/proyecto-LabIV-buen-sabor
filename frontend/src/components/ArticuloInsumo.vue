@@ -118,12 +118,13 @@ export default {
     },
     beforeUpdate(){ 
         console.log("asdasdasdasdasdsa"),
-        console.log("manufacturadoParam", this.manufacturadoParam)
-        if(this.manufacturadoParam)
-            this.getManufacturadosxrubro(this.manufacturadoParam)
+        console.log("insumoParam", this.insumoParam)
+        if(this.insumoParam)
+            this.getInsumos()
     },
-    props: ["manufacturadoParam"],
+    props: ["insumoParam"],
     mounted() {
+        console.log("insumoParam", this.insumoParam)
             //   this.getInsumos()
     },
 

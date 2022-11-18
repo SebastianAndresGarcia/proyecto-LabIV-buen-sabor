@@ -1,9 +1,44 @@
+//https://stackoverflow.com/questions/38734051/nest-mongoose-schema-within-itself/72603609#72603609
+const mongoose = require("mongoose");
+
+const itemSchema = new mongoose.Schema({
+    
+    denominacion: {
+        type: String,
+        unique: true
+    },
+    items: {
+        type: [this],
+        default: undefined,
+        ref: 'itemSchema' //no hace nada
+    }
+} /*, { _id: false }*/)
+
+const RubroArticulo = mongoose.model(
+    "RubroArticulo",
+
+    new mongoose.Schema({
+
+        denominacion: {
+            type: String,
+            unique: true
+        },
+        items: {
+            type: [itemSchema],
+            default: undefined,
+            ref: 'itemSchema' //no hace nada
+            
+        }
+    }));
+module.exports = RubroArticulo
+
+/*
 //https://stackoverflow.com/questions/44968248/how-to-populate-documents-with-unlimited-nested-levels-using-mongoose
 const mongoose = require("mongoose");
 //const ArticuloInsumo=require('./ArticuloInsumo')
 
 
-const rubrochild = 
+const rubrochild =
     new mongoose.Schema({
     denominacionRubroHijo : {
        type: String,
@@ -14,24 +49,24 @@ const rubrochild =
         ref : 'RubroArticulo',
         required: true,
         default: null
-     }, 
+     },
      //articulos : [Object]
  });
- 
- 
+
+
  const RubroArticulo = mongoose.model(
     "RubroArticulo",
     new mongoose.Schema({
 
-    denominacion: { 
+    denominacion: {
         type: String,
         unique: true
     },
     Rubrohijo: [{ type: mongoose.Schema.ObjectId, ref: "RubroArticulo"}],
     //articulos: [ArticuloInsumo]
-    
+
  }));
- module.exports= RubroArticulo; 
+ module.exports= RubroArticulo;
 /*import { Schema, model } from "mongoose";
 
 const RubroArticuloSchema = new Schema({
@@ -54,7 +89,7 @@ const RubroArticuloSchema = new Schema({
     articuloinsumoid: [{
         type: Schema.Types.ObjectId,
         ref: 'ArticuloInsumo'
-    }]   
+    }]
 })
 
 export default model("RubroArticulo", RubroArticuloSchema); */

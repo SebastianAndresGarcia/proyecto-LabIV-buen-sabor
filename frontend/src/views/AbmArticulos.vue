@@ -73,10 +73,8 @@
                             </v-select>
                             <articuloinsumo-item :insumoParam="insumoSeleccionado"></articuloinsumo-item>
                        
-
                     </v-expansion-panel-content>
                 </v-expansion-panel>
-
 
             </v-expansion-panels>
         </v-card-text>

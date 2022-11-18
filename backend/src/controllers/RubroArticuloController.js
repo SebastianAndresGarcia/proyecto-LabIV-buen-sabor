@@ -53,7 +53,7 @@ exports.agregarArticuloRubro = async (req, res) => {
 } */
 
 exports.getRubros = async (req, res) => {
-    const rubros = await Rubro.find()
+    const rubros = await RubroArticulo.find()
     console.log(rubros)
     return res.json(rubros)
 }

@@ -29,7 +29,7 @@ router.post("/api/auth/signin", controller.signin);
 
 router.post('/crearDomicilio', controllerDlio.createAddress)
 router.get('/usuarioDlios/:id', controllerDlio.getAddressbyuser);
-router.post('/crearRubro', controllerRubroArticulo.createRubroArticulo);
+router.post('/crearRubroArticulo', controllerRubroArticulo.createRubroArticulo);
 router.get('/rubros/', controllerRubroArticulo.getRubros);
 router.post('/agregarSubRubro', controllerRubroArticulo.agregarSubRubro);
 // router.post('/agregarArticuloRubro', agregarArticuloRubro);  //comentar-descomentar ctrol+k+c  ctrl+k+u
