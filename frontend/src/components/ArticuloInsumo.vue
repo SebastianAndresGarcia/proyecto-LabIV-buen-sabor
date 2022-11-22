@@ -1,11 +1,11 @@
 <template>
-    <v-card style="margin-top: 10px; justify:center">
+    <v-card v-if="insumoParam.length > 0" style="margin-top: 10px; justify:center">
         <v-card-title>
             Articulos Insumos
 
             <v-spacer></v-spacer>
             <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on" :href="'/Formulario/0'">
-                Cargar Nuevo
+                Crear Insumo
             </v-btn>
         </v-card-title>
         <v-simple-table class="tabla">
@@ -94,6 +94,9 @@
             </template>
         </v-simple-table>
     </v-card>
+    <div v-else>
+        <h1 class="text-center">Seleccione un Rubro</h1>
+    </div>
 </template>
 <script >
 
@@ -120,7 +123,7 @@ export default {
         console.log("asdasdasdasdasdsa"),
         console.log("insumoParam", this.insumoParam)
         if(this.insumoParam)
-            this.getInsumos()
+            this.getInsumos(this.insumoParam)
     },
     props: ["insumoParam"],
     mounted() {
@@ -129,10 +132,12 @@ export default {
     },
 
     methods: {
-        async getInsumos() {
+        async getInsumos(parametro) {
+            console.log(parametro)
             const res = await fetch(
-                "http://localhost:3000/ArticulosInsumos"
-            );
+                //estoy sería para que busque por rubro pero no puedo hacer busquedas y modificaciones en el json anidado "http://localhost:3000/ArticulosInsumosxrubro/"+parametro
+                "http://localhost:3000/articulosinsumos"
+                );
             const resJson = await res.json();
             console.log(resJson);
             this.insumosData = resJson;

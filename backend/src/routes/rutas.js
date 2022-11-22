@@ -30,6 +30,7 @@ router.post("/api/auth/signin", controller.signin);
 router.post('/crearDomicilio', controllerDlio.createAddress)
 router.get('/usuarioDlios/:id', controllerDlio.getAddressbyuser);
 router.post('/crearRubroArticulo', controllerRubroArticulo.createRubroArticulo);
+router.post('/ActualizarRubroGeneral', controllerRubroGeneral.updateRubroGeneral);
 router.get('/rubros/', controllerRubroArticulo.getRubros);
 router.post('/agregarSubRubro', controllerRubroArticulo.agregarSubRubro);
 // router.post('/agregarArticuloRubro', agregarArticuloRubro);  //comentar-descomentar ctrol+k+c  ctrl+k+u
@@ -41,5 +42,7 @@ router.get('/articulosmanufacturadosxrubro/:id', controllerArticuloManufacturado
 
 router.post('/crearArticuloInsumo', controllerArticuloInsumo.createArticuloInsumo)
 router.get('/ArticulosInsumos', controllerArticuloInsumo.getArticulosInsumos)
+router.get('/ArticulosInsumosxrubro/:id', controllerArticuloInsumo.getArticulosInsumosxrubro)
+router.post('/ActualizarInsumo/:id', controllerArticuloInsumo.updateArticuloInsumo)
 
 module.exports = router

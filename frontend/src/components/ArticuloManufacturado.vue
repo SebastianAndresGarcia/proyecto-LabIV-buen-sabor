@@ -4,9 +4,7 @@
             Articulos Manufacturados
 
             <v-spacer></v-spacer>
-            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on" :href="''">
-                Cargar Nuevo
-            </v-btn>
+            <Form-Manufacturado></Form-Manufacturado>
         </v-card-title>
         <v-simple-table class="tabla">
             <template v-slot:default>
@@ -44,7 +42,7 @@
                             {{ manufacturado.imagen }}
                         </td>
                         <td>
-                            {{ manufacturado.precioVenta}}
+                            {{ manufacturado.precioVenta }}
                         </td>
 
                         <td>
@@ -74,7 +72,7 @@
     </div>
 </template>
 <script >
-
+import formmanufacturado from "@/components/FormManufacturados.vue";
 export default {
     data() {
         return {
@@ -92,11 +90,13 @@ export default {
             }],
         }
     },
-
-    beforeUpdate(){ 
+    components: {
+        "Form-Manufacturado": formmanufacturado
+    },
+    beforeUpdate() {
         console.log("asdasdasdasdasdsa"),
-        console.log("manufacturadoParam", this.manufacturadoParam)
-        if(this.manufacturadoParam)
+            console.log("manufacturadoParam", this.manufacturadoParam)
+        if (this.manufacturadoParam)
             this.getManufacturadosxrubro(this.manufacturadoParam)
     },
     props: ["manufacturadoParam"],
@@ -117,15 +117,15 @@ export default {
             this.manufacturadosData = resJson;
         },
         async getManufacturadosxrubro(parametro) {
-           
-            console.log("parametro: "+parametro)
+
+            console.log("parametro: " + parametro)
             const res = await fetch(
-                "http://localhost:3000/articulosmanufacturadosxrubro/"+ parametro
+                "http://localhost:3000/articulosmanufacturadosxrubro/" + parametro
             );
             const resJson = await res.json();
             console.log(resJson);
             this.manufacturadosData = resJson;
-           }
-    }   
+        }
+    }
 }
 </script >

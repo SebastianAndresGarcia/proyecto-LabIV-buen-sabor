@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 
 const itemSchema = new mongoose.Schema({
-    
+
     denominacion: {
         type: String,
         unique: true
@@ -10,9 +10,15 @@ const itemSchema = new mongoose.Schema({
     items: {
         type: [this],
         default: undefined,
-        ref: 'itemSchema' //no hace nada
-    }
-} /*, { _id: false }*/)
+        //ref: 'itemSchema' // no hace nada
+
+    },
+    articuloinsumoid: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ArticuloInsumo'
+    }]
+}
+)
 
 const RubroArticulo = mongoose.model(
     "RubroArticulo",
@@ -26,10 +32,14 @@ const RubroArticulo = mongoose.model(
         items: {
             type: [itemSchema],
             default: undefined,
-            ref: 'itemSchema' //no hace nada
-            
-        }
-    }));
+            ref: 'itemSchema', //no hace nada
+        },
+        articuloinsumoid: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'ArticuloInsumo'
+        }]
+    }
+    ));
 module.exports = RubroArticulo
 
 /*
