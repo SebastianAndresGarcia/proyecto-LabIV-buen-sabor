@@ -36,11 +36,12 @@
                             <v-col cols="12">
                                 <v-row v-for="ins in cantidadInsumos" :key="ins.id">
                                     <v-col>
-                                        <v-select label="Seleccione un insumo" outlined
-                                            v-model="insumoSeleccionado[ins - 1]" :items="insumosData" item-value="_id"
+                                        <v-select label="Seleccione un insumo" outlined v-model="insumoSeleccionado[ins - 1]" :items="insumosData" item-value="_id"
                                             item-text="denominacion">
 
                                         </v-select>
+                                        <v-text-field label="Cantidad" ></v-text-field>
+                                        <v-text-field label="Unidad Medida" v-model="insumosData[ins-1].unidadMedida"></v-text-field>
                                     </v-col>
                                     <v-col>
                                         <v-btn @click="eliminarInsumo(ins)">Eliminar</v-btn>
@@ -49,7 +50,7 @@
                                 <v-btn @click="crearSelectInsumo">Agregar Insumo</v-btn>
                             </v-col>
                             <v-col cols="12">
-                                <v-text-field label="rubrogeneralid*" v-model="artmanufacturado.rubrogeneralid"
+                                <v-text-field hidden v-model="artmanufacturado.rubrogeneralid"
                                     required>
                                 </v-text-field>
                             </v-col>
@@ -94,31 +95,37 @@ export default {
                 precioVenta: null,
                 imagen: "",
                 activo: null,
-                detallefacturaid: [],
-                detallepedidoid: [],
-                detallearticulomanufacturadoid: [],
+                detallearticulomanufacturadoid: [{
+                    cantidad: null,
+                    unidadMedida: "",
+                    articuloInsumoid: ""
+                }],
                 rubrogeneralid: ""
             },
+           
         };
     },
+    props:["idrubrogral"],
     beforeUpdate() {
         //console.log("datos select ", this.insumoSeleccionado)
     },
     mounted() {
-        this.getInsumos()
+        console.log("idrubrogral props "+this.idrubrogral)
+        this.getInsumos(),
+        this.artmanufacturado.rubrogeneralid=this.idrubrogral
     },
     methods: {
         crearSelectInsumo() {
             this.cantidadInsumos = this.cantidadInsumos + 1;
-            console.log("cantidad de select: " + this.cantidadInsumos)
+            console.log("cantidad de select: " + this.cantidadInsumos);
         },
         eliminarInsumo(i) {
-            console.log("indice "+i)
-            console.log("this.insumoSeleccionado.length "+this.insumoSeleccionado.length)
-            this.cantidadInsumos=this.cantidadInsumos-1;
-            this.insumoSeleccionado.splice(i-1, 1);           
+            console.log("indice " + i)
+            console.log("this.insumoSeleccionado.length " + this.insumoSeleccionado.length)
+            this.cantidadInsumos = this.cantidadInsumos - 1;
+            this.insumoSeleccionado.splice(i - 1, 1);
             console.log("insumoSeleccionado ", this.insumoSeleccionado)
-            
+
         },
         async crearManufacturado() {
             console.log("entró");
@@ -154,7 +161,7 @@ export default {
                 "http://localhost:3000/articulosinsumos"
             );
             const resJson = await res.json();
-            console.log(resJson);
+            console.log("insumosData",resJson);
             this.insumosData = resJson;
         },
     },

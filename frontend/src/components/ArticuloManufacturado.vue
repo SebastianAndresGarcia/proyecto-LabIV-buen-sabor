@@ -4,7 +4,7 @@
             Articulos Manufacturados
 
             <v-spacer></v-spacer>
-            <Form-Manufacturado></Form-Manufacturado>
+            <Form-Manufacturado :idrubrogral="manufacturadoParam"></Form-Manufacturado>
         </v-card-title>
         <v-simple-table class="tabla">
             <template v-slot:default>
