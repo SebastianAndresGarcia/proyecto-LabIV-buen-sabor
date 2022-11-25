@@ -36,12 +36,20 @@
                             <v-col cols="12">
                                 <v-row v-for="ins in cantidadInsumos" :key="ins.id">
                                     <v-col>
-                                        <v-select label="Seleccione un insumo" outlined v-model="insumoSeleccionado[ins - 1]" :items="insumosData" item-value="_id"
-                                            item-text="denominacion">
+                                        <v-select label="Seleccione un insumo" outlined
+                                            v-model="insumoSeleccionado" :items="insumosData" item-value="_id"
+                                            item-text="denominacion" @change="onchange(insumoSeleccionado)">
 
                                         </v-select>
-                                        <v-text-field label="Cantidad" ></v-text-field>
-                                        <v-text-field label="Unidad Medida" v-model="insumosData[ins-1].unidadMedida"></v-text-field>
+                                    </v-col>
+                                    <v-col>
+                                        <v-text-field label="Cantidad" number 
+                                            ></v-text-field>
+                                    </v-col>
+                                    <v-col>
+                                        <v-text-field label="Unidad Medida" 
+                                            >
+                                        </v-text-field>
                                     </v-col>
                                     <v-col>
                                         <v-btn @click="eliminarInsumo(ins)">Eliminar</v-btn>
@@ -50,8 +58,7 @@
                                 <v-btn @click="crearSelectInsumo">Agregar Insumo</v-btn>
                             </v-col>
                             <v-col cols="12">
-                                <v-text-field hidden v-model="artmanufacturado.rubrogeneralid"
-                                    required>
+                                <v-text-field hidden v-model="artmanufacturado.rubrogeneralid" required>
                                 </v-text-field>
                             </v-col>
 
@@ -95,24 +102,25 @@ export default {
                 precioVenta: null,
                 imagen: "",
                 activo: null,
-                detallearticulomanufacturadoid: [{
-                    cantidad: null,
-                    unidadMedida: "",
-                    articuloInsumoid: ""
-                }],
                 rubrogeneralid: ""
             },
-           
+            detalleartmanufacturado: [{
+                cantidad: 0,
+                unidadMedida: "",
+                articuloInsumoid: ""
+            }],
+
+
         };
     },
-    props:["idrubrogral"],
+    props: ["idrubrogral"],
     beforeUpdate() {
         //console.log("datos select ", this.insumoSeleccionado)
     },
     mounted() {
-        console.log("idrubrogral props "+this.idrubrogral)
+        console.log("idrubrogral props " + this.idrubrogral)
         this.getInsumos(),
-        this.artmanufacturado.rubrogeneralid=this.idrubrogral
+            this.artmanufacturado.rubrogeneralid = this.idrubrogral
     },
     methods: {
         crearSelectInsumo() {
@@ -161,9 +169,24 @@ export default {
                 "http://localhost:3000/articulosinsumos"
             );
             const resJson = await res.json();
-            console.log("insumosData",resJson);
+            console.log("insumosData", resJson);
             this.insumosData = resJson;
         },
+        onchange(id) {
+            console.log("enviado desde el select " + id)
+          /*  console.log("insumosData.length " + insumosData.length)
+            for (let i = 0; i < insumosData.length; i++) {
+                console.log(insumosData[i])
+                if (id == insumosData[i]._id) {
+                    console.log("entró")
+                    this.detalleartmanufacturado.push(insumosData[i].unidadMedida, insumosData[i]._id, 0)
+                    //this.detalleartmanufacturado[i].unidadMedida = insumosData[i].unidadMedida
+                    console.log(this.detalleartmanufacturado[i])
+                    id=[]
+                    break
+                }
+            } */
+        }
     },
 };
 </script>
