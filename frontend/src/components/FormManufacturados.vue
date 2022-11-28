@@ -14,41 +14,41 @@
                         <v-row>
 
                             <v-col cols="12" sm="6" md="6">
-                                <v-text-field label="Denominacion*" v-model="artmanufacturado.denominacion" required>
+                                <v-text-field label="Denominacion*" v-model="ArticuloManufacturado.denominacion" required>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="6">
-                                <v-text-field label="Tiempo de Cocina*" v-model="artmanufacturado.tiempoEstimadoCocina"
+                                <v-text-field label="Tiempo de Cocina*" type="number" v-model="ArticuloManufacturado.tiempoEstimadoCocina"
                                     hint="example of helper text only on focus" required></v-text-field>
                             </v-col>
                             <v-col cols="12">
-                                <v-text-field label="Precio de Venta*" v-model="artmanufacturado.precioVenta" required>
+                                <v-text-field type="number" label="Precio de Venta*" v-model="ArticuloManufacturado.precioVenta" required>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="12">
-                                <v-text-field label="Imagen*" v-model="artmanufacturado.imagen" required>
+                                <v-text-field label="Imagen*" v-model="ArticuloManufacturado.imagen" required>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="12">
-                                <v-text-field label="Activo?*" v-model="artmanufacturado.activo" required>
+                                <v-text-field label="Activo?*" v-model="ArticuloManufacturado.activo" required>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="12">
                                 <v-row v-for="ins in cantidadInsumos" :key="ins.id">
                                     <v-col>
                                         <v-select label="Seleccione un insumo" outlined
-                                            v-model="insumoSeleccionado" :items="insumosData" item-value="_id"
+                                            v-model="insumoSeleccionado[ins - 1]" :items="insumosData" item-value="_id"
                                             item-text="denominacion" @change="onchange(insumoSeleccionado)">
 
                                         </v-select>
                                     </v-col>
                                     <v-col>
-                                        <v-text-field label="Cantidad" number 
-                                            ></v-text-field>
+                                        <v-text-field label="Cantidad" type="number"
+                                            v-model="DetalleArticuloManufacturado[ins - 1].cantidad"></v-text-field>
                                     </v-col>
                                     <v-col>
-                                        <v-text-field label="Unidad Medida" 
-                                            >
+                                        <v-text-field label="Unidad Medida"
+                                            v-model="DetalleArticuloManufacturado[ins - 1].unidadMedida">
                                         </v-text-field>
                                     </v-col>
                                     <v-col>
@@ -58,7 +58,7 @@
                                 <v-btn @click="crearSelectInsumo">Agregar Insumo</v-btn>
                             </v-col>
                             <v-col cols="12">
-                                <v-text-field hidden v-model="artmanufacturado.rubrogeneralid" required>
+                                <v-text-field hidden v-model="ArticuloManufacturado.rubrogeneralid" required>
                                 </v-text-field>
                             </v-col>
 
@@ -69,7 +69,7 @@
 
                     <v-card-actions>
 
-                        <v-btn text color="blue darken-1" @click="dialog = false">
+                        <v-btn text color="blue darken-1" @click="cerrardialog">
                             Cancel
                         </v-btn>
                         <v-spacer></v-spacer>
@@ -96,7 +96,7 @@ export default {
             modal: false,
             insumosData: [],
             insumoSeleccionado: [],
-            artmanufacturado: {
+            ArticuloManufacturado: {
                 tiempoEstimadoCocina: null,
                 denominacion: "",
                 precioVenta: null,
@@ -104,12 +104,7 @@ export default {
                 activo: null,
                 rubrogeneralid: ""
             },
-            detalleartmanufacturado: [{
-                cantidad: 0,
-                unidadMedida: "",
-                articuloInsumoid: ""
-            }],
-
+            DetalleArticuloManufacturado: [],
 
         };
     },
@@ -120,10 +115,11 @@ export default {
     mounted() {
         console.log("idrubrogral props " + this.idrubrogral)
         this.getInsumos(),
-            this.artmanufacturado.rubrogeneralid = this.idrubrogral
+            this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
     },
     methods: {
         crearSelectInsumo() {
+            this.DetalleArticuloManufacturado.push({ 'unidadMedida': "", 'articuloInsumoid': "", 'cantidad': null })
             this.cantidadInsumos = this.cantidadInsumos + 1;
             console.log("cantidad de select: " + this.cantidadInsumos);
         },
@@ -133,17 +129,24 @@ export default {
             this.cantidadInsumos = this.cantidadInsumos - 1;
             this.insumoSeleccionado.splice(i - 1, 1);
             console.log("insumoSeleccionado ", this.insumoSeleccionado)
-
+            this.DetalleArticuloManufacturado.splice(i - 1, 1)
+            console.log(this.DetalleArticuloManufacturado)
+        },
+        cerrardialog(){
+            this.dialog = false
+            this.cantidadInsumos=null    
+            this.insumoSeleccionado=[]
+            this.DetalleArticuloManufacturado=[]
         },
         async crearManufacturado() {
             console.log("entró");
-            console.log(this.artmanufacturado);
+            console.log(this.ArticuloManufacturado);
             let urlServer = "http://localhost:3000/crearArticuloManufacturado";
             let method = "POST";
 
             const respuesta = await fetch(urlServer, {
                 method: method,
-                body: JSON.stringify(this.artmanufacturado),
+                body: JSON.stringify({'ArticuloManufacturado': this.ArticuloManufacturado, 'DetalleArticuloManufacturado': this.DetalleArticuloManufacturado}),
                 headers: {
                     "Content-type": "application/json",
                 },
@@ -155,12 +158,13 @@ export default {
             if (respuesta.status === 200) {
                 console.log(respuesta.status)
                 this.dialog = false;
+                
             } else {
 
                 this.respuestaError = resJson.message
                 console.log("mensaje del servidor: " + this.respuestaError)
             }
-            this.artmanufacturado = []
+            this.ArticuloManufacturado = []
         },
         async getInsumos() {
             console.log()
@@ -174,18 +178,21 @@ export default {
         },
         onchange(id) {
             console.log("enviado desde el select " + id)
-          /*  console.log("insumosData.length " + insumosData.length)
-            for (let i = 0; i < insumosData.length; i++) {
-                console.log(insumosData[i])
-                if (id == insumosData[i]._id) {
+            const indice = id[id.length - 1]
+            console.log("insumosData: ", this.insumosData)
+            console.log("insumosData.length " + this.insumosData.length)
+            for (let i = 0; i < this.insumosData.length; i++) {
+                console.log(this.insumosData[i])
+                if (indice == this.insumosData[i]._id) {
                     console.log("entró")
-                    this.detalleartmanufacturado.push(insumosData[i].unidadMedida, insumosData[i]._id, 0)
-                    //this.detalleartmanufacturado[i].unidadMedida = insumosData[i].unidadMedida
-                    console.log(this.detalleartmanufacturado[i])
-                    id=[]
+                    //this.DetalleArticuloManufacturado.push({'unidadMedida': this.insumosData[i].unidadMedida, 'articuloInsumoid': this.insumosData[i]._id})
+                    this.DetalleArticuloManufacturado[this.DetalleArticuloManufacturado.length - 1].unidadMedida = this.insumosData[i].unidadMedida
+                    this.DetalleArticuloManufacturado[this.DetalleArticuloManufacturado.length - 1].articuloInsumoid = this.insumosData[i]._id
+                    console.log(this.DetalleArticuloManufacturado)
+
                     break
                 }
-            } */
+            }
         }
     },
 };

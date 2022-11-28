@@ -5,10 +5,11 @@ const ArticuloInsumo = require('../models/ArticuloInsumo');
 const RubroGeneral = require('../models/RubroGeneral');
 
 exports.createArticuloManufacturado = async (req, res) => {
-    const ArticuloFound = await ArticuloManufacturado.findOne({ denominacion: req.body.ArticuloManufacturado[0].denominacion })
+    //const ArticuloFound = await ArticuloManufacturado.findOne({ denominacion: req.body.ArticuloManufacturado[0].denominacion })
+    const ArticuloFound = await ArticuloManufacturado.findOne({ denominacion: req.body.ArticuloManufacturado.denominacion })
     if (ArticuloFound)
         return res.status(301).json({ message: 'The article already exists' })
-    const insumosJson = req.body.insumos
+    const insumosJson = req.body.DetalleArticuloManufacturado
     console.log(insumosJson)
     const insumos = [];
     const keys = Object.keys(insumosJson);
@@ -17,7 +18,7 @@ exports.createArticuloManufacturado = async (req, res) => {
     };
     console.log("insumos array", insumos)
     console.log(req.body.ArticuloManufacturado);
-    const artmanufacturado = new ArticuloManufacturado(req.body.ArticuloManufacturado[0])
+    const artmanufacturado = new ArticuloManufacturado(req.body.ArticuloManufacturado)
     const savedArtmanufacturado = await artmanufacturado.save()
     console.log(savedArtmanufacturado)
     console.log("array " + insumos.length)
