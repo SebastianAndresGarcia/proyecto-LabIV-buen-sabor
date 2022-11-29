@@ -20,7 +20,7 @@
                         <v-row>
                             <v-col>
                                 <v-select multiple label="Seleccione un Rubro" outlined v-model="rubroSeleccionado"
-                                    :items="rubros" item-value="_id" item-text="denominacion">
+                                    :items="rubros" item-value="_id" item-text="denominacion" >
                                     <template v-slot:prepend-item>
                                         <v-list-item ripple @mousedown.prevent @click="toggle">
                                             <v-list-item-action>
@@ -38,9 +38,9 @@
                                     </template>
                                 </v-select>
                             </v-col>
-                            
+
                             <v-col style="margin-top: 20px;">
-                                <Crear-Rubro ></Crear-Rubro>
+                                <Crear-Rubro @nuevoRubro="handleMessage"></Crear-Rubro>
                             </v-col>
                         </v-row>
                         <p>{{ rubroSeleccionado }}</p>
@@ -59,26 +59,32 @@
                         </v-row>
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
-
-                        <v-select multiple label="Seleccione un insumo" outlined v-model="insumoSeleccionado"
-                            :items="insumos" item-value="_id" item-text="denominacion">
-                            <template v-slot:prepend-item>
-                                <v-list-item ripple @mousedown.prevent @click="toggleInsumos">
-                                    <v-list-item-action>
-                                        <v-icon :color="insumoSeleccionado.length > 0 ? 'indigo darken-4' : ''">
-                                            {{ icon }}
-                                        </v-icon>
-                                    </v-list-item-action>
-                                    <v-list-item-content>
-                                        <v-list-item-title>
-                                            Select All
-                                        </v-list-item-title>
-                                    </v-list-item-content>
-                                </v-list-item>
-                                <v-divider class="mt-2"></v-divider>
-                            </template>
-                        </v-select>
-                        <v-btn color="primary" dark class="mb-2"> Crear Insumo </v-btn>
+                        <v-divider class="mt-2"></v-divider>
+                        <v-row>
+                            <v-col>
+                                <v-select multiple label="Seleccione un insumo" outlined v-model="insumoSeleccionado"
+                                    :items="insumos" item-value="_id" item-text="denominacion">
+                                    <template v-slot:prepend-item>
+                                        <v-list-item ripple @mousedown.prevent @click="toggleInsumos">
+                                            <v-list-item-action>
+                                                <v-icon :color="insumoSeleccionado.length > 0 ? 'indigo darken-4' : ''">
+                                                    {{ icon }}
+                                                </v-icon>
+                                            </v-list-item-action>
+                                            <v-list-item-content>
+                                                <v-list-item-title>
+                                                    Select All
+                                                </v-list-item-title>
+                                            </v-list-item-content>
+                                        </v-list-item>
+                                        <v-divider class="mt-2"></v-divider>
+                                    </template>
+                                </v-select>
+                            </v-col>
+                            <v-col style="margin-top: 20px;">
+                                <Crear-RubroInsumo></Crear-RubroInsumo>
+                            </v-col>
+                        </v-row>
                         <p>{{ insumoSeleccionado }}</p>
                         <articuloinsumo-item :insumoParam="insumoSeleccionado"></articuloinsumo-item>
 
@@ -94,12 +100,14 @@
 import articuloManufacturado from "@/components/ArticuloManufacturado.vue";
 import articuloInsumo from "@/components/ArticuloInsumo.vue";
 import CrearRubro from "@/components/CrearRubro.vue";
+import CrearInsumo from "@/components/CrearInsumo.vue"
 export default {
     name: "abm-articulos",
     components: {
         "articulomanufacturado-item": articuloManufacturado,
         "articuloinsumo-item": articuloInsumo,
-        "Crear-Rubro": CrearRubro
+        "Crear-Rubro": CrearRubro,
+        "Crear-RubroInsumo": CrearInsumo
     },
     data() {
         return {
@@ -110,10 +118,10 @@ export default {
             rubrocreado: false
         }
     },
-    
+
     mounted() {
         this.getRubrosGeneral(),
-        this.getRubrosArticulos()
+            this.getRubrosArticulos()
     },
 
     methods: {
@@ -157,6 +165,14 @@ export default {
                 }
             })
         },
+        handleMessage(value) {
+            this.nuevoArt=value
+            if (this.nuevoArt) {
+                this.getRubrosGeneral()
+                this.nuevoArt=false
+            }
+
+        }
     },
     computed: {
         selectAll() {

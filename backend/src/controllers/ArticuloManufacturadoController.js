@@ -20,6 +20,7 @@ exports.createArticuloManufacturado = async (req, res) => {
     console.log(req.body.ArticuloManufacturado);
     const artmanufacturado = new ArticuloManufacturado(req.body.ArticuloManufacturado)
     const savedArtmanufacturado = await artmanufacturado.save()
+    const updateRubroGeneral = await RubroGeneral.findByIdAndUpdate(req.body.ArticuloManufacturado.rubrogeneralid, { $addToSet: { "articulomanufacturadoid": savedArtmanufacturado._id } })
     console.log(savedArtmanufacturado)
     console.log("array " + insumos.length)
     for (let i = 0; i < insumos.length; i++) {
@@ -34,6 +35,7 @@ exports.createArticuloManufacturado = async (req, res) => {
         const updateInsumo = await ArticuloInsumo.findByIdAndUpdate(InsumoFound._id, { $addToSet: { "detallearticulomanufacturadoid": savedDetalle._id } })
         const updateArtmanufacturado = await ArticuloManufacturado.findByIdAndUpdate(savedArtmanufacturado._id, { $addToSet: { "detallearticulomanufacturadoid": savedDetalle._id } })
         console.log("updateArtmanufacturado"+updateArtmanufacturado)
+        
     }
     res.json(savedArtmanufacturado) 
    

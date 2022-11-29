@@ -88,6 +88,7 @@
     </v-row>
 </template>
 <script>
+import ArticuloManufacturadoVue from './ArticuloManufacturado.vue';
 export default {
     name: "register-item",
 
@@ -120,7 +121,7 @@ export default {
     mounted() {
         console.log("idrubrogral props " + this.idrubrogral)
         this.getInsumos(),
-        this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
+            this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
     },
     methods: {
         crearSelectInsumo() {
@@ -142,7 +143,13 @@ export default {
             this.cantidadInsumos = null
             this.insumoSeleccionado = []
             this.DetalleArticuloManufacturado = []
-            this.ArticuloManufacturado=null
+            this.ArticuloManufacturado = new Object({
+                'tiempoEstimadoCocina': null,
+                'denominacion': "",
+                'precioVenta': null,
+                'imagen': "",
+                'activo': null, 'rubrogeneralid': this.idrubrogral
+            })
         },
         async crearManufacturado() {
             this.nuevoManufacturado = false
@@ -171,15 +178,22 @@ export default {
                 this.respuestaError = resJson.message
                 console.log("mensaje del servidor: " + this.respuestaError)
             }
-            
+
             this.cantidadInsumos = null
             this.insumoSeleccionado = []
             this.DetalleArticuloManufacturado = []
+            this.ArticuloManufacturado = new Object({
+                'tiempoEstimadoCocina': null,
+                'denominacion': "",
+                'precioVenta': null,
+                'imagen': "",
+                'activo': null, 
+                'rubrogeneralid': this.idrubrogral
+            })
         },
         async getInsumos() {
             console.log()
             const res = await fetch(
-                //estoy sería para que busque por rubro pero no puedo hacer busquedas y modificaciones en el json anidado "http://localhost:3000/ArticulosInsumosxrubro/"+parametro
                 "http://localhost:3000/articulosinsumos"
             );
             const resJson = await res.json();
@@ -195,11 +209,9 @@ export default {
                 console.log(this.insumosData[i])
                 if (indice == this.insumosData[i]._id) {
                     console.log("entró")
-                    //this.DetalleArticuloManufacturado.push({'unidadMedida': this.insumosData[i].unidadMedida, 'articuloInsumoid': this.insumosData[i]._id})
                     this.DetalleArticuloManufacturado[this.DetalleArticuloManufacturado.length - 1].unidadMedida = this.insumosData[i].unidadMedida
                     this.DetalleArticuloManufacturado[this.DetalleArticuloManufacturado.length - 1].articuloInsumoid = this.insumosData[i]._id
                     console.log(this.DetalleArticuloManufacturado)
-
                     break
                 }
             }
