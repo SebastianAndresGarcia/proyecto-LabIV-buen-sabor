@@ -14,15 +14,18 @@
                         <v-row>
 
                             <v-col cols="12" sm="6" md="6">
-                                <v-text-field label="Denominacion*" v-model="ArticuloManufacturado.denominacion" required>
+                                <v-text-field label="Denominacion*" v-model="ArticuloManufacturado.denominacion"
+                                    required>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="6">
-                                <v-text-field label="Tiempo de Cocina*" type="number" v-model="ArticuloManufacturado.tiempoEstimadoCocina"
+                                <v-text-field label="Tiempo de Cocina*" type="number"
+                                    v-model="ArticuloManufacturado.tiempoEstimadoCocina"
                                     hint="example of helper text only on focus" required></v-text-field>
                             </v-col>
                             <v-col cols="12">
-                                <v-text-field type="number" label="Precio de Venta*" v-model="ArticuloManufacturado.precioVenta" required>
+                                <v-text-field type="number" label="Precio de Venta*"
+                                    v-model="ArticuloManufacturado.precioVenta" required>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="12">
@@ -58,7 +61,7 @@
                                 <v-btn @click="crearSelectInsumo">Agregar Insumo</v-btn>
                             </v-col>
                             <v-col cols="12">
-                                <v-text-field hidden v-model="ArticuloManufacturado.rubrogeneralid" required>
+                                <v-text-field v-model="ArticuloManufacturado.rubrogeneralid" required>
                                 </v-text-field>
                             </v-col>
 
@@ -96,6 +99,7 @@ export default {
             modal: false,
             insumosData: [],
             insumoSeleccionado: [],
+            nuevoManufacturado: false,
             ArticuloManufacturado: {
                 tiempoEstimadoCocina: null,
                 denominacion: "",
@@ -111,11 +115,12 @@ export default {
     props: ["idrubrogral"],
     beforeUpdate() {
         //console.log("datos select ", this.insumoSeleccionado)
+        this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
     },
     mounted() {
         console.log("idrubrogral props " + this.idrubrogral)
         this.getInsumos(),
-            this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
+        this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
     },
     methods: {
         crearSelectInsumo() {
@@ -132,13 +137,15 @@ export default {
             this.DetalleArticuloManufacturado.splice(i - 1, 1)
             console.log(this.DetalleArticuloManufacturado)
         },
-        cerrardialog(){
+        cerrardialog() {
             this.dialog = false
-            this.cantidadInsumos=null    
-            this.insumoSeleccionado=[]
-            this.DetalleArticuloManufacturado=[]
+            this.cantidadInsumos = null
+            this.insumoSeleccionado = []
+            this.DetalleArticuloManufacturado = []
+            this.ArticuloManufacturado=null
         },
         async crearManufacturado() {
+            this.nuevoManufacturado = false
             console.log("entró");
             console.log(this.ArticuloManufacturado);
             let urlServer = "http://localhost:3000/crearArticuloManufacturado";
@@ -146,7 +153,7 @@ export default {
 
             const respuesta = await fetch(urlServer, {
                 method: method,
-                body: JSON.stringify({'ArticuloManufacturado': this.ArticuloManufacturado, 'DetalleArticuloManufacturado': this.DetalleArticuloManufacturado}),
+                body: JSON.stringify({ 'ArticuloManufacturado': this.ArticuloManufacturado, 'DetalleArticuloManufacturado': this.DetalleArticuloManufacturado }),
                 headers: {
                     "Content-type": "application/json",
                 },
@@ -158,13 +165,16 @@ export default {
             if (respuesta.status === 200) {
                 console.log(respuesta.status)
                 this.dialog = false;
-                
+                this.nuevoManufacturado = true
             } else {
 
                 this.respuestaError = resJson.message
                 console.log("mensaje del servidor: " + this.respuestaError)
             }
-            this.ArticuloManufacturado = []
+            
+            this.cantidadInsumos = null
+            this.insumoSeleccionado = []
+            this.DetalleArticuloManufacturado = []
         },
         async getInsumos() {
             console.log()
@@ -195,5 +205,10 @@ export default {
             }
         }
     },
+    watch: {
+        nuevoManufacturado: function () {
+            this.$emit('nuevoManufacturado', this.nuevoManufacturado)
+        }
+    }
 };
 </script>

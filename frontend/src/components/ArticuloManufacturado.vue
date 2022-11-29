@@ -4,7 +4,8 @@
             Articulos Manufacturados
 
             <v-spacer></v-spacer>
-            <Form-Manufacturado :idrubrogral="manufacturadoParam"></Form-Manufacturado>
+            <Form-Manufacturado :idrubrogral="manufacturadoParam" @nuevoManufacturado="handleMessage">
+            </Form-Manufacturado>
         </v-card-title>
         <v-simple-table class="tabla">
             <template v-slot:default>
@@ -66,6 +67,7 @@
                 </tbody>
             </template>
         </v-simple-table>
+
     </v-card>
     <div v-else>
         <h1 class="text-center">Seleccione un Rubro</h1>
@@ -88,6 +90,7 @@ export default {
                 detallearticulomanufacturadoid: "",
                 rubrogeneralid: ""
             }],
+            nuevoArt: false
         }
     },
     components: {
@@ -125,6 +128,14 @@ export default {
             const resJson = await res.json();
             console.log(resJson);
             this.manufacturadosData = resJson;
+        },
+        handleMessage(value) {
+            this.nuevoArt=value
+            if (this.nuevoArt) {
+                this.getManufacturadosxrubro(this.manufacturadoParam)
+                this.nuevoArt=false
+            }
+
         }
     }
 }
