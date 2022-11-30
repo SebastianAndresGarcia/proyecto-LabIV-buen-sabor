@@ -37,7 +37,7 @@ exports.createArticuloManufacturado = async (req, res) => {
     }
     res.json(savedArtmanufacturado) 
    
-}
+},
 exports.getArticulosManufacturados = async (req, res) => {
     const manufacturados = await ArticuloManufacturado.find()
     if (!manufacturados)
@@ -58,4 +58,37 @@ exports.getArticulosManufacturadosxrubro = async (req, res) => {
 exports.updateArticulosManufacturados = async (req, res) => { 
     const addressUpdated = await Address.findByIdAndUpdate(req.params.id, req.body)
     res.json(addressUpdated)
+},
+exports.deleteArticuloManufacturado = async (req, res) => {
+    
+    const ArticuloFound = await ArticuloManufacturado.findOne(req.params.id)
+    
+    const insumosJson = req.body.DetalleArticuloManufacturado
+    console.log(insumosJson)
+    const insumos = [];
+    const keys = Object.keys(insumosJson);
+    for (let x = 0; x < keys.length; x++) {
+        insumos.push(insumosJson[keys[x]]);
+    };
+    console.log("insumos array", insumos)
+    console.log(req.body.ArticuloManufacturado);
+    const artmanufacturado = new ArticuloManufacturado(req.body.ArticuloManufacturado)
+    const savedArtmanufacturado = await artmanufacturado.save()
+    console.log(savedArtmanufacturado)
+    console.log("array " + insumos.length)
+    for (let i = 0; i < insumos.length; i++) {
+        console.log("insumo.articuloInsumoid: " + insumos[i].articuloInsumoid+" insumo.unidadMedida: "+insumos[i].unidadMedida)
+        const InsumoFound = await ArticuloInsumo.findOne({ _id: insumos[i].articuloInsumoid })
+        console.log("InsumoFound"+InsumoFound)
+        console.log("savedArtmanufacturado._id: "+savedArtmanufacturado._id)
+        const detallearticulo = new DetalleArticuloManufacturado( {"cantidad":insumos[i].cantidad , "unidadMedida":insumos[i].unidadMedida, "ArticuloManufacturadoid": savedArtmanufacturado._id,"ArticuloInsumoid": InsumoFound._id})
+        console.log(detallearticulo)
+        const savedDetalle = await detallearticulo.save()
+        console.log("savedDetalle: "+savedDetalle)
+        const updateInsumo = await ArticuloInsumo.findByIdAndUpdate(InsumoFound._id, { $addToSet: { "detallearticulomanufacturadoid": savedDetalle._id } })
+        const updateArtmanufacturado = await ArticuloManufacturado.findByIdAndUpdate(savedArtmanufacturado._id, { $addToSet: { "detallearticulomanufacturadoid": savedDetalle._id } })
+        console.log("updateArtmanufacturado"+updateArtmanufacturado)
+    }
+    res.json(savedArtmanufacturado) 
+   
 }

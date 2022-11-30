@@ -51,16 +51,17 @@
                         </td>
 
                         <td>
-                            <a :href="'/'" style="text-decoration: none; color: white">
-                                <v-icon small class="mr-2">
-                                    mdi-pencil
-                                </v-icon>
-                            </a>
+
+                            <v-btn icon v-bind="attrs" v-on="on">
+                                <v-icon>mdi-pencil</v-icon>
+                            </v-btn>
                         </td>
                         <td>
-                            <v-icon small>
-                                mdi-delete
-                            </v-icon>
+                            <v-btn icon v-bind="attrs" v-on="on" @click="eliminarManufacturado(manufacturado._id)">
+                                <v-icon small>
+                                    mdi-delete
+                                </v-icon>
+                            </v-btn>
                         </td>
 
                     </tr>
@@ -109,7 +110,6 @@ export default {
         //this.getManufacturadosxrubro(this.manufacturadoParam)
     },
 
-
     methods: {
         async getManufacturados() {
             const res = await fetch(
@@ -129,11 +129,45 @@ export default {
             console.log(resJson);
             this.manufacturadosData = resJson;
         },
+        async eliminarManufacturado(id){
+            let urlServer = `http://localhost:3000/eliminarArticuloManufacturado/${id}/`;
+    
+              await fetch(urlServer, {
+                  "method": 'DELETE',
+  
+                  "headers": {
+                      "Content-type": 'application/json',
+                      'Access-Control-Allow-Origin': '*'
+                  },
+                  mode: 'cors'
+  
+              });
+        },
+        /*  async deleteinstrumento(idinstrumento) {
+  
+              let urlServer = `http://localhost:3001/eliminarInstrumento/${idinstrumento}/`;
+  
+  
+              await fetch(urlServer, {
+                  "method": 'DELETE',
+  
+                  "headers": {
+                      "Content-type": 'application/json',
+                      'Access-Control-Allow-Origin': '*'
+                  },
+                  mode: 'cors'
+  
+              });
+              window.location.reload();
+          },*/
+/* async editarinstrumento(idinstrumento){
+    href('/Formulario/' + instrumento.id),
+ */
         handleMessage(value) {
-            this.nuevoArt=value
+            this.nuevoArt = value
             if (this.nuevoArt) {
                 this.getManufacturadosxrubro(this.manufacturadoParam)
-                this.nuevoArt=false
+                this.nuevoArt = false
             }
 
         }

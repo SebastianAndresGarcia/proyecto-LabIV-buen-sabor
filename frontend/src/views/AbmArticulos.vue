@@ -183,26 +183,7 @@ export default {
         },
     },
 };
-/*  async deleteinstrumento(idinstrumento) {
-  
-              let urlServer = `http://localhost:3001/eliminarInstrumento/${idinstrumento}/`;
-  
-  
-              await fetch(urlServer, {
-                  "method": 'DELETE',
-  
-                  "headers": {
-                      "Content-type": 'application/json',
-                      'Access-Control-Allow-Origin': '*'
-                  },
-                  mode: 'cors'
-  
-              });
-              window.location.reload();
-          },*/
-/* async editarinstrumento(idinstrumento){
-    href('/Formulario/' + instrumento.id),
- */
+
 </script>
 <style scoped>
 .tabla {
