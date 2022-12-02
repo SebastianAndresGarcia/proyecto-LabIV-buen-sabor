@@ -52,9 +52,11 @@
 
                         <td>
 
-                            <v-btn icon v-bind="attrs" v-on="on">
+                          <!--  <v-btn icon v-bind="attrs" v-on="on" @click="modificarManufacturado(manufacturado._id)">
                                 <v-icon>mdi-pencil</v-icon>
-                            </v-btn>
+                            </v-btn> -->
+                            <Form-Manufacturado :manufacturadoid = "manufacturado._id" @nuevoManufacturado="handleMessage">
+                            </Form-Manufacturado>
                         </td>
                         <td>
                             <v-btn icon v-bind="attrs" v-on="on" @click="eliminarManufacturado(manufacturado._id)">
@@ -104,6 +106,7 @@ export default {
             this.getManufacturadosxrubro(this.manufacturadoParam)
     },
     props: ["manufacturadoParam"],
+    
     mounted() {
         console.log("manufacturadoParam", this.manufacturadoParam)
         //this.getManufacturados()
@@ -129,40 +132,30 @@ export default {
             console.log(resJson);
             this.manufacturadosData = resJson;
         },
-        async eliminarManufacturado(id){
-            let urlServer = `http://localhost:3000/eliminarArticuloManufacturado/${id}/`;
-    
-              await fetch(urlServer, {
-                  "method": 'DELETE',
-  
-                  "headers": {
-                      "Content-type": 'application/json',
-                      'Access-Control-Allow-Origin': '*'
-                  },
-                  mode: 'cors'
-  
-              });
+        async eliminarManufacturado(id) {
+            let urlServer = `http://localhost:3000/eliminarArticuloManufacturado/${id}`;
+
+            const res = await fetch(urlServer, {
+                "method": 'DELETE',
+
+                "headers": {
+                    "Content-type": 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                mode: 'cors'
+
+            });
+            const resJson = await res.json();
+            console.log("respuesta: ", resJson)
+            if (res.status === 200) {
+                console.log(res.status)
+                this.getManufacturadosxrubro(this.manufacturadoParam)
+            }
         },
-        /*  async deleteinstrumento(idinstrumento) {
-  
-              let urlServer = `http://localhost:3001/eliminarInstrumento/${idinstrumento}/`;
-  
-  
-              await fetch(urlServer, {
-                  "method": 'DELETE',
-  
-                  "headers": {
-                      "Content-type": 'application/json',
-                      'Access-Control-Allow-Origin': '*'
-                  },
-                  mode: 'cors'
-  
-              });
-              window.location.reload();
-          },*/
-/* async editarinstrumento(idinstrumento){
-    href('/Formulario/' + instrumento.id),
- */
+
+        /* async editarinstrumento(idinstrumento){
+            href('/Formulario/' + instrumento.id),
+         */
         handleMessage(value) {
             this.nuevoArt = value
             if (this.nuevoArt) {

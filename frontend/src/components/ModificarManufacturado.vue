@@ -1,26 +1,15 @@
 <template>
     <v-row justify="center">
         <v-dialog v-model="dialog" persistent max-width="600px">
-            <!--<template v-if="(idrubrogral.length > 0)" v-slot:activator="{ on, attrs }">
-
-                    <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"> Crear Manufacturado </v-btn>
-                </template>
-            
-            <template v-if="(manufacturadoid.length > 0)" >
-                <v-btn icon v-bind="attrs" v-on="on" @click="modificarManufacturado(manufacturado._id)">
-                                <v-icon>mdi-pencil</v-icon>
-                            </v-btn>
-            </template>-->
             <template v-slot:activator="{ on, attrs }">
                 <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"> Crear Manufacturado </v-btn>
             </template>
-        
             <v-card ref="form">
                 <v-card-title>
-                    <span class="text-h5">Crear Articulo Manufacturado</span>
+                    <span class="text-h5">Modificar Articulo Manufacturado</span>
                 </v-card-title>
 
-                <form @submit.prevent="crearManufacturado">
+                <form @submit.prevent="modificarManufacturado">
                     <v-card-text>
                         <v-row>
 
@@ -162,7 +151,7 @@ export default {
                 'activo': null, 'rubrogeneralid': this.idrubrogral
             })
         },
-        async crearManufacturado() {
+        async modificarManufacturado() {
             this.nuevoManufacturado = false
             console.log("entró");
             console.log(this.ArticuloManufacturado);
