@@ -1,20 +1,16 @@
 <template>
     <v-row justify="center">
         <v-dialog v-model="dialog" persistent max-width="600px">
-            <!--<template v-if="(idrubrogral.length > 0)" v-slot:activator="{ on, attrs }">
-
-                    <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"> Crear Manufacturado </v-btn>
-                </template>
-            
-            <template v-if="(manufacturadoid.length > 0)" >
-                <v-btn icon v-bind="attrs" v-on="on" @click="modificarManufacturado(manufacturado._id)">
-                                <v-icon>mdi-pencil</v-icon>
-                            </v-btn>
-            </template>-->
             <template v-slot:activator="{ on, attrs }">
-                <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"> Crear Manufacturado </v-btn>
+                <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
+                    <v-icon>mdi-pencil</v-icon>
+                </v-btn>
             </template>
-        
+
+            <!--<template v-slot:activator="{ on, attrs }">
+                <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"> Crear Manufacturado </v-btn>
+            </template>-->
+
             <v-card ref="form">
                 <v-card-title>
                     <span class="text-h5">Crear Articulo Manufacturado</span>
@@ -125,12 +121,14 @@ export default {
         };
     },
     props: ["idrubrogral"],
+    //props: ["manufacturadoid"],
     beforeUpdate() {
         //console.log("datos select ", this.insumoSeleccionado)
         this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
     },
     mounted() {
-        console.log("idrubrogral props " + this.idrubrogral)
+        console.log("idrubrogral props " , this.idrubrogral)
+        console.log("manufacturadoid props " + this.manufacturadoid)
         this.getInsumos(),
             this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
     },
@@ -198,7 +196,7 @@ export default {
                 'denominacion': "",
                 'precioVenta': null,
                 'imagen': "",
-                'activo': null, 
+                'activo': null,
                 'rubrogeneralid': this.idrubrogral
             })
         },

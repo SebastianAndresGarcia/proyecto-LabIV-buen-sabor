@@ -55,7 +55,7 @@
                           <!--  <v-btn icon v-bind="attrs" v-on="on" @click="modificarManufacturado(manufacturado._id)">
                                 <v-icon>mdi-pencil</v-icon>
                             </v-btn> -->
-                            <Form-Manufacturado :manufacturadoid = "manufacturado._id" @nuevoManufacturado="handleMessage">
+                            <Form-Manufacturado :idrubrogral = "manufacturado._id" >
                             </Form-Manufacturado>
                         </td>
                         <td>
