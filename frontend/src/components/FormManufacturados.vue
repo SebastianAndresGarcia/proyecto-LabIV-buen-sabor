@@ -2,9 +2,16 @@
     <v-row justify="center">
         <v-dialog v-model="dialog" persistent max-width="600px">
             <template v-slot:activator="{ on, attrs }">
-                <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                    <v-icon>mdi-pencil</v-icon>
-                </v-btn>
+                <div v-if="(idrubrogral[1] == null)">
+                    <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
+                        Crear Manufacturado
+                    </v-btn>
+                </div>
+                <div v-else>
+                    <v-btn icon v-bind="attrs" v-on="on">
+                        <v-icon>mdi-pencil</v-icon>
+                    </v-btn>
+                </div>
             </template>
 
             <!--<template v-slot:activator="{ on, attrs }">
@@ -125,10 +132,11 @@ export default {
     beforeUpdate() {
         //console.log("datos select ", this.insumoSeleccionado)
         this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
+        console.log("idrubrogral dentro de formulario ", this.idrubrogral)
     },
     mounted() {
-        console.log("idrubrogral props " , this.idrubrogral)
-        console.log("manufacturadoid props " + this.manufacturadoid)
+        console.log("idrubrogral props ", this.idrubrogral)
+        //console.log("manufacturadoid props " + this.manufacturadoid)
         this.getInsumos(),
             this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
     },
