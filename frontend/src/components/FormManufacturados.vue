@@ -133,12 +133,18 @@ export default {
         //console.log("datos select ", this.insumoSeleccionado)
         this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
         console.log("idrubrogral dentro de formulario ", this.idrubrogral)
+        if(this.idrubrogral.length>0){
+            console.log(this.idrubrogral[1])
+            this.getManufacturadoXdenominacion(this.idrubrogral[1])   
+        }
     },
     mounted() {
         console.log("idrubrogral props ", this.idrubrogral)
         //console.log("manufacturadoid props " + this.manufacturadoid)
         this.getInsumos(),
-            this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
+        this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
+        console.log(this.idrubrogral[1])
+        this.getManufacturadoXdenominacion(this.idrubrogral[1]) 
     },
     methods: {
         crearSelectInsumo() {
@@ -232,6 +238,22 @@ export default {
                     break
                 }
             }
+        },
+        async getManufacturadoXdenominacion(id)  {
+            const res = await fetch(
+                    'http://localhost:3000/getManufacturadoXdenominacion/' + id
+                )
+                const resJson = await res.json()
+                console.log("resJson ", resJson)
+                this.ArticuloManufacturado = new Object({
+                    
+                    'tiempoEstimadoCocina': resJson.tiempoEstimadoCocina,
+                    'denominacion': resJson.denominacion,
+                    'precioVenta': resJson.precioVenta,
+                    'imagen': resJson.imagen,
+                    'activo': resJson.activo,
+                    'rubrogeneralid': resJson.rubrogeneralid,
+                })
         }
     },
     watch: {

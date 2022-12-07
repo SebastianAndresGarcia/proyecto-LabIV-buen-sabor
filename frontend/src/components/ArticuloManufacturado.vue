@@ -52,10 +52,11 @@
 
                         <td>
 
-                          <!--  <v-btn icon v-bind="attrs" v-on="on" @click="modificarManufacturado(manufacturado._id)">
+                            <!--  <v-btn icon v-bind="attrs" v-on="on" @click="modificarManufacturado(manufacturado._id)">
                                 <v-icon>mdi-pencil</v-icon>
                             </v-btn> -->
-                            <Form-Manufacturado :idrubrogral =  "[manufacturadoParam,manufacturado._id]" >
+                            <Form-Manufacturado :idrubrogral="[manufacturadoParam, manufacturado.denominacion]"
+                                @nuevoManufacturado="handleMessage">
                             </Form-Manufacturado>
                         </td>
                         <td>
@@ -106,7 +107,7 @@ export default {
             this.getManufacturadosxrubro(this.manufacturadoParam)
     },
     props: ["manufacturadoParam"],
-    
+
     mounted() {
         console.log("manufacturadoParam", this.manufacturadoParam)
         //this.getManufacturados()

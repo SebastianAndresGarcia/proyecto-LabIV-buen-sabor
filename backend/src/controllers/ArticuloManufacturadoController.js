@@ -81,3 +81,10 @@ exports.deleteArticuloManufacturado = async (req, res) => {
         return res.status(204).json();
     res.json(eliminarArticulo)
 }
+exports.getManufacturadoXdenominacion=async (req,res)=>{
+    const busqueda = req.params.id;
+    const manufacturadoxid = await ArticuloManufacturado.findOne({ denominacion: busqueda });
+    if (!manufacturadoxid)
+        return res.status(204).json();
+    return res.json(manufacturadoxid)
+}
