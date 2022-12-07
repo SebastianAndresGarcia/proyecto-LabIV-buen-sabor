@@ -2,21 +2,17 @@
     <v-row justify="center">
         <v-dialog v-model="dialog" persistent max-width="600px">
             <template v-slot:activator="{ on, attrs }">
-                <div v-if="(idrubrogral[1] == null)">
+                <div v-if="(idmanufacturado == null)">
                     <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
                         Crear Manufacturado
                     </v-btn>
                 </div>
                 <div v-else>
-                    <v-btn icon v-bind="attrs" v-on="on">
+                    <v-btn icon v-bind="attrs" v-on="on" @click="getManufacturadoXdenominacion(idmanufacturado)">
                         <v-icon>mdi-pencil</v-icon>
                     </v-btn>
                 </div>
             </template>
-
-            <!--<template v-slot:activator="{ on, attrs }">
-                <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"> Crear Manufacturado </v-btn>
-            </template>-->
 
             <v-card ref="form">
                 <v-card-title>
@@ -124,27 +120,23 @@ export default {
                 rubrogeneralid: ""
             },
             DetalleArticuloManufacturado: [],
-
         };
     },
-    props: ["idrubrogral"],
+    props: { idrubrogral: String, idmanufacturado: String },
     //props: ["manufacturadoid"],
     beforeUpdate() {
         //console.log("datos select ", this.insumoSeleccionado)
-        this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
-        console.log("idrubrogral dentro de formulario ", this.idrubrogral)
-        if(this.idrubrogral.length>0){
-            console.log(this.idrubrogral[1])
-            this.getManufacturadoXdenominacion(this.idrubrogral[1])   
-        }
+        //this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
+        console.log("idrubrogral beforeUpdate ", this.idrubrogral)
+        console.log("idmanufacturado beforeUpdate", this.idmanufacturado)
     },
     mounted() {
         console.log("idrubrogral props ", this.idrubrogral)
-        //console.log("manufacturadoid props " + this.manufacturadoid)
+        console.log("idmanufacturado props " + this.idmanufacturado)
         this.getInsumos(),
-        this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
-        console.log(this.idrubrogral[1])
-        this.getManufacturadoXdenominacion(this.idrubrogral[1]) 
+            this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
+        console.log(this.idrubrogral)
+        //this.getManufacturadoXdenominacion(this.idrubrogral[1]) 
     },
     methods: {
         crearSelectInsumo() {
@@ -174,34 +166,54 @@ export default {
                 'activo': null, 'rubrogeneralid': this.idrubrogral
             })
         },
-        async crearManufacturado() {
+        async crearManufacturado() { //también cumple la función de actualizar según el props activo
             this.nuevoManufacturado = false
             console.log("entró");
+
             console.log(this.ArticuloManufacturado);
-            let urlServer = "http://localhost:3000/crearArticuloManufacturado";
-            let method = "POST";
-
-            const respuesta = await fetch(urlServer, {
-                method: method,
-                body: JSON.stringify({ 'ArticuloManufacturado': this.ArticuloManufacturado, 'DetalleArticuloManufacturado': this.DetalleArticuloManufacturado }),
-                headers: {
-                    "Content-type": "application/json",
-                },
-                mode: "cors",
-
-            });
-            const resJson = await respuesta.json()
-            console.log("respuesta: ", resJson)
-            if (respuesta.status === 200) {
-                console.log(respuesta.status)
-                this.dialog = false;
-                this.nuevoManufacturado = true
+            if (this.idrubrogral) {
+                let urlServer = "http://localhost:3000/crearArticuloManufacturado";
+                let method = "POST";
+                const respuesta = await fetch(urlServer, {
+                    method: method,
+                    body: JSON.stringify({ 'ArticuloManufacturado': this.ArticuloManufacturado, 'DetalleArticuloManufacturado': this.DetalleArticuloManufacturado }),
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    mode: "cors",
+                });
+                const resJson = await respuesta.json()
+                console.log("respuesta: ", resJson)
+                if (respuesta.status === 200) {
+                    console.log(respuesta.status)
+                    this.dialog = false;
+                    this.nuevoManufacturado = true
+                } else {
+                    this.respuestaError = resJson.message
+                    console.log("mensaje del servidor: " + this.respuestaError)
+                }
             } else {
-
-                this.respuestaError = resJson.message
-                console.log("mensaje del servidor: " + this.respuestaError)
+                let urlServer = "http://localhost:3000/actualizarArticuloManufacturado/" + this.idmanufacturado;
+                let method = "POST";
+                const respuesta = await fetch(urlServer, {
+                    method: method,
+                    body: JSON.stringify({ 'ArticuloManufacturado': this.ArticuloManufacturado }),
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    mode: "cors",
+                });
+                const resJson = await respuesta.json()
+                console.log("respuesta: ", resJson)
+                if (respuesta.status === 200) {
+                    console.log(respuesta.status)
+                    this.dialog = false;
+                    this.nuevoManufacturado = true
+                } else {
+                    this.respuestaError = resJson.message
+                    console.log("mensaje del servidor: " + this.respuestaError)
+                }
             }
-
             this.cantidadInsumos = null
             this.insumoSeleccionado = []
             this.DetalleArticuloManufacturado = []
@@ -213,6 +225,7 @@ export default {
                 'activo': null,
                 'rubrogeneralid': this.idrubrogral
             })
+
         },
         async getInsumos() {
             console.log()
@@ -239,21 +252,21 @@ export default {
                 }
             }
         },
-        async getManufacturadoXdenominacion(id)  {
+        async getManufacturadoXdenominacion(id) {
             const res = await fetch(
-                    'http://localhost:3000/getManufacturadoXdenominacion/' + id
-                )
-                const resJson = await res.json()
-                console.log("resJson ", resJson)
-                this.ArticuloManufacturado = new Object({
-                    
-                    'tiempoEstimadoCocina': resJson.tiempoEstimadoCocina,
-                    'denominacion': resJson.denominacion,
-                    'precioVenta': resJson.precioVenta,
-                    'imagen': resJson.imagen,
-                    'activo': resJson.activo,
-                    'rubrogeneralid': resJson.rubrogeneralid,
-                })
+                'http://localhost:3000/getManufacturadoXdenominacion/' + id
+            )
+            const resJson = await res.json()
+            console.log("resJson ", resJson)
+            this.ArticuloManufacturado = new Object({
+
+                'tiempoEstimadoCocina': resJson.tiempoEstimadoCocina,
+                'denominacion': resJson.denominacion,
+                'precioVenta': resJson.precioVenta,
+                'imagen': resJson.imagen,
+                'activo': resJson.activo,
+                'rubrogeneralid': resJson.rubrogeneralid,
+            })
         }
     },
     watch: {

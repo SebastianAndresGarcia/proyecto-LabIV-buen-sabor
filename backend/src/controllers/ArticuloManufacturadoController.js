@@ -59,9 +59,9 @@ exports.getArticulosManufacturadosxrubro = async (req, res) => {
     return res.json(manufacturados)
 }
 
-exports.updateArticulosManufacturados = async (req, res) => {
-    const addressUpdated = await Address.findByIdAndUpdate(req.params.id, req.body)
-    res.json(addressUpdated)
+exports.updateArticuloManufacturado = async (req, res) => {
+    const ArticuloManufacturadoUpdated = await ArticuloManufacturado.findOneAndUpdate({denominacion: req.params.id}, req.body.ArticuloManufacturado)
+    res.json(ArticuloManufacturadoUpdated)
 }
 
 exports.deleteArticuloManufacturado = async (req, res) => {
@@ -83,7 +83,7 @@ exports.deleteArticuloManufacturado = async (req, res) => {
 }
 exports.getManufacturadoXdenominacion=async (req,res)=>{
     const busqueda = req.params.id;
-    const manufacturadoxid = await ArticuloManufacturado.findOne({ denominacion: busqueda });
+    const manufacturadoxid = await ArticuloManufacturado.findOne({ denominacion: busqueda }).populate('detallearticulomanufacturadoid');
     if (!manufacturadoxid)
         return res.status(204).json();
     return res.json(manufacturadoxid)
