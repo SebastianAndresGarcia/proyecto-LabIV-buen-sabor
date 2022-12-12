@@ -83,7 +83,15 @@ exports.deleteArticuloManufacturado = async (req, res) => {
 }
 exports.getManufacturadoXdenominacion=async (req,res)=>{
     const busqueda = req.params.id;
-    const manufacturadoxid = await ArticuloManufacturado.findOne({ denominacion: busqueda }).populate('detallearticulomanufacturadoid');
+    //const manufacturadoxid = await ArticuloManufacturado.findOne({ denominacion: busqueda }).populate('detallearticulomanufacturadoid', populate('ArticuloInsumoid'));
+    //https://dev.to/paras594/how-to-use-populate-in-mongoose-node-js-mo0
+    const manufacturadoxid = await ArticuloManufacturado.findOne({ denominacion: busqueda }).populate({
+        path: "detallearticulomanufacturadoid", // populate blogs
+        populate: {
+           path: "ArticuloInsumoid", // in blogs, populate comments
+           select: { denominacion: 1, unidadMedida: 1}, //elijo solo los campos que quiero traer
+        }
+     })
     if (!manufacturadoxid)
         return res.status(204).json();
     return res.json(manufacturadoxid)

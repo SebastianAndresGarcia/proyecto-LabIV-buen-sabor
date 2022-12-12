@@ -257,6 +257,7 @@ export default {
                 'http://localhost:3000/getManufacturadoXdenominacion/' + id
             )
             const resJson = await res.json()
+            
             console.log("resJson ", resJson)
             this.ArticuloManufacturado = new Object({
 
@@ -267,6 +268,20 @@ export default {
                 'activo': resJson.activo,
                 'rubrogeneralid': resJson.rubrogeneralid,
             })
+            
+            this.DetalleArticuloManufacturado=(
+                resJson.detallearticulomanufacturadoid
+                //'cantidad': resJson.detallearticulomanufacturadoid.cantidad,
+                //'unidadMedida': resJson.detallearticulomanufacturadoid.unidadMedida
+            )
+            this.cantidadInsumos=this.DetalleArticuloManufacturado.length
+            for (let i = 0; i < this.cantidadInsumos; i++) {
+                this.insumoSeleccionado.push(resJson.detallearticulomanufacturadoid[i].ArticuloInsumoid)
+            }
+            console.log('this.cantidadInsumos',this.cantidadInsumos),
+            console.log('this.DetalleArticuloManufacturado',this.DetalleArticuloManufacturado),
+            console.log('this.insumoSeleccionado',this.insumoSeleccionado)
+            
         }
     },
     watch: {
