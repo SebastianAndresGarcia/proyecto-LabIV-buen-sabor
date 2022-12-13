@@ -5,6 +5,8 @@ const controllerRubroArticulo = require('../controllers/RubroArticuloController'
 const controllerRubroGeneral = require('../controllers/RubroGeneralController')
 const controllerArticuloManufacturado = require('../controllers/ArticuloManufacturadoController')
 const controllerArticuloInsumo = require('../controllers/ArticuloInsumoController')
+const controllerDetalleArticuloManufacturado = require('../controllers/DetalleArticuloManufacturadoController')
+
 const { verifySignUp } = require("../middlewares");
 const controller = require("../controllers/auth.controller");
 
@@ -42,6 +44,7 @@ router.get('/articulosmanufacturadosxrubro/:id', controllerArticuloManufacturado
 router.post('/actualizarArticuloManufacturado/:id', controllerArticuloManufacturado.updateArticuloManufacturado);
 router.get('/getManufacturadoXdenominacion/:id', controllerArticuloManufacturado.getManufacturadoXdenominacion);
 router.delete('/eliminarArticuloManufacturado/:id', controllerArticuloManufacturado.deleteArticuloManufacturado);
+router.delete('/eliminarDetalleArticuloManufacturado/:id', controllerDetalleArticuloManufacturado.deleteDetalleArticuloManufacturado);
 router.post('/crearArticuloInsumo', controllerArticuloInsumo.createArticuloInsumo)
 router.get('/ArticulosInsumos', controllerArticuloInsumo.getArticulosInsumos)
 router.get('/ArticulosInsumosxrubro/:id', controllerArticuloInsumo.getArticulosInsumosxrubro)

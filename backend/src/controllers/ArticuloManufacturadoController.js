@@ -60,7 +60,7 @@ exports.getArticulosManufacturadosxrubro = async (req, res) => {
 }
 
 exports.updateArticuloManufacturado = async (req, res) => {
-    const ArticuloManufacturadoUpdated = await ArticuloManufacturado.findOneAndUpdate({denominacion: req.params.id}, req.body.ArticuloManufacturado)
+    const ArticuloManufacturadoUpdated = await ArticuloManufacturado.findOneAndUpdate({ denominacion: req.params.id }, req.body.ArticuloManufacturado)
     res.json(ArticuloManufacturadoUpdated)
 }
 
@@ -81,17 +81,18 @@ exports.deleteArticuloManufacturado = async (req, res) => {
         return res.status(204).json();
     res.json(eliminarArticulo)
 }
-exports.getManufacturadoXdenominacion=async (req,res)=>{
+exports.getManufacturadoXdenominacion = async (req, res) => {
     const busqueda = req.params.id;
     //const manufacturadoxid = await ArticuloManufacturado.findOne({ denominacion: busqueda }).populate('detallearticulomanufacturadoid', populate('ArticuloInsumoid'));
     //https://dev.to/paras594/how-to-use-populate-in-mongoose-node-js-mo0
-    const manufacturadoxid = await ArticuloManufacturado.findOne({ denominacion: busqueda }).populate({
-        path: "detallearticulomanufacturadoid", // populate blogs
-        populate: {
-           path: "ArticuloInsumoid", // in blogs, populate comments
-           select: { denominacion: 1, unidadMedida: 1}, //elijo solo los campos que quiero traer
-        }
-     })
+    const manufacturadoxid = await ArticuloManufacturado.findOne({ denominacion: busqueda })
+        .populate({
+            path: "detallearticulomanufacturadoid", // populate blogs
+            populate: {
+                path: "ArticuloInsumoid", // in blogs, populate comments
+                select: { denominacion: 1, unidadMedida: 1 }, //elijo solo los campos que quiero traer
+            }
+        })
     if (!manufacturadoxid)
         return res.status(204).json();
     return res.json(manufacturadoxid)

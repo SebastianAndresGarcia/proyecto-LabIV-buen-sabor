@@ -144,7 +144,27 @@ export default {
             this.cantidadInsumos = this.cantidadInsumos + 1;
             console.log("cantidad de select: " + this.cantidadInsumos);
         },
-        eliminarInsumo(i) {
+        async eliminarInsumo(i) {
+            if (this.idmanufacturado == undefined) {
+                console.log("solo borrar insumo del form")
+            } else {
+                console.log("borrar insumo de la bd"+this.DetalleArticuloManufacturado[i-1]._id)
+                const id =this.DetalleArticuloManufacturado[i-1]._id
+                let urlServer = `http://localhost:3000/eliminarDetalleArticuloManufacturado/${id}`;
+                const res = await fetch(urlServer, {
+                    "method": 'DELETE',
+                    "headers": {
+                        "Content-type": 'application/json',
+                        'Access-Control-Allow-Origin': '*'
+                    },
+                    mode: 'cors'
+                });
+                const resJson = await res.json();
+                console.log("respuesta: ", resJson)
+                if (res.status === 200) {
+                    console.log(res.status)
+                }
+            }
             console.log("indice " + i)
             console.log("this.insumoSeleccionado.length " + this.insumoSeleccionado.length)
             this.cantidadInsumos = this.cantidadInsumos - 1;
@@ -152,6 +172,7 @@ export default {
             console.log("insumoSeleccionado ", this.insumoSeleccionado)
             this.DetalleArticuloManufacturado.splice(i - 1, 1)
             console.log(this.DetalleArticuloManufacturado)
+
         },
         cerrardialog() {
             this.dialog = false
@@ -257,7 +278,7 @@ export default {
                 'http://localhost:3000/getManufacturadoXdenominacion/' + id
             )
             const resJson = await res.json()
-            
+
             console.log("resJson ", resJson)
             this.ArticuloManufacturado = new Object({
 
@@ -268,20 +289,20 @@ export default {
                 'activo': resJson.activo,
                 'rubrogeneralid': resJson.rubrogeneralid,
             })
-            
-            this.DetalleArticuloManufacturado=(
+
+            this.DetalleArticuloManufacturado = (
                 resJson.detallearticulomanufacturadoid
                 //'cantidad': resJson.detallearticulomanufacturadoid.cantidad,
                 //'unidadMedida': resJson.detallearticulomanufacturadoid.unidadMedida
             )
-            this.cantidadInsumos=this.DetalleArticuloManufacturado.length
+            this.cantidadInsumos = this.DetalleArticuloManufacturado.length
             for (let i = 0; i < this.cantidadInsumos; i++) {
                 this.insumoSeleccionado.push(resJson.detallearticulomanufacturadoid[i].ArticuloInsumoid)
             }
-            console.log('this.cantidadInsumos',this.cantidadInsumos),
-            console.log('this.DetalleArticuloManufacturado',this.DetalleArticuloManufacturado),
-            console.log('this.insumoSeleccionado',this.insumoSeleccionado)
-            
+            console.log('this.cantidadInsumos', this.cantidadInsumos),
+                console.log('this.DetalleArticuloManufacturado', this.DetalleArticuloManufacturado),
+                console.log('this.insumoSeleccionado', this.insumoSeleccionado)
+
         }
     },
     watch: {
