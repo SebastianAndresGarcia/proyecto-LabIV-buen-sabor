@@ -145,11 +145,11 @@ export default {
             console.log("cantidad de select: " + this.cantidadInsumos);
         },
         async eliminarInsumo(i) {
-            if (this.idmanufacturado == undefined) {
+            if (this.idmanufacturado == undefined || this.DetalleArticuloManufacturado[i - 1]._id == undefined) {
                 console.log("solo borrar insumo del form")
             } else {
-                console.log("borrar insumo de la bd"+this.DetalleArticuloManufacturado[i-1]._id)
-                const id =this.DetalleArticuloManufacturado[i-1]._id
+                console.log("borrar insumo de la bd" + this.DetalleArticuloManufacturado[i - 1]._id)
+                const id = this.DetalleArticuloManufacturado[i - 1]._id
                 let urlServer = `http://localhost:3000/eliminarDetalleArticuloManufacturado/${id}`;
                 const res = await fetch(urlServer, {
                     "method": 'DELETE',
@@ -218,7 +218,7 @@ export default {
                 let method = "POST";
                 const respuesta = await fetch(urlServer, {
                     method: method,
-                    body: JSON.stringify({ 'ArticuloManufacturado': this.ArticuloManufacturado }),
+                    body: JSON.stringify({ 'ArticuloManufacturado': this.ArticuloManufacturado, 'DetalleArticuloManufacturado': this.DetalleArticuloManufacturado }),
                     headers: {
                         "Content-type": "application/json",
                     },

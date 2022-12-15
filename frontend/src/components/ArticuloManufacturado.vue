@@ -25,11 +25,11 @@
                             <b>Activo</b>
                         </th>
 
-                        <th class="text-left">
-                            algunBoton
+                        <th class="text-center">
+                            MODIFICAR
                         </th>
                         <th class="text-left">
-                            otroBoton
+                            ELIMINAR
                         </th>
                     </tr>
                 </thead>

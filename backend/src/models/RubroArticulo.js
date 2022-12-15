@@ -1,7 +1,29 @@
+//https://medium.com/swlh/crud-operations-on-mongodb-tree-data-structure-f5afaeca1550
+
 //https://stackoverflow.com/questions/38734051/nest-mongoose-schema-within-itself/72603609#72603609
 const mongoose = require("mongoose");
+const RubroArticulo = mongoose.model(
+    "RubroArticulo", new mongoose.Schema({
+    denominacion: String,
+    slug: { type: String, index: true },
+    parent: {
+      type: mongoose.Schema.Types.ObjectId,
+      default: null,
+      ref: 'RubroArticulo'
+    },
+    ancestors: [{
+         _id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "RubroArticulo",
+            index: true
+         },
+         denominacion: String,
+         slug: { type: String, index: true }
+    }]
+    }));
+    module.exports = RubroArticulo
 
-const itemSchema = new mongoose.Schema({
+/*const itemSchema = new mongoose.Schema({
 
     denominacion: {
         type: String,

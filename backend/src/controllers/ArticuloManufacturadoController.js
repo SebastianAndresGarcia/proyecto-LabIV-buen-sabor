@@ -61,7 +61,37 @@ exports.getArticulosManufacturadosxrubro = async (req, res) => {
 
 exports.updateArticuloManufacturado = async (req, res) => {
     const ArticuloManufacturadoUpdated = await ArticuloManufacturado.findOneAndUpdate({ denominacion: req.params.id }, req.body.ArticuloManufacturado)
-    res.json(ArticuloManufacturadoUpdated)
+    
+    const insumosJson = req.body.DetalleArticuloManufacturado
+    console.log(insumosJson)
+    const insumos = [];
+    const keys = Object.keys(insumosJson);
+    for (let x = 0; x < keys.length; x++) {
+        insumos.push(insumosJson[keys[x]]);
+    }; //por alguna razón que no sé, si directamente trabajo sobre el insumosJson en el siguiente for, el código se rompe, error Cast to Object
+    
+    for (let i = 0; i < insumos.length; i++) {
+        if (insumos[i]._id) {     
+            console.log("insumos[i]._id"+insumos[i]._id)
+            const updateDetalle= await DetalleArticuloManufacturado.findByIdAndUpdate( insumos[i]._id, {"cantidad":insumos[i].cantidad, "unidadMedida": insumos[i].unidadMedida})
+            console.log("updateDetalle",updateDetalle)
+        }
+        else {
+            console.log("insumos[i].articuloInsumoid"+insumos[i].articuloInsumoid)
+            const InsumoFound = await ArticuloInsumo.findOne({ _id: insumos[i].articuloInsumoid })
+            console.log("InsumoFound" + InsumoFound)
+            console.log("ArticuloManufacturadoUpdated._id: " + ArticuloManufacturadoUpdated._id)
+            const detallearticulo = new DetalleArticuloManufacturado({ "cantidad": insumos[i].cantidad, "unidadMedida": insumos[i].unidadMedida, "ArticuloManufacturadoid": ArticuloManufacturadoUpdated._id, "ArticuloInsumoid": InsumoFound._id })
+            console.log(detallearticulo)
+            const savedDetalle = await detallearticulo.save()
+            console.log("savedDetalle: " + savedDetalle)
+            const updateInsumo = await ArticuloInsumo.findByIdAndUpdate(InsumoFound._id, { $addToSet: { "detallearticulomanufacturadoid": savedDetalle._id } })
+            const updateArtmanufacturado = await ArticuloManufacturado.findByIdAndUpdate(ArticuloManufacturadoUpdated._id, { $addToSet: { "detallearticulomanufacturadoid": savedDetalle._id } })
+            console.log("updateArtmanufacturado" + updateArtmanufacturado)
+        }
+    }
+    const ArticuloUpdated = await ArticuloManufacturado.findOne({ denominacion: req.params.id })
+    res.json(ArticuloUpdated)
 }
 
 exports.deleteArticuloManufacturado = async (req, res) => {
