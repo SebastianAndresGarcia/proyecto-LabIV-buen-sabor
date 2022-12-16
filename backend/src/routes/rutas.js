@@ -32,6 +32,8 @@ router.post("/api/auth/signin", controller.signin);
 router.post('/crearDomicilio', controllerDlio.createAddress)
 router.get('/usuarioDlios/:id', controllerDlio.getAddressbyuser);
 router.post('/crearRubroArticulo', controllerRubroArticulo.createRubroArticulo);
+router.get('/verAncestrosRubroArticulo', controllerRubroArticulo.getAncestorsRubroArticulo);
+router.get('/verDescendentesRubroArticulo', controllerRubroArticulo.getDescendentsRubroArticulo);
 router.post('/ActualizarRubroGeneral', controllerRubroGeneral.updateRubroGeneral);
 router.get('/rubros/', controllerRubroArticulo.getRubros);
 router.post('/agregarSubRubro', controllerRubroArticulo.agregarSubRubro);

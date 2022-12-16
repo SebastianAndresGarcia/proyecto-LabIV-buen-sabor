@@ -4,24 +4,27 @@
 const mongoose = require("mongoose");
 const RubroArticulo = mongoose.model(
     "RubroArticulo", new mongoose.Schema({
-    denominacion: String,
-    slug: { type: String, index: true },
-    parent: {
-      type: mongoose.Schema.Types.ObjectId,
-      default: null,
-      ref: 'RubroArticulo'
-    },
-    ancestors: [{
-         _id: {
+        denominacion: { type: String, index: true },
+        articuloinsumoid: [{
             type: mongoose.Schema.Types.ObjectId,
-            ref: "RubroArticulo",
-            index: true
-         },
-         denominacion: String,
-         slug: { type: String, index: true }
-    }]
+            ref: 'ArticuloInsumo',
+            default: null
+        }],
+        parent: {
+            type: mongoose.Schema.Types.ObjectId,
+            default: null,
+            ref: 'RubroArticulo'
+        },
+        ancestors: [{
+            _id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "RubroArticulo",
+                index: true
+            },
+            denominacion: { type: String, index: true },
+        }]
     }));
-    module.exports = RubroArticulo
+module.exports = RubroArticulo
 
 /*const itemSchema = new mongoose.Schema({
 
