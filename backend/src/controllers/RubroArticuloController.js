@@ -1,5 +1,5 @@
 //import { RequestHandler, Request, Response } from "express";
-const Rubro = require('../models/RubroArticulo');
+
 const RubroArticulo = require("../models/RubroArticulo");
 
 
@@ -22,6 +22,7 @@ exports.createRubroArticulo = async (req, res) => {
         buildAncestors(newRubroArticulo._id, parent)
         res.status(201).send({ response: `Rubro ${newRubroArticulo._id}` });
     } catch (err) {
+        console.log(err)
         res.status(500).send(err);
     }
 }
@@ -63,6 +64,8 @@ exports.getDescendentsRubroArticulo=async (req,res)=>{
          res.status(500).send(err);
        }
 }
+
+
 exports.agregarSubRubro = async (req, res) => {
     const rubroFound = await Rubro.findOne({ "rubropadreid": req.body.rubropadreid })
     console.log("subrubro :", rubroFound)
@@ -117,7 +120,8 @@ exports.getRubro = async (req, res) => {
 }
 
 
-exports.updateRubro = async (req, res) => {
-    const rubroUpdated = await Rubro.findByIdAndUpdate(req.params.id, req.body)
+exports.updateRubroArticulo = async (req, res) => {
+    const rubroUpdated = await RubroArticulo.findByIdAndUpdate(req.body._id, {$addToSet: { "articuloinsumoid": req.body.articuloinsumoid }})
+    console.log(rubroUpdated)
     res.json(rubroUpdated)
 }
