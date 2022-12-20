@@ -12,13 +12,13 @@ exports.createRubroArticulo = async (req, res) => {
     const savedRubro = await rubro.save()
     res.json(savedRubro)*/
     let parent = req.body.parent ? req.body.parent : null;
-    console.log("parent"+parent)
+    console.log("parent" + parent)
     const rubro = new RubroArticulo({ denominacion: req.body.denominacion, parent })
-    
+
     try {
-        console.log("rubro",rubro)
+        console.log("rubro", rubro)
         const newRubroArticulo = await rubro.save();
-        console.log("newRubroArticulo",newRubroArticulo)
+        console.log("newRubroArticulo", newRubroArticulo)
         buildAncestors(newRubroArticulo._id, parent)
         res.status(201).send({ response: `Rubro ${newRubroArticulo._id}` });
     } catch (err) {
@@ -29,40 +29,43 @@ exports.createRubroArticulo = async (req, res) => {
 const buildAncestors = async (id, parent_id) => {
     let ancest = [];
     try {
-        let parent_category = await RubroArticulo.findOne({ "_id":    parent_id },{ "denominacion": 1, "ancestors": 1 }).exec();
- if( parent_category ) {
-           const { _id, denominacion } = parent_category;
-           const ancest = [...parent_category.ancestors];
-           ancest.unshift({ _id, denominacion })
-           const category = await RubroArticulo.findByIdAndUpdate(id, { $set: { "ancestors": ancest } });
-         }
-      } catch (err) {
-          console.log(err.message)
-       }
- }
+        let parent_category = await RubroArticulo.findOne({ "_id": parent_id }, { "denominacion": 1, "ancestors": 1 }).exec();
+        if (parent_category) {
+            const { _id, denominacion } = parent_category;
+            const ancest = [...parent_category.ancestors];
+            ancest.unshift({ _id, denominacion })
+            const category = await RubroArticulo.findByIdAndUpdate(id, { $set: { "ancestors": ancest } });
+        }
+    } catch (err) {
+        console.log(err.message)
+    }
+}
 
-exports.getAncestorsRubroArticulo= async (req,res)=>{
+exports.getAncestorsRubroArticulo = async (req, res) => {
     try {
         const result = await RubroArticulo.find({ denominacion: req.body.denominacion })
-        .select({
-        "_id": false, 
-        "denominacion": true,
-        "ancestors.denominacion": true
-        }).exec();
-        res.status(201).send({ "status": "success", "result": result     });
-   } catch (err) {
-       res.status(500).send(err);
-   }
+            .select({
+                "_id": false,
+                "denominacion": true,
+                "ancestors.denominacion": true
+            }) 
+            .exec();
+        res.status(201).send({ "status": "success", "result": result });
+    } catch (err) {
+        res.status(500).send(err);
+    }
 }
-exports.getDescendentsRubroArticulo=async (req,res)=>{
+exports.getDescendentsRubroArticulo = async (req, res) => {
     try {
-        const result = await RubroArticulo.find({ "ancestors._id":   req.body._id })
-         .select({ "_id": true, "denominacion": true, "parent": true })
-         .exec();
-       res.status(201).send({ "status": "success", "result": result });
-       } catch (err) {
-         res.status(500).send(err);
-       }
+        const result = await RubroArticulo.find( {"ancestors._id" : req.body._id })
+       
+            .select({ "_id": false, "denominacion": true, "parent": true })
+            .exec();
+        
+        res.status(201).send({ "status": "success", "result": result });
+    } catch (err) {
+        res.status(500).send(err);
+    } 
 }
 
 
@@ -106,22 +109,15 @@ exports.agregarArticuloRubro = async (req, res) => {
 } */
 
 exports.getRubros = async (req, res) => {
-    const rubros = await RubroArticulo.find()
+    const rubros = await RubroArticulo.find({ "parent": null })
     console.log(rubros)
     return res.json(rubros)
 }
 
 
-exports.getRubro = async (req, res) => {
-    const rubroFound = await Rubro.findById(req.params.id)
-    if (!rubroFound)
-        return res.status(204).json();
-    return res.json(rubroFound)
-}
-
 
 exports.updateRubroArticulo = async (req, res) => {
-    const rubroUpdated = await RubroArticulo.findByIdAndUpdate(req.body._id, {$addToSet: { "articuloinsumoid": req.body.articuloinsumoid }})
+    const rubroUpdated = await RubroArticulo.findByIdAndUpdate(req.body._id, { $addToSet: { "articuloinsumoid": req.body.articuloinsumoid } })
     console.log(rubroUpdated)
     res.json(rubroUpdated)
 }

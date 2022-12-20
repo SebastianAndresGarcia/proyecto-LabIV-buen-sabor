@@ -2,7 +2,7 @@
 
 //https://stackoverflow.com/questions/38734051/nest-mongoose-schema-within-itself/72603609#72603609
 const mongoose = require("mongoose");
-const RubroArticulo = mongoose.model(
+const RubroArticuloSchema = mongoose.model(
     "RubroArticulo", new mongoose.Schema({
         denominacion: { type: String, index: true },
         articuloinsumoid: [{
@@ -21,10 +21,10 @@ const RubroArticulo = mongoose.model(
                 ref: "RubroArticulo",
                 index: true
             },
-            denominacion: { type: String, index: true },
+            denominacion: { type: String },
         }]
     }));
-module.exports = RubroArticulo
+module.exports = RubroArticuloSchema
 
 /*const itemSchema = new mongoose.Schema({
 
