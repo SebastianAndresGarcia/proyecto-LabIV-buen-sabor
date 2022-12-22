@@ -40,7 +40,7 @@
                             </v-col>
 
                             <v-col style="margin-top: 20px;">
-                                <Crear-Rubro @nuevoRubro="handleMessage"></Crear-Rubro>
+                                <Crear-Rubro @nuevoRubro="handleMessage3"></Crear-Rubro>
                             </v-col>
                         </v-row>
                         <p>{{ rubroSeleccionado }}</p>
@@ -82,7 +82,7 @@
                                 </v-select>
                             </v-col>
                             <v-col style="margin-top: 20px;">
-                                <Crear-RubroInsumo></Crear-RubroInsumo>
+                                <Crear-RubroInsumo @nuevoRubroInsumo="handleMessage"></Crear-RubroInsumo>
                             </v-col>
                         </v-row>
                         <p>{{ insumoSeleccionado }}</p>
@@ -121,7 +121,7 @@ export default {
 
     mounted() {
         this.getRubrosGeneral(),
-            this.getRubrosArticulos()
+        this.getRubrosArticulos()
     },
 
     methods: {
@@ -165,11 +165,21 @@ export default {
                 }
             })
         },
-        handleMessage(value) {
+        handleMessage3(value) {
+            console.log("entró handleMessage"+value)
             this.nuevoArt=value
             if (this.nuevoArt) {
                 this.getRubrosGeneral()
                 this.nuevoArt=false
+            }
+
+        },
+        handleMessage(value) {
+            console.log("entró handleMessageRubroArticulo"+value)
+            this.nuevoIns=value
+            if (this.nuevoIns) {
+                this.getRubrosArticulos()
+                this.nuevoIns=false
             }
 
         }

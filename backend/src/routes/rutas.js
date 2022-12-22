@@ -50,7 +50,7 @@ router.delete('/eliminarArticuloManufacturado/:id', controllerArticuloManufactur
 router.delete('/eliminarDetalleArticuloManufacturado/:id', controllerDetalleArticuloManufacturado.deleteDetalleArticuloManufacturado);
 router.post('/crearArticuloInsumo', controllerArticuloInsumo.createArticuloInsumo)
 router.get('/ArticulosInsumos', controllerArticuloInsumo.getArticulosInsumos)
-router.get('/ArticulosInsumosxrubro/:id', controllerArticuloInsumo.getArticulosInsumosxrubro)
+router.get('/articulosinsumosXrubro/:id', controllerArticuloInsumo.getArticulosInsumosxrubro)
 router.post('/ActualizarInsumo/:id', controllerArticuloInsumo.updateArticuloInsumo)
 
 module.exports = router

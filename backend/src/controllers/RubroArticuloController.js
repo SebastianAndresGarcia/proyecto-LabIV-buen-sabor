@@ -20,7 +20,8 @@ exports.createRubroArticulo = async (req, res) => {
         const newRubroArticulo = await rubro.save();
         console.log("newRubroArticulo", newRubroArticulo)
         buildAncestors(newRubroArticulo._id, parent)
-        res.status(201).send({ response: `Rubro ${newRubroArticulo._id}` });
+        res.json(newRubroArticulo)
+        //res.status(201).send({ response: `Rubro ${newRubroArticulo._id}` });
     } catch (err) {
         console.log(err)
         res.status(500).send(err);

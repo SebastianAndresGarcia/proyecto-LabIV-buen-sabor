@@ -4,11 +4,10 @@
             Articulos Insumos
 
             <v-spacer></v-spacer>
-            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on" :href="'/Formulario/0'">
-                Crear Insumo
-            </v-btn>
+            <Form-Insumo :idrubroarticulo="insumoParam" @nuevoInsumo="handleMessage">
+            </Form-Insumo>
         </v-card-title>
-        <v-simple-table class="tabla">
+        <v-simple-table class="tabla" v-if="insumosData">
             <template v-slot:default>
                 <thead>
                     <tr>
@@ -77,11 +76,9 @@
                         </td>
 
                         <td>
-                            <a :href="'/'" style="text-decoration: none; color: white">
-                                <v-icon small class="mr-2">
-                                    mdi-pencil
-                                </v-icon>
-                            </a>
+                            <Form-Insumo :idinsumo="insumo.denominacion"
+                                @nuevoManufacturado="handleMessage">
+                            </Form-Insumo>
                         </td>
                         <td>
                             <v-icon small>
@@ -93,6 +90,9 @@
                 </tbody>
             </template>
         </v-simple-table>
+        <div v-else>
+            <h3 class="text-center">No existen insumos para esta categoría</h3>
+        </div>
     </v-card>
     <div v-else>
         <h1 class="text-center">Seleccione un Rubro</h1>
@@ -123,7 +123,7 @@ export default {
         console.log("asdasdasdasdasdsa"),
         console.log("insumoParam", this.insumoParam)
         if(this.insumoParam)
-            this.getInsumos(this.insumoParam)
+            this.getInsumosXrubro(this.insumoParam)
     },
     props: ["insumoParam"],
     mounted() {
@@ -132,37 +132,17 @@ export default {
     },
 
     methods: {
-        async getInsumos(parametro) {
+        async getInsumosXrubro(parametro) {
             console.log(parametro)
             const res = await fetch(
-                //estoy sería para que busque por rubro pero no puedo hacer busquedas y modificaciones en el json anidado "http://localhost:3000/ArticulosInsumosxrubro/"+parametro
-                "http://localhost:3000/articulosinsumos"
+                `http://localhost:3000/articulosinsumosXrubro/${parametro}`
                 );
             const resJson = await res.json();
             console.log(resJson);
             this.insumosData = resJson;
         },
 
-        /*async deleteinstrumento(idinstrumento) {
-
-            let urlServer = `http://localhost:3001/eliminarInstrumento/${idinstrumento}/`;
-
-
-            await fetch(urlServer, {
-                "method": 'DELETE',
-
-                "headers": {
-                    "Content-type": 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
-                mode: 'cors'
-
-            });
-            window.location.reload();
-        },
-        /* async editarinstrumento(idinstrumento){
-            href('/Formulario/' + instrumento.id),
-         */
+       
     }
 }
 </script >

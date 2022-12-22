@@ -106,7 +106,7 @@ export default {
         if (this.manufacturadoParam)
             this.getManufacturadosxrubro(this.manufacturadoParam)
     },
-    props: ["manufacturadoParam"],
+    props: ["manufacturadoParam"], //recibe el props de AbmArticulos
     
 
     mounted() {

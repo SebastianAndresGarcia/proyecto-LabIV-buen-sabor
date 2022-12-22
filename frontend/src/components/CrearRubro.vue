@@ -60,7 +60,7 @@ export default {
         denominacion: ""
       },
       respuestaError: '',
-      rubrocreado: false,
+      //rubrocreado: false,
       nuevoRubro: false
     }
   },
