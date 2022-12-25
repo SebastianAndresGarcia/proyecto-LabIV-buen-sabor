@@ -300,9 +300,8 @@ export default {
                 this.insumoSeleccionado.push(resJson.detallearticulomanufacturadoid[i].ArticuloInsumoid)
             }
             console.log('this.cantidadInsumos', this.cantidadInsumos),
-                console.log('this.DetalleArticuloManufacturado', this.DetalleArticuloManufacturado),
-                console.log('this.insumoSeleccionado', this.insumoSeleccionado)
-
+            console.log('this.DetalleArticuloManufacturado', this.DetalleArticuloManufacturado),
+            console.log('this.insumoSeleccionado', this.insumoSeleccionado)
         }
     },
     watch: {

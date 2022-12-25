@@ -9,13 +9,23 @@ exports.createArticuloInsumo = async (req, res) => {
     console.log(articulo)
     try {
         const savedArticulo = await articulo.save()
-        //const userUpdated =await User.findByIdAndUpdate(req.body.userid, {$addToSet:{"domicilios":savedAddress._id}})
+        const rubroArticuloUpdated =await RubroArticulo.findByIdAndUpdate(savedArticulo.RubroArticuloid, {$addToSet:{"articuloinsumoid":savedArticulo._id}})
         //console.log(userUpdated)
         res.json(savedArticulo)
     } catch (error) {
         console.log(error)
     }
 }
+exports.deleteArticuloInsumo = async (req, res) => {
+    const ArticuloFound = await ArticuloInsumo.findOne({ _id: req.params.id }) //identifico el insumo a borrar
+    const updateRubroGeneral = await RubroArticulo.findByIdAndUpdate(ArticuloFound.RubroArticuloid, { $pull: { "articuloinsumoid": ArticuloFound._id } }) //borro el insumo del array de RubroArticulo
+    //tal vez debería borrar los id de los Manufacturados
+    const eliminarArticulo = await ArticuloFound.deleteOne({ _id: ArticuloFound._id }) //finalmente elimino el insumo
+    if (!eliminarArticulo)
+        return res.status(204).json();
+    res.json(eliminarArticulo)
+}
+
 exports.updateArticuloInsumo = async (req, res) => {
     const articulo = await ArticuloInsumo.findByIdAndUpdate(req.params.id, req.body)
     res.json(articulo)
@@ -29,7 +39,14 @@ exports.getArticulosInsumos = async (req, res) => { //trae todos los articulosin
     console.log(insumos);
     return res.json(insumos)
 }
+exports.getArticuloInsumo = async (req, res) => { //trae un articulo
 
+    const insumo = await ArticuloInsumo.findOne({denominacion :req.params.id})
+    if (!insumo)
+        return res.status(204).json();
+    console.log(insumo);
+    return res.json(insumo)
+}
 exports.getArticulosInsumosxrubro = async (req, res) => {
     console.log("req.params.id" + req.params.id)
     const rubrosinsumos = await RubroArticulo.find({ "ancestors._id": req.params.id, $where: 'this.articuloinsumoid.length>0' }, { articuloinsumoid: 1 }).populate({ path: "articuloinsumoid" })

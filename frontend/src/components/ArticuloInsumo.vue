@@ -7,7 +7,7 @@
             <Form-Insumo :idrubroarticulo="insumoParam" @nuevoInsumo="handleMessage">
             </Form-Insumo>
         </v-card-title>
-        <v-simple-table class="tabla" v-if="insumosData">
+        <v-simple-table class="tabla" > <!--v-if="!insumosData==null"-->
             <template v-slot:default>
                 <thead>
                     <tr>
@@ -77,29 +77,31 @@
 
                         <td>
                             <Form-Insumo :idinsumo="insumo.denominacion"
-                                @nuevoManufacturado="handleMessage">
+                                @nuevoInsumo="handleMessage">
                             </Form-Insumo>
                         </td>
                         <td>
-                            <v-icon small>
-                                mdi-delete
-                            </v-icon>
+                            <v-btn icon v-bind="attrs" v-on="on" @click="eliminarInsumo(insumo._id)">
+                                <v-icon small>
+                                    mdi-delete
+                                </v-icon>
+                            </v-btn>
                         </td>
 
                     </tr>
                 </tbody>
             </template>
         </v-simple-table>
-        <div v-else>
+      <!--  <div v-else>
             <h3 class="text-center">No existen insumos para esta categoría</h3>
-        </div>
+        </div> -->
     </v-card>
     <div v-else>
         <h1 class="text-center">Seleccione un Rubro</h1>
     </div>
 </template>
 <script >
-
+import forminsumo from "@/components/FormInsumos.vue";
 export default {
     data() {
         return {
@@ -118,6 +120,9 @@ export default {
                 RubroArticuloid: ""
             }],
         }
+    },
+    components:{
+        "Form-Insumo": forminsumo
     },
     beforeUpdate(){ 
         console.log("asdasdasdasdasdsa"),
@@ -139,10 +144,36 @@ export default {
                 );
             const resJson = await res.json();
             console.log(resJson);
+            //if(resJson!=null)
             this.insumosData = resJson;
         },
+        handleMessage(value) {
+            this.nuevoArt = value
+            if (this.nuevoArt) {
+                this.getInsumosXrubro(this.insumoParam)
+                this.nuevoArt = false
+            }
+        },
+        async eliminarInsumo(id) {
+            let urlServer = `http://localhost:3000/EliminarInsumo/${id}`;
 
-       
+            const res = await fetch(urlServer, {
+                "method": 'DELETE',
+
+                "headers": {
+                    "Content-type": 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                mode: 'cors'
+
+            });
+            const resJson = await res.json();
+            console.log("respuesta: ", resJson)
+            if (res.status === 200) {
+                console.log(res.status)
+                this.getInsumosXrubro(this.insumoParam)
+            }
+        },
     }
 }
 </script >

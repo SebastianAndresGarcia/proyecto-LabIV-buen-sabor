@@ -166,7 +166,7 @@ export default {
             })
         },
         handleMessage3(value) {
-            console.log("entró handleMessage"+value)
+            console.log("entró handleMessage3"+value)
             this.nuevoArt=value
             if (this.nuevoArt) {
                 this.getRubrosGeneral()

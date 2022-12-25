@@ -52,8 +52,8 @@ exports.getArticulosManufacturadosxrubro = async (req, res) => {
     /*console.log("parametroRubro: ",req.params.id)
     const rubrogral = await RubroGeneral.find({ denominacion: [busqueda]});
     console.log(rubrogral) */
-    var array = [] = busqueda.split(",")
-    const manufacturados = await ArticuloManufacturado.find({ rubrogeneralid: array });
+    //var array = [] = busqueda.split(",")
+    const manufacturados = await ArticuloManufacturado.find({ rubrogeneralid: busqueda });
     if (!manufacturados)
         return res.status(204).json();
     return res.json(manufacturados)

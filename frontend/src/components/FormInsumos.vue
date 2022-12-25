@@ -24,57 +24,40 @@
                         <v-row>
 
                             <v-col cols="12" sm="6" md="6">
-                                <v-text-field label="Denominacion*" v-model="insumo.denominacion"
-                                    required>
+                                <v-text-field label="Denominacion*" v-model="insumo.denominacion" required>
                                 </v-text-field>
                             </v-col>
-                            <v-col cols="12" sm="6" md="6">
-                                <v-text-field label="Tiempo de Cocina*" type="number"
-                                    v-model="ArticuloManufacturado.tiempoEstimadoCocina"
+                           <v-col cols="12" sm="6" md="6">
+                                <v-text-field label="precioCompra*" type="number"
+                                    v-model="insumo.precioCompra"
                                     hint="example of helper text only on focus" required></v-text-field>
                             </v-col>
                             <v-col cols="12">
                                 <v-text-field type="number" label="Precio de Venta*"
-                                    v-model="ArticuloManufacturado.precioVenta" required>
+                                    v-model="insumo.precioVenta" required>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="12">
-                                <v-text-field label="Imagen*" v-model="ArticuloManufacturado.imagen" required>
+                                <v-text-field label="stockActual*" type="number" v-model="insumo.stockActual" required>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="12">
-                                <v-text-field label="Activo?*" v-model="ArticuloManufacturado.activo" required>
+                                <v-text-field label="stockMinimo*" type="number" v-model="insumo.stockMinimo" required>
+                                </v-text-field>
+                            </v-col>
+                            
+                            <v-col cols="12">
+                                <v-text-field label="esInsumo?" v-model="insumo.esInsumo" required>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="12">
-                                <v-row v-for="ins in cantidadInsumos" :key="ins.id">
-                                    <v-col>
-                                        <v-select label="Seleccione un insumo" outlined
-                                            v-model="insumoSeleccionado[ins - 1]" :items="insumosData" item-value="_id"
-                                            item-text="denominacion" @change="onchange(insumoSeleccionado)">
-
-                                        </v-select>
-                                    </v-col>
-                                    <v-col>
-                                        <v-text-field label="Cantidad" type="number"
-                                            v-model="DetalleArticuloManufacturado[ins - 1].cantidad"></v-text-field>
-                                    </v-col>
-                                    <v-col>
-                                        <v-text-field label="Unidad Medida"
-                                            v-model="DetalleArticuloManufacturado[ins - 1].unidadMedida">
-                                        </v-text-field>
-                                    </v-col>
-                                    <v-col>
-                                        <v-btn @click="eliminarInsumo(ins)">Eliminar</v-btn>
-                                    </v-col>
-                                </v-row>
-                                <v-btn @click="crearSelectInsumo">Agregar Insumo</v-btn>
-                            </v-col>
-                            <v-col cols="12">
-                                <v-text-field v-model="ArticuloManufacturado.rubrogeneralid" required>
+                                <v-text-field label="unidadMedida" v-model="insumo.unidadMedida" required>
                                 </v-text-field>
                             </v-col>
-
+                            <v-col cols="12">
+                                <v-text-field label="rubroArticuloid" v-model="insumo.RubroArticuloid" required>
+                                </v-text-field>
+                            </v-col>
                         </v-row>
                         <small>*Todos los campos son obligatorios</small>
                     </v-card-text>
@@ -100,30 +83,13 @@
 <script>
 
 export default {
-    name: "register-item",
 
     data() {
-        /*denominacion
-precioCompra
-precioVenta
-stockActual
-stockMinimo
-unidadMedida
-esInsumo
-detallefacturaid
-detallepedidoid
-detallearticulomanufacturadoid
-RubroArticuloid
-
-        */
         return {
             dialog: false,
-         
-            aux: [],
             modal: false,
             insumosData: [],
-            insumoSeleccionado: [],
-            nuevoManufacturado: false,
+            nuevoInsumo: false,
             insumo: {
                 denominacion: "",
                 precioCompra: null,
@@ -137,7 +103,7 @@ RubroArticuloid
                 //detallearticulomanufacturadoid:
                 RubroArticuloid: ""
             },
-    
+
         };
     },
     props: { idrubroarticulo: String, idinsumo: String },
@@ -146,59 +112,28 @@ RubroArticuloid
         //console.log("datos select ", this.insumoSeleccionado)
         //this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
         console.log("idrubroarticulo beforeUpdate ", this.idrubroarticulo)
-        
+        console.log("idinsumo beforeUpdate ", this.idinsumo)
+
     },
     mounted() {
         console.log("idrubroarticulo props ", this.idrubroarticulo)
         console.log("idinsumo props " + this.idinsumo)
-        this.getInsumos(),
-            this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
-        console.log(this.idrubrogral)
+        this.insumo.RubroArticuloid=this.idrubroarticulo
         //this.getManufacturadoXdenominacion(this.idrubrogral[1]) 
     },
     methods: {
-       
-        async eliminarInsumo(i) {
-            if (this.idmanufacturado == undefined || this.DetalleArticuloManufacturado[i - 1]._id == undefined) {
-                console.log("solo borrar insumo del form")
-            } else {
-                console.log("borrar insumo de la bd" + this.DetalleArticuloManufacturado[i - 1]._id)
-                const id = this.DetalleArticuloManufacturado[i - 1]._id
-                let urlServer = `http://localhost:3000/eliminarDetalleArticuloManufacturado/${id}`;
-                const res = await fetch(urlServer, {
-                    "method": 'DELETE',
-                    "headers": {
-                        "Content-type": 'application/json',
-                        'Access-Control-Allow-Origin': '*'
-                    },
-                    mode: 'cors'
-                });
-                const resJson = await res.json();
-                console.log("respuesta: ", resJson)
-                if (res.status === 200) {
-                    console.log(res.status)
-                }
-            }
-            console.log("indice " + i)
-            console.log("this.insumoSeleccionado.length " + this.insumoSeleccionado.length)
-            this.cantidadInsumos = this.cantidadInsumos - 1;
-            this.insumoSeleccionado.splice(i - 1, 1);
-            console.log("insumoSeleccionado ", this.insumoSeleccionado)
-            this.DetalleArticuloManufacturado.splice(i - 1, 1)
-            console.log(this.DetalleArticuloManufacturado)
 
-        },
         cerrardialog() {
             this.dialog = false
-            this.cantidadInsumos = null
-            this.insumoSeleccionado = []
-            this.DetalleArticuloManufacturado = []
-            this.ArticuloManufacturado = new Object({
-                'tiempoEstimadoCocina': null,
+            this.insumo = new Object({
                 'denominacion': "",
+                'precioCompra': null,
                 'precioVenta': null,
-                'imagen': "",
-                'activo': null, 'rubrogeneralid': this.idrubrogral
+                'stockActual': null,
+                'stockMinimo': null,
+                'unidadMedida': "",
+                'esInsumo': false,
+                'RubroArticuloid': this.idrubroarticulo
             })
         },
         async crearInsumo() { //también cumple la función de actualizar según el props activo
@@ -249,7 +184,7 @@ RubroArticuloid
                     console.log("mensaje del servidor: " + this.respuestaError)
                 }
             }
-                
+
             this.insumo = new Object({
                 'denominacion': "",
                 'precioCompra': null,
@@ -258,46 +193,25 @@ RubroArticuloid
                 'stockMinimo': null,
                 'unidadMedida': "",
                 'esInsumo': false,
-                'RubroArticuloid': ""
+                'RubroArticuloid': this.idrubroarticulo
             })
 
         },
-        
+
         async getInsumoXdenominacion(id) {
             const res = await fetch(
-                'http://localhost:3000/getManufacturadoXdenominacion/' + id
+                'http://localhost:3000/ArticuloInsumo/' + id
             )
             const resJson = await res.json()
-
+            this.insumo=resJson
             console.log("resJson ", resJson)
-            this.ArticuloManufacturado = new Object({
-
-                'tiempoEstimadoCocina': resJson.tiempoEstimadoCocina,
-                'denominacion': resJson.denominacion,
-                'precioVenta': resJson.precioVenta,
-                'imagen': resJson.imagen,
-                'activo': resJson.activo,
-                'rubrogeneralid': resJson.rubrogeneralid,
-            })
-
-            this.DetalleArticuloManufacturado = (
-                resJson.detallearticulomanufacturadoid
-                //'cantidad': resJson.detallearticulomanufacturadoid.cantidad,
-                //'unidadMedida': resJson.detallearticulomanufacturadoid.unidadMedida
-            )
-            this.cantidadInsumos = this.DetalleArticuloManufacturado.length
-            for (let i = 0; i < this.cantidadInsumos; i++) {
-                this.insumoSeleccionado.push(resJson.detallearticulomanufacturadoid[i].ArticuloInsumoid)
-            }
-            console.log('this.cantidadInsumos', this.cantidadInsumos),
-                console.log('this.DetalleArticuloManufacturado', this.DetalleArticuloManufacturado),
-                console.log('this.insumoSeleccionado', this.insumoSeleccionado)
+            
 
         }
     },
     watch: {
-        nuevoManufacturado: function () {
-            this.$emit('nuevoManufacturado', this.nuevoManufacturado)
+        nuevoInsumo: function () {
+            this.$emit('nuevoInsumo', this.nuevoInsumo)
         }
     }
 };

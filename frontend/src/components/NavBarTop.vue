@@ -24,7 +24,7 @@ https://kinsta.com/es/blog/vue-js/
       <template v-slot:extension>
         <v-tabs align-with-title>
           <v-tab>
-            <v-btn text href="./#carousel">Ofertas del Día</v-btn>
+            <v-btn text href="http://localhost:8080/#carousel">Ofertas del Día</v-btn>
           </v-tab>
           <v-tab>
             <v-menu bottom offset-y>
@@ -32,28 +32,21 @@ https://kinsta.com/es/blog/vue-js/
                 <v-btn text v-bind="attrs" v-on="on"> Nuestro Menú </v-btn>
               </template>
               <v-list>
-                <v-list-item v-for="(item, index) in items" :key="index">
-                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                <v-list-item v-for="(item, index) in rubros" :key="index">
+                  <v-list-item-title><v-btn text :href="'http://localhost:8080/ManufacXrubro/' + item._id">{{ item.denominacion }}</v-btn></v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-menu>
           </v-tab>
           <v-tab>
-            <a
-              style="text-decoration: none; color: white"
-              href="./#dondeestamos"
-              >Sobre Nosotros</a
-            >
+            <a style="text-decoration: none; color: white" href="http://localhost:8080/#dondeestamos">Sobre Nosotros</a>
           </v-tab>
         </v-tabs>
       </template>
     </v-app-bar>
     <v-navigation-drawer class="app" v-model="drawer" app absolute temporary>
       <v-list nav dense>
-        <v-list-item-group
-          v-model="group"
-          active-class="deep-purple--text text--accent-4"
-        >
+        <v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
           <v-list-item :href="'./'">
             <v-list-item-icon>
               <v-icon>mdi-home</v-icon>
@@ -74,14 +67,14 @@ https://kinsta.com/es/blog/vue-js/
             </v-list-item-icon>
             <register-item></register-item>
           </v-list-item>
-          
+
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
   </div>
 </template>
 
-<script lang="ts">
+<script > //lang="ts"
 import register from "@/components/Register.vue";
 import login from "@/components/Login.vue";
 export default {
@@ -90,20 +83,28 @@ export default {
     return {
       drawer: false,
       group: null,
-      items: [
-        { title: "Pizzas" },
-        { title: "Lomos" },
-        { title: "Empanadas" },
-        { title: "Hamburguesas" },
-        { title: "Bebidas" },
-        { title: "Ver Todo" },
-      ] as Array<Object>,
+      rubros: [
+        //{ denominacion: String }
+      ] //as Array<Object>,
     };
   },
   components: {
     "register-item": register,
     "login-item": login,
   },
+  mounted(){
+    this.getRubrosGeneral()
+  },
+  methods: {
+    async getRubrosGeneral() {
+      const res = await fetch(
+        "http://localhost:3000/rubrosgeneral"
+      );
+      const resJson = await res.json();
+      this.rubros=resJson
+      this.rubros.push({'denominacion': "Ver todo", '_id':0})
+    },
+  }
 };
 </script>
 
