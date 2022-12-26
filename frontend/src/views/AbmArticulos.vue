@@ -172,7 +172,6 @@ export default {
                 this.getRubrosGeneral()
                 this.nuevoArt=false
             }
-
         },
         handleMessage(value) {
             console.log("entró handleMessageRubroArticulo"+value)
@@ -181,7 +180,6 @@ export default {
                 this.getRubrosArticulos()
                 this.nuevoIns=false
             }
-
         }
     },
     computed: {

@@ -55,7 +55,7 @@
                             {{ empleado.borrado }}
                         </td>
                         <td>
-                            <Form-Empleado :datoEmpleado="empleado"></Form-Empleado>
+                            <Form-Empleado :datoEmpleado="empleado" @nuevoEmpleado="handleMessage"></Form-Empleado>
                         </td>
                         <td>
                             <v-btn icon small @click="deleteempleado(empleado.id)">
@@ -75,14 +75,14 @@
 import FormEmpleado from '@/components/FormEmpleados.vue'
 export default {
     data() {
-       return{
-        empleado:{}
-       }
+        return {
+            empleado: {}
+        }
     },
-    components:{
+    components: {
         'Form-Empleado': FormEmpleado
     },
-    props:["empleados"],
+    props: ["empleados"],
     methods: {
         async bajaempleado(idempleado) {
             let urlServer = `http://localhost:3000/bajaEmpleado/${idempleado}/`;
@@ -94,8 +94,14 @@ export default {
                 },
                 mode: 'cors'
             })
+        },
+        async handleMessage(value) {
+            this.nuevoEmp = value
+            if (this.nuevoEmp) {
+                this.getEmpleados()
+                this.nuevoEmp = false
+            }
         }
-        
     }
 }    
 </script>

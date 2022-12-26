@@ -16,7 +16,10 @@
             </template>
 
             <v-card ref="form">
-                <v-card-title>
+                <v-card-title v-if="datoEmpleado">
+                    <span class="text-h5">Actualizar Datos Empleado</span>
+                </v-card-title>
+                <v-card-title v-else>
                     <span class="text-h5">Crear Empleado</span>
                 </v-card-title>
 
@@ -36,10 +39,18 @@
                                 </v-text-field>
                             </v-col>
                             <v-col class="d-flex" cols="12" sm="6">
-                                <v-select :items="items" label="Rol" item-value="_id" item-text="name" v-model="empleado.roles"></v-select>
+                                <v-select :items="items" label="Rol" item-value="name" item-text="name" v-model="empleado.roles.name"></v-select>
                             </v-col>
                             <v-col cols="12">
                                 <v-text-field label="email*" type="mail" v-model="empleado.email" required>
+                                </v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-text-field label="Teléfono*" v-model="empleado.telefono" type="Number" required>
+                                </v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-text-field label="Borrado*" v-model="empleado.borrado" required>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="12" sm="12">
@@ -106,7 +117,7 @@ export default {
                 fechaNacimiento: null,
                 telefono: null,
                 borrado: false,
-                
+                roles:{name:''}
             },
 
         };
@@ -118,17 +129,27 @@ export default {
         console.log("datoEmpleado", this.datoEmpleado)
         if (this.datoEmpleado)
             this.empleado = this.datoEmpleado
+            this.empleado.roles=this.datoEmpleado.roles[0]
         //this.getManufacturadoXdenominacion(this.idrubrogral[1]) 
     },
     methods: {
 
         cerrardialog() {
             this.dialog = false
+            if(!this.datoEmpleado)
             this.empleado = new Object({
-
+                username: "",
+                email: "",
+                password: "",
+                nombre: "",
+                apellido: "",
+                fechaNacimiento: null,
+                telefono: null,
+                borrado: false,
+                roles:{name:''}
             })
         },
-        async crearEmpleado() { //también cumple la función de actualizar según el props activo
+        async crearEmpleado() { //también cumple la fción de actualizar un empleado
             this.nuevoEmpleado = false
             console.log("entró");
 
@@ -177,7 +198,15 @@ export default {
             }
 
             this.empleado = new Object({
-
+                username: "",
+                email: "",
+                password: "",
+                nombre: "",
+                apellido: "",
+                fechaNacimiento: null,
+                telefono: null,
+                borrado: false,
+                roles:{name:''}
             })
 
         },

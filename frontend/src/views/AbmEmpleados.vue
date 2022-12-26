@@ -7,10 +7,10 @@
             <!--<v-btn color="primary" small dark class="mb-2" :href="'/Formulario/0'">
                 Nuevo Empleado
             </v-btn>-->
-            <Form-Empleado> </Form-Empleado>
+            <Form-Empleado @nuevoEmpleado="handleMessage"> </Form-Empleado>
         </v-card-title>
 
-        <v-row class="row" align="center" justify="center">
+       <!-- <v-row class="row" align="center" justify="center">
             <form class="row">
                 <v-row class="row">
                     <v-col class="col" cols="6" sm="3" md="3">
@@ -31,7 +31,7 @@
                     </v-col>
                 </v-row>
             </form>
-        </v-row>
+        </v-row>-->
         <empleado-item :empleados="empleadosData"></empleado-item>
         
     </v-card>
@@ -76,7 +76,13 @@ export default {
             console.log(resJson);
             this.empleadosData = resJson;
         },
-
+        async handleMessage(value){
+            this.nuevoEmp=value
+            if (this.nuevoEmp) {
+                this.getEmpleados()
+                this.nuevoEmp=false
+            }
+        }
         /*   async filtrarporprecio(preciomin, preciomax) {
    
                const res = await fetch(

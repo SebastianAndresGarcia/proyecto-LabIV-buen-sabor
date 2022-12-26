@@ -20,16 +20,17 @@ exports.signup = (req, res) => {
 
   user.save((err, user) => {
     if (err) {
+      console.log("req.body.roles" , req.body.roles)
       console.log(err)
       res.status(500).send({ message: err });
       return;
     }
 
     if (req.body.roles) {
-      console.log("req.body.roles"+req.body.roles)
+      console.log("req.body.roles" + req.body.roles)
       Role.find(
         {
-          name: { $in: req.body.roles }
+          name: { $in: req.body.roles.name }
         },
         (err, roles) => {
           if (err) {
@@ -62,7 +63,8 @@ exports.signup = (req, res) => {
             return;
           }
 
-          res.send({ message: "User was registered successfully!" });
+          res.send({ message: "User was registered successfully!",
+        user });
         });
       });
     }
