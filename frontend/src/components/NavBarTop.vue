@@ -41,6 +41,12 @@ https://kinsta.com/es/blog/vue-js/
           <v-tab>
             <a style="text-decoration: none; color: white" href="http://localhost:8080/#dondeestamos">Sobre Nosotros</a>
           </v-tab>
+          <v-tab>
+            <a style="text-decoration: none; color: white" href="http://localhost:8080/abmempleados">ABM EMPLEADOS</a>
+          </v-tab>
+          <v-tab>
+            <a style="text-decoration: none; color: white" href="http://localhost:8080/abmarticulos">ABM ARTICULOS</a>
+          </v-tab>
         </v-tabs>
       </template>
     </v-app-bar>

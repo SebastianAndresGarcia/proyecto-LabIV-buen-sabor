@@ -1,6 +1,6 @@
 <template>
     <v-row justify="center">
-        <v-dialog v-model="dialog" persistent max-width="600px">
+        <v-dialog v-model="dialog" persistent max-width="700px">
             <template v-slot:activator="{ on, attrs }">
                 <div v-if="(idmanufacturado == null)">
                     <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
@@ -47,24 +47,24 @@
                                 </v-text-field>
                             </v-col>
                             <v-col cols="12">
-                                <v-row v-for="ins in cantidadInsumos" :key="ins.id">
-                                    <v-col>
+                                <v-row  v-for="ins in cantidadInsumos" :key="ins.id">
+                                    <v-col cols="4">
                                         <v-select label="Seleccione un insumo" outlined
                                             v-model="insumoSeleccionado[ins - 1]" :items="insumosData" item-value="_id"
                                             item-text="denominacion" @change="onchange(insumoSeleccionado)">
 
                                         </v-select>
                                     </v-col>
-                                    <v-col>
+                                    <v-col cols="2">
                                         <v-text-field label="Cantidad" type="number"
                                             v-model="DetalleArticuloManufacturado[ins - 1].cantidad"></v-text-field>
                                     </v-col>
-                                    <v-col>
+                                    <v-col cols="2">
                                         <v-text-field label="Unidad Medida"
                                             v-model="DetalleArticuloManufacturado[ins - 1].unidadMedida">
                                         </v-text-field>
                                     </v-col>
-                                    <v-col>
+                                    <v-col cols="4">
                                         <v-btn @click="eliminarInsumo(ins)">Eliminar</v-btn>
                                     </v-col>
                                 </v-row>

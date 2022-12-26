@@ -6,6 +6,8 @@ const controllerRubroGeneral = require('../controllers/RubroGeneralController')
 const controllerArticuloManufacturado = require('../controllers/ArticuloManufacturadoController')
 const controllerArticuloInsumo = require('../controllers/ArticuloInsumoController')
 const controllerDetalleArticuloManufacturado = require('../controllers/DetalleArticuloManufacturadoController')
+const controllerUser = require('../controllers/user.controller')
+const controllerRoles = require('../controllers/Roles.controller')
 
 const { verifySignUp } = require("../middlewares");
 const controller = require("../controllers/auth.controller");
@@ -27,7 +29,6 @@ router.post(
     controller.signup
 );
 router.post("/api/auth/signin", controller.signin);
-
 
 router.post('/crearDomicilio', controllerDlio.createAddress)
 router.get('/usuarioDlios/:id', controllerDlio.getAddressbyuser);
@@ -54,5 +55,7 @@ router.get('/ArticulosInsumos', controllerArticuloInsumo.getArticulosInsumos)
 router.get('/articulosinsumosXrubro/:id', controllerArticuloInsumo.getArticulosInsumosxrubro)
 router.post('/ActualizarInsumo/:id', controllerArticuloInsumo.updateArticuloInsumo)
 router.delete('/EliminarInsumo/:id', controllerArticuloInsumo.deleteArticuloInsumo)
-
+router.get('/empleados', controllerUser.getEmpleados)
+router.post('/ActualizarUsuario', controllerUser.updateUser)
+router.get('/Roles', controllerRoles.getRoles)
 module.exports = router

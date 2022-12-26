@@ -1,15 +1,17 @@
-exports.allAccess = (req, res) => {
-  res.status(200).send("Public Content.");
-};
+const path = require('path');
+const User = require('../models/user.model');
 
-exports.userBoard = (req, res) => {
-  res.status(200).send("User Content.");
-};
+exports.getEmpleados = async (req, res) => {
+  const rolempleado = "63589ca2473f9606e8844be8";
 
-exports.adminBoard = (req, res) => {
-  res.status(200).send("Admin Content.");
-};
+  const empleados = await User.find({ "roles.0": rolempleado }).populate({path:"roles"});
+  if (!empleados)
+      return res.status(204).json();
+  console.log(empleados)
+  return res.json(empleados)
+}
 
-exports.moderatorBoard = (req, res) => {
-  res.status(200).send("Moderator Content.");
-};
+exports.updateUser = async (req, res) =>{
+  const updatedUser = await User.findByIdAndUpdate(req.body._id, req.body)
+  return res.json(updatedUser)
+}
