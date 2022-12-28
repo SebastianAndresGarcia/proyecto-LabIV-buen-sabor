@@ -8,7 +8,7 @@
                     </v-btn>
                 </div>
                 <div v-else>
-                    <v-btn color="primary" small dark class="mb-2" v-bind="attrs" v-on="on">
+                    <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
                         Nuevo Empleado
                     </v-btn>
                 </div>
@@ -39,7 +39,8 @@
                                 </v-text-field>
                             </v-col>
                             <v-col class="d-flex" cols="12" sm="6">
-                                <v-select :items="items" label="Rol" item-value="name" item-text="name" v-model="empleado.roles.name"></v-select>
+                                <v-select :items="items" label="Rol" item-value="name" item-text="name"
+                                    v-model="empleado.roles.name"></v-select>
                             </v-col>
                             <v-col cols="12">
                                 <v-text-field label="email*" type="mail" v-model="empleado.email" required>
@@ -117,7 +118,7 @@ export default {
                 fechaNacimiento: null,
                 telefono: null,
                 borrado: false,
-                roles:{name:''}
+                roles: { name: "" }
             },
 
         };
@@ -129,25 +130,27 @@ export default {
         console.log("datoEmpleado", this.datoEmpleado)
         if (this.datoEmpleado)
             this.empleado = this.datoEmpleado
-            this.empleado.roles=this.datoEmpleado.roles[0]
-        //this.getManufacturadoXdenominacion(this.idrubrogral[1]) 
+        this.empleado.roles = this.datoEmpleado.roles[0]
     },
     methods: {
 
         cerrardialog() {
             this.dialog = false
-            if(!this.datoEmpleado)
+            if (!this.datoEmpleado)
+                this.limpiar()
+        },
+        limpiar(){
             this.empleado = new Object({
-                username: "",
-                email: "",
-                password: "",
-                nombre: "",
-                apellido: "",
-                fechaNacimiento: null,
-                telefono: null,
-                borrado: false,
-                roles:{name:''}
-            })
+                    username: "",
+                    email: "",
+                    password: "",
+                    nombre: "",
+                    apellido: "",
+                    fechaNacimiento: null,
+                    telefono: null,
+                    borrado: false,
+                    roles: { name: "" }
+                })
         },
         async crearEmpleado() { //también cumple la fción de actualizar un empleado
             this.nuevoEmpleado = false
@@ -174,6 +177,7 @@ export default {
                     this.respuestaError = resJson.message
                     console.log("mensaje del servidor: " + this.respuestaError)
                 }
+                this.limpiar()
             } else {
                 let urlServer = "http://localhost:3000/ActualizarUsuario";
                 let method = "POST";
@@ -196,21 +200,7 @@ export default {
                     console.log("mensaje del servidor: " + this.respuestaError)
                 }
             }
-
-            this.empleado = new Object({
-                username: "",
-                email: "",
-                password: "",
-                nombre: "",
-                apellido: "",
-                fechaNacimiento: null,
-                telefono: null,
-                borrado: false,
-                roles:{name:''}
-            })
-
         },
-
         async getRoles() {
             const res = await fetch(
                 'http://localhost:3000/Roles'

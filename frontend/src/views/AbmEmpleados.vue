@@ -1,7 +1,8 @@
 <template>
-    <v-card>
+    <v-card style="margin-top: 15px">
+
         <v-card-title>
-            Empleados
+            <v-row class="text-h4" justify="center">Listado de empleados</v-row>
             <v-spacer></v-spacer>
             <v-spacer></v-spacer>
             <!--<v-btn color="primary" small dark class="mb-2" :href="'/Formulario/0'">
@@ -9,8 +10,9 @@
             </v-btn>-->
             <Form-Empleado @nuevoEmpleado="handleMessage"> </Form-Empleado>
         </v-card-title>
-
-       <!-- <v-row class="row" align="center" justify="center">
+        <empleado-item :empleados="empleadosData" @actualizadoEmpleado="handleMessage"></empleado-item>
+        
+        <!-- <v-row class="row" align="center" justify="center">
             <form class="row">
                 <v-row class="row">
                     <v-col class="col" cols="6" sm="3" md="3">
@@ -32,8 +34,7 @@
                 </v-row>
             </form>
         </v-row>-->
-        <empleado-item :empleados="empleadosData"></empleado-item>
-        
+
     </v-card>
 </template>
 <script >
@@ -76,11 +77,11 @@ export default {
             console.log(resJson);
             this.empleadosData = resJson;
         },
-        async handleMessage(value){
-            this.nuevoEmp=value
+        async handleMessage(value) {
+            this.nuevoEmp = value
             if (this.nuevoEmp) {
                 this.getEmpleados()
-                this.nuevoEmp=false
+                this.nuevoEmp = false
             }
         }
         /*   async filtrarporprecio(preciomin, preciomax) {
@@ -106,7 +107,7 @@ export default {
                    window.location.reload();
            }, */
 
-       
+
     }
 };
 </script>
@@ -126,5 +127,4 @@ export default {
     text-align: justify;
     margin-left: auto;
 }
-
 </style>

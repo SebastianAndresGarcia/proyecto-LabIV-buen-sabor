@@ -20,9 +20,9 @@
                             <b>Rol</b>
                         </th>
                         <th class="text-left">
-                            <b>Activo</b>
+                            <b>Borrado</b>
                         </th>
-                        <th class="text-left">
+                        <th class="text-center">
                             <b>Actualizar</b>
                         </th>
 
@@ -76,12 +76,14 @@ import FormEmpleado from '@/components/FormEmpleados.vue'
 export default {
     data() {
         return {
-            empleado: {}
+            empleado: {},
+            actualizadoEmpleado: false
         }
     },
     components: {
         'Form-Empleado': FormEmpleado
     },
+    //beforeMount(){},
     props: ["empleados"],
     methods: {
         async bajaempleado(idempleado) {
@@ -96,11 +98,14 @@ export default {
             })
         },
         async handleMessage(value) {
-            this.nuevoEmp = value
-            if (this.nuevoEmp) {
-                this.getEmpleados()
-                this.nuevoEmp = false
-            }
+            this.actualizadoEmpleado = value
+            
+        }
+    },
+    watch: {
+        actualizadoEmpleado: function () {
+            this.$emit('actualizadoEmpleado', this.actualizadoEmpleado)
+            this.actualizadoEmpleado = false
         }
     }
 }    

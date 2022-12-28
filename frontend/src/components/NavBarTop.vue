@@ -1,6 +1,8 @@
 <!--https://codingbeautydev.com/blog/vuetify-app-bar/
 https://es.acervolima.com/comunicacion-entre-componentes-usando-emit-y-props-en-vue-js/
 https://kinsta.com/es/blog/vue-js/
+
+https://materialdesignicons.com/  ÍCONOS
 -->
 <template>
   <div class="app">
@@ -10,9 +12,9 @@ https://kinsta.com/es/blog/vue-js/
       </v-app-bar-nav-icon>
       <v-toolbar-title>EL BUEN SABOR</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
+      
+      <Carrito-item ></Carrito-item>
+      
       <v-menu left bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
@@ -33,7 +35,9 @@ https://kinsta.com/es/blog/vue-js/
               </template>
               <v-list>
                 <v-list-item v-for="(item, index) in rubros" :key="index">
-                  <v-list-item-title><v-btn text :href="'http://localhost:8080/ManufacXrubro/' + item._id">{{ item.denominacion }}</v-btn></v-list-item-title>
+                  <v-list-item-title><v-btn text :href="'http://localhost:8080/ManufacXrubro/' + item._id">{{
+    item.denominacion
+}}</v-btn></v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-menu>
@@ -77,16 +81,19 @@ https://kinsta.com/es/blog/vue-js/
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
+    
   </div>
 </template>
 
-<script > //lang="ts"
+<script >//lang="ts"
 import register from "@/components/Register.vue";
 import login from "@/components/Login.vue";
+import carrito from "@/components/Carrito.vue"
 export default {
   name: "App",
   data() {
     return {
+      activado: false,
       drawer: false,
       group: null,
       rubros: [
@@ -97,8 +104,9 @@ export default {
   components: {
     "register-item": register,
     "login-item": login,
+    "Carrito-item": carrito
   },
-  mounted(){
+  mounted() {
     this.getRubrosGeneral()
   },
   methods: {
@@ -107,11 +115,14 @@ export default {
         "http://localhost:3000/rubrosgeneral"
       );
       const resJson = await res.json();
-      this.rubros=resJson
-      this.rubros.push({'denominacion': "Ver todo", '_id':0})
+      this.rubros = resJson
+      this.rubros.push({ 'denominacion': "Ver todo", '_id': 0 })
     },
+   
   }
 };
 </script>
 
-<style lang=""></style>
+<style >
+
+</style>
