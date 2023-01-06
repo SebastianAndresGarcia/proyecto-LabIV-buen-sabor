@@ -39,8 +39,8 @@
                                 </v-text-field>
                             </v-col>
                             <v-col class="d-flex" cols="12" sm="6">
-                                <v-select :items="items" label="Rol" item-value="name" item-text="name"
-                                    v-model="empleado.roles.name"></v-select>
+                                <v-select :items="items" label="Rol" item-value="_id" item-text="name"
+                                    v-model="empleado.roles._id"></v-select>
                             </v-col>
                             <v-col cols="12">
                                 <v-text-field label="email*" type="mail" v-model="empleado.email" required>
@@ -112,7 +112,7 @@ export default {
             empleado: {
                 username: "",
                 email: "",
-                password: "",
+                //password: "",
                 nombre: "",
                 apellido: "",
                 fechaNacimiento: null,
@@ -143,7 +143,7 @@ export default {
             this.empleado = new Object({
                     username: "",
                     email: "",
-                    password: "",
+                    //password: "",
                     nombre: "",
                     apellido: "",
                     fechaNacimiento: null,
@@ -157,6 +157,7 @@ export default {
             console.log("entró");
 
             if (!this.empleado._id) {
+                console.log("this.empleado to signup", this.empleado)
                 let urlServer = "http://localhost:3000/api/auth/signup";
                 let method = "POST";
                 const respuesta = await fetch(urlServer, {
