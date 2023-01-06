@@ -47,6 +47,7 @@ router.get('/articulosmanufacturados', controllerArticuloManufacturado.getArticu
 router.get('/articulosmanufacturadosxrubro/:id', controllerArticuloManufacturado.getArticulosManufacturadosxrubro);
 router.post('/actualizarArticuloManufacturado/:id', controllerArticuloManufacturado.updateArticuloManufacturado);
 router.get('/getManufacturadoXdenominacion/:id', controllerArticuloManufacturado.getManufacturadoXdenominacion);
+router.get('/getManufacturadoXid/:id', controllerArticuloManufacturado.getManufacturadoXid);
 router.delete('/eliminarArticuloManufacturado/:id', controllerArticuloManufacturado.deleteArticuloManufacturado);
 router.delete('/eliminarDetalleArticuloManufacturado/:id', controllerDetalleArticuloManufacturado.deleteDetalleArticuloManufacturado);
 router.post('/crearArticuloInsumo', controllerArticuloInsumo.createArticuloInsumo)

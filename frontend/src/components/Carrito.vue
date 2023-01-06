@@ -3,40 +3,14 @@
     <div>
         <v-btn icon @click="drawer = true">
             <v-icon large>mdi-cart</v-icon>
-            <span id="cart_menu_num" class="badge rounded-circle">5</span>
+            <span id="cart_menu_num" class="badge rounded-circle">{{ this.cantidadcarrito }}</span>
         </v-btn>
 
-        <v-navigation-drawer color="white" class="mx-auto" height="700" width="25%" v-model="drawer" absolute temporary
+        <v-navigation-drawer color="white" class="mx-auto" height="100vh" width="25%" v-model="drawer" absolute temporary
             right>
                
-            <item-carrito></item-carrito>
-            
-            <!-- <v-list nav dense>
-                <v-list-item-group color="black" v-model="group" active-class="deep-purple--text text--accent-4">
-                    <v-list-item  :href="'./'">
-                        <v-list-item-icon>
-                            <v-icon color="black">mdi-home</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title> Home </v-list-item-title>
-                    </v-list-item>
-
-                    <v-list-item>
-                        <v-list-item-icon>
-                            <v-icon color="black">mdi-account</v-icon>
-                        </v-list-item-icon>
-                        <login-item></login-item>
-                    </v-list-item>
-
-                    <v-list-item>
-                        <v-list-item-icon>
-                            <v-icon>mdi-account</v-icon>
-                        </v-list-item-icon>
-                        <register-item></register-item>
-                    </v-list-item>
-
-                </v-list-item-group>
-            </v-list>-->
-
+            <item-carrito @carritoLength="handleMessage"></item-carrito>
+     
         </v-navigation-drawer>
     </div>
 </template>
@@ -48,19 +22,18 @@ export default {
     data() {
         return {
             drawer: false,
-            group: null,
-            items: [
-        {
-          color: '#1F7087',
-          src: 'https://cdn.vuetifyjs.com/images/cards/foster.jpg',
-          title: 'Supermodel',
-          artist: 'Foster the People',
-        }
-      ],
+            cantidadcarrito: 0
         };
     },
     components:{
         "item-carrito": itemcarrito
+    },
+    methods:{
+        async handleMessage(value) {
+            
+            console.log("cantidadcarrito"+value)
+            this.cantidadcarrito = value
+        }
     }
 };
 </script>
