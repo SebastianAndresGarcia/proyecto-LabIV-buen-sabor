@@ -44,8 +44,7 @@
                 <v-row>
                     <div v-if="reserve == true" class="buttons_buy" style="display: flex;">
                         <a class="arrow-down_touch" @click="agregarProducto(manufacturadoParam._id, -1)"></a>
-                        <input onfocus="this.select();" class="inputpromohome" v-model="cantidad" onkeyup=""
-                            onmouseup="return false;">
+                        <input readonly class="inputpromohome" v-model="cantidad">
                         <a class="arrow-up_touch" @click="agregarProducto(manufacturadoParam._id, 1)"></a>
                     </div>
                 </v-row>
@@ -63,28 +62,21 @@ export default {
             reserve: false,
             cantidad: 0,
             cambioCarrito: false,
-            ca: []
+            ca: [],
+            carritoLocalstorage: {}
         };
     },
     props: {manufacturadoParam: Object},
     mounted() {
-        
         this.getCookie(this.manufacturadoParam._id)
         console.log("manufacturadoParam", this.manufacturadoParam)
-        // if (String(this.manufacturadoParam.imagen).indexOf("http") >= 0) {
-        //     this.urlImage = this.manufacturadoParam.imagen;
-        //     console.log(this.urlImage)
-        // } else {
-        //     this.urlImage = "../images/" + this.manufacturadoParam.imagen;
-        //     console.log(this.urlImage)
-        // }
     },
-    //beforeUpdate(){this.cambioCarrito=false},
     methods: {
         agregar(id) {
             this.cantidad = 1
             this.reserve = true
             this.cambioCarrito = true
+            window.localStorage.setItem(id, JSON.stringify({'cantidad': this.cantidad}));
             document.cookie = id + "=" + id + "," + 1
             eventBus.$emit("carrito-changed", this.cambioCarrito)
             //this.cambioCarrito=false
@@ -92,13 +84,16 @@ export default {
         agregarProducto(id, i) {
             if (i == 0) {
                 this.reserve = false
+                window.localStorage.removeItem(id)
                 document.cookie = id + "=; max-age=0";
             } else {
                 this.cantidad += i
+                window.localStorage.setItem(id, JSON.stringify({'cantidad': this.cantidad}))
                 document.cookie = id + "=" + id + "," + this.cantidad
 
                 if (this.cantidad == 0) {
                     this.reserve = false
+                    window.localStorage.removeItem( id)
                     document.cookie = id + "=; max-age=0"
                 }
                 console.log("cookie", document.cookie)
@@ -106,27 +101,36 @@ export default {
                 eventBus.$emit("carrito-changed", this.cambioCarrito)
                 //this.cambioCarrito=false
             }
+            this.getCookie(this.manufacturadoParam._id) //está línea actualiza la vista gral del componente padre cuando se elimina desde el carrito
         },
         async getCookie(id) {
-            this.ca = await document.cookie.split(';'); //divido por cookie
-            if (document.cookie) {
-                for (let i = 0; i < this.ca.length; i++) {
-                    if (this.ca[i].includes(id)) { //busco si el producto está incluido en el carrito
-                        this.reserve = true
-                        this.cantidad = Number(this.ca[i].slice(-1)) //para obtener el último caracter que trae la cantidad
-                        //console.log("this.ca[i][this.ca[i].length]"+this.ca[i])
-                    }
-                }
+            // this.ca = await document.cookie.split(';'); //divido por cookie
+            // if (document.cookie) {
+            //     for (let i = 0; i < this.ca.length; i++) {
+            //         if (this.ca[i].includes(id)) { //busco si el producto está incluido en el carrito
+            //             this.reserve = true
+            //             this.cantidad = Number(this.ca[i].slice(-1)) //para obtener el último caracter que trae la cantidad
+            //             //console.log("this.ca[i][this.ca[i].length]"+this.ca[i])
+            //         }
+            //     }
+            // }
+            if(localStorage.getItem(id)){
+                this.reserve = true
+                this.cantidad = (JSON.parse(localStorage.getItem(id))).cantidad
+                //console.log("this.cantidad: "+this.cantidad)
             }
+
         },
     },
     created() {
         eventBus.$on("elimina-itemcarrito", async (data) => {
-            if (data) {
+            if (data!=0) {
                 console.log("entró al if del itemcarrito, data: " + data)
                 this.agregarProducto(data, 0)
             }
-            //eventBus.$off("elimina-itemcarrito");
+            else{
+                this.getCookie(this.manufacturadoParam._id)
+            }
         });
     },
 };

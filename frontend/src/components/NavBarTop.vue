@@ -15,18 +15,18 @@ https://materialdesignicons.com/  ÍCONOS
       
       <Carrito-item ></Carrito-item>
       
-      <v-menu left bottom>
+      <!-- <v-menu left bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
         </template>
-      </v-menu>
+      </v-menu> -->
 
       <template v-slot:extension>
         <v-tabs align-with-title>
           <v-tab>
-            <v-btn text href="http://localhost:8080/#carousel">Ofertas del Día</v-btn>
+            <v-btn block text href="http://localhost:8080/#carousel">Ofertas del Día</v-btn>
           </v-tab>
           <v-tab>
             <v-menu bottom offset-y>
@@ -35,7 +35,7 @@ https://materialdesignicons.com/  ÍCONOS
               </template>
               <v-list>
                 <v-list-item v-for="(item, index) in rubros" :key="index">
-                  <v-list-item-title><v-btn text :href="'http://localhost:8080/ManufacXrubro/' + item._id">{{
+                  <v-list-item-title><v-btn block text :href="'http://localhost:8080/ManufacXrubro/' + item._id">{{
     item.denominacion
 }}</v-btn></v-list-item-title>
                 </v-list-item>
@@ -54,27 +54,23 @@ https://materialdesignicons.com/  ÍCONOS
         </v-tabs>
       </template>
     </v-app-bar>
-    <v-navigation-drawer class="app" v-model="drawer" app absolute temporary>
-      <v-list nav dense>
+    <v-navigation-drawer height="100vh" class="app" v-model="drawer" app absolute temporary>
+      <v-list nav dense >
         <v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
-          <v-list-item :href="'./'">
+          <!-- <v-list-item :href="'./'">
             <v-list-item-icon>
               <v-icon>mdi-home</v-icon>
             </v-list-item-icon>
             <v-list-item-title> Home </v-list-item-title>
-          </v-list-item>
-
+          </v-list-item> -->
+          
           <v-list-item>
-            <v-list-item-icon>
-              <v-icon>mdi-account</v-icon>
-            </v-list-item-icon>
+            
             <login-item></login-item>
           </v-list-item>
 
           <v-list-item>
-            <v-list-item-icon>
-              <v-icon>mdi-account</v-icon>
-            </v-list-item-icon>
+           
             <register-item></register-item>
           </v-list-item>
 

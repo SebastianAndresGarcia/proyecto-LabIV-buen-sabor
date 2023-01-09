@@ -19,8 +19,6 @@ export default {
     "foo-ter": footer, //si no le pongo el guión en el medio no funciona
     "register-item": Register,
   },
-
- 
   /* mounted() { 
          this.getInstrumentos()
      },
