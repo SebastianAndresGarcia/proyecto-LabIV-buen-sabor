@@ -1,9 +1,10 @@
 <template>
     <div style="margin-top:40px; margin-left: 50px; margin-bottom: 40px; ">
-
+        <v-dialog v-model="alert" max-width="400px"><v-alert color="red" prominent type="warning" >Inicie sesión para llenar su
+                carrito<v-btn text @click="alert=false">X</v-btn></v-alert></v-dialog>
         <div style="margin:20px; display:inline-flex;" v-for="(manufacturado, index) in manufacturadosData"
             :key="index">
-            <manufacturado-item :manufacturadoParam="manufacturado"></manufacturado-item>
+            <manufacturado-item :manufacturadoParam="manufacturado" @abrirAlert="handleMessage"></manufacturado-item>
         </div>
     </div>
 </template>
@@ -21,7 +22,8 @@ export default {
     },
     data() {
         return {
-            manufacturadosData: []
+            manufacturadosData: [],
+            alert: false
         };
     },
     methods: {
@@ -43,6 +45,9 @@ export default {
                 this.manufacturadosData = resJson;
             }
             console.log("this.manufacturadosData", this.manufacturadosData)
+        },
+        handleMessage(value) {
+            this.alert = value
         }
     }
 };

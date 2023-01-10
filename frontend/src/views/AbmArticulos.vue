@@ -1,5 +1,5 @@
 <template>
-    <v-card elevation="4">
+    <v-card v-if='currentUser.roles.includes("ROLE_ADMIN")' elevation="4">
         <v-card-title>GESTION DE ARTICULOS</v-card-title>
 
         <v-card-text>
@@ -20,7 +20,7 @@
                         <v-row>
                             <v-col>
                                 <v-select multiple label="Seleccione un Rubro" outlined v-model="rubroSeleccionado"
-                                    :items="rubros" item-value="_id" item-text="denominacion" >
+                                    :items="rubros" item-value="_id" item-text="denominacion">
                                     <template v-slot:prepend-item>
                                         <v-list-item ripple @mousedown.prevent @click="toggle">
                                             <v-list-item-action>
@@ -101,6 +101,7 @@ import articuloManufacturado from "@/components/ArticuloManufacturado.vue";
 import articuloInsumo from "@/components/ArticuloInsumo.vue";
 import CrearRubro from "@/components/CrearRubro.vue";
 import CrearInsumo from "@/components/CrearInsumo.vue"
+import AuthService from "@/service/auth.service.js"
 export default {
     name: "abm-articulos",
     components: {
@@ -120,6 +121,8 @@ export default {
     },
 
     mounted() {
+        this.currentUser = AuthService.getCurrentUser()
+        this.verificarUsuario(this.currentUser)
         this.getRubrosGeneral(),
         this.getRubrosArticulos()
     },
@@ -166,19 +169,28 @@ export default {
             })
         },
         handleMessage3(value) {
-            console.log("entró handleMessage3"+value)
-            this.nuevoArt=value
+            console.log("entró handleMessage3" + value)
+            this.nuevoArt = value
             if (this.nuevoArt) {
                 this.getRubrosGeneral()
-                this.nuevoArt=false
+                this.nuevoArt = false
             }
         },
         handleMessage(value) {
-            console.log("entró handleMessageRubroArticulo"+value)
-            this.nuevoIns=value
+            console.log("entró handleMessageRubroArticulo" + value)
+            this.nuevoIns = value
             if (this.nuevoIns) {
                 this.getRubrosArticulos()
-                this.nuevoIns=false
+                this.nuevoIns = false
+            }
+        },
+        async verificarUsuario(currentUser) {
+            if (currentUser) {
+                if (!currentUser.roles.includes("ROLE_ADMIN")) {
+                    window.location.href = "/Home"
+                }
+            } else {
+                window.location.href = "/Home"
             }
         }
     },

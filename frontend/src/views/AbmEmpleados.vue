@@ -1,5 +1,5 @@
 <template>
-    <v-card style="margin-top: 15px">
+    <v-card v-if='currentUser.roles.includes("ROLE_ADMIN")' style="margin-top: 15px">
 
         <v-card-title>
             <v-row class="text-h4" justify="center">Listado de empleados</v-row>
@@ -11,35 +11,12 @@
             <Form-Empleado @nuevoEmpleado="handleMessage"> </Form-Empleado>
         </v-card-title>
         <empleado-item :empleados="empleadosData" @actualizadoEmpleado="handleMessage"></empleado-item>
-        
-        <!-- <v-row class="row" align="center" justify="center">
-            <form class="row">
-                <v-row class="row">
-                    <v-col class="col" cols="6" sm="3" md="3">
-                        <v-text-field type="number" placeholder="ingresevalor" label="preciomin" v-model="preciomin"
-                            required></v-text-field>
-                    </v-col>
-                    <v-col class="col" cols="6" sm="3" md="3">
-                        <v-text-field type="number" placeholder="ingresevalor" label="preciomax" v-model="preciomax"
-                            required></v-text-field>
-                    </v-col>
-                    <v-col class="col" cols="6" md="2">
-                        <v-btn dark x-small @click="filtrarporprecio(preciomin, preciomax)">
-                            Filtrar
-                        </v-btn><br />
-                        <v-btn dark x-small :href="'./Grillaempleados'">
-                            Limpiar
-                        </v-btn>
-                    </v-col>
-                </v-row>
-            </form>
-        </v-row>-->
-
     </v-card>
 </template>
 <script >
 import grillaEmpleados from "@/components/GrillaEmpleados.vue"
 import FormEmpleado from "@/components/FormEmpleados.vue"
+import AuthService from "@/service/auth.service.js"
 export default {
 
     components: {
@@ -47,6 +24,8 @@ export default {
         'Form-Empleado': FormEmpleado
     },
     mounted() {
+        this.currentUser = AuthService.getCurrentUser()
+        this.verificarUsuario(this.currentUser)
         this.getEmpleados()
     },
     data() {
@@ -64,8 +43,7 @@ export default {
     borrado
     roles */
             ],
-            preciomax: undefined,
-            preciomin: undefined
+            currentUser: undefined
         };
     },
     methods: {
@@ -83,31 +61,16 @@ export default {
                 this.getEmpleados()
                 this.nuevoEmp = false
             }
+        },
+        async verificarUsuario(currentUser) {
+            if (currentUser) {
+                if (!currentUser.roles.includes("ROLE_ADMIN")) {
+                    window.location.href = "/Home"
+                }
+            } else {
+                window.location.href = "/Home"
+            }
         }
-        /*   async filtrarporprecio(preciomin, preciomax) {
-   
-               const res = await fetch(
-                   "http://localhost:3000/empleados"
-               );
-               console.log("preciomin" + preciomin)
-               console.log("preciomax" + Number(preciomax))
-               //this.empleadosData = resJson;
-               //if (Number(preciomax) != null && Number(preciomax) != NaN && Number(preciomax) != 0) {
-               //this.empleadosData = resJson;
-               if (Number(preciomax) > 0 && Number(preciomin) > 0) {
-                   const resJson = await res.json();
-                   console.log("funcion filtrar ", resJson);
-                   this.empleadosData.splice(0, this.empleadosData.length);
-                   for (let i of resJson) {
-                       if (Number(preciomin) <= Number(i.precio) && Number(preciomax) >= Number(i.precio)) {
-                           this.empleadosData.push(i)
-                       }
-                   }
-               } else //if (Number(preciomax) == undefined || Number(preciomax) == 0 || Number(preciomax) == null || this.empleadosData.length == 0) {
-                   window.location.reload();
-           }, */
-
-
     }
 };
 </script>

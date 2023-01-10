@@ -56,11 +56,11 @@
                                         </v-select>
                                     </v-col>
                                     <v-col cols="2">
-                                        <v-text-field label="Cantidad" type="number"
+                                        <v-text-field label="Cantidad" type="number" placeholder="1.0" step="0.01" min="0"
                                             v-model="DetalleArticuloManufacturado[ins - 1].cantidad"></v-text-field>
                                     </v-col>
                                     <v-col cols="2">
-                                        <v-text-field label="Unidad Medida"
+                                        <v-text-field label="Unidad Medida" readonly
                                             v-model="DetalleArticuloManufacturado[ins - 1].unidadMedida">
                                         </v-text-field>
                                     </v-col>

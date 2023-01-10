@@ -39,6 +39,9 @@
                     </v-card>
                 </v-col>
             </v-row>
+            <v-row dense>
+                <v-btn block color="info" href="http://localhost:8080/micarrito">Finalizar Compra</v-btn>
+            </v-row>
         </v-container>
     </v-card>
     <v-card v-else class="mx-auto" color="white" height="100%">
@@ -48,7 +51,7 @@
             <v-btn outlined color="white" @click="cerrar()"><v-icon medium color="black">mdi-close</v-icon></v-btn>
         </v-card-title>
         <v-card-text >
-            <v-row style="color: black" class="mx-0">
+            <v-row style="color: black; justify-content: center; margin-top: 20%;" class="mx-0">
                 Su carrito se encuentra vacío
             </v-row>
         </v-card-text>

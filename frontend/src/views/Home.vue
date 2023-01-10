@@ -18,24 +18,6 @@ export default {
     "carousel-item": carousel,
     "foo-ter": footer, //si no le pongo el guión en el medio no funciona
     "register-item": Register,
-  },
-  /* mounted() { 
-         this.getInstrumentos()
-     },
-     data() {
-         return {
-             instrumentosData: []
-         };
-     },
-     methods: {
-         async getInstrumentos() {
-             const res = await fetch(
-                 "http://localhost:3000/instrumentos"
-             );
-             const resJson = await res.json();
-             console.log(resJson);
-             this.instrumentosData = resJson;
-         }
-     }  */
+  }
 };
 </script>

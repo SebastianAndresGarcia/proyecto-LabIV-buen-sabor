@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-dialog v-model="dialog" persistent max-width="600px">
+    <v-dialog v-model="dialog" temporary max-width="600px">
       <template v-slot:activator="{ on, attrs }">
         <v-btn block text v-bind="attrs" v-on="on"><v-icon>mdi-account</v-icon> Iniciar sesión </v-btn>
       </template>
@@ -67,6 +67,7 @@
 </template>
 
 <script>
+import AuthService from '@/service/auth.service.js'
 export default {
   data() {
     return {
@@ -78,34 +79,28 @@ export default {
         respuestaError: ''
     }
   },
-
+  mounted(){
+    //this.ingresar()
+  },
   methods: {
     async ingresar() {
-      console.log("entró");
-      console.log(this.usuario);
-      let urlServer = "http://localhost:3000/api/auth/signin";
-      let method = "POST";
+      console.log("entró a loguearse");
+      AuthService.login(this.usuario.username, this.usuario.password).then(
+            () => {
+                //navigate("/Home");
+                window.location.href = "/Home"
+            },
+            (error) => {
+                const resMessage =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
 
-      const respuesta = await fetch(urlServer, {
-        method: method,
-        body: JSON.stringify(this.usuario),
-        headers: {
-          "Content-type": "application/json",
-        },
-        mode: "cors",
-
-      });
-      const resJson = await respuesta.json()
-      console.log("respuesta: ", resJson)
-      if (respuesta.status === 200) {
-        console.log(respuesta.status)
-        this.dialog = false;
-      } else {
-
-        this.respuestaError = resJson.message
-        console.log("mensaje del servidor: " + this.respuestaError)
-      }
-
+               this.respuestaError=(resMessage);
+            }
+        );
     },
   }
 };
