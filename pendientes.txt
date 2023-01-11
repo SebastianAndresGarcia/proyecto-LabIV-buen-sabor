@@ -1,5 +1,7 @@
 Funcionando ArticuloInsumos, habría que terminar el frontend para que se vea la funcionalidad recursiva.
 
+El menú login se queda oculto si arrastro hacia abajo la página.
+
 El carrousel no tiene funcionalidad, habría que vincularlo al carrito.
 
 El carrito le falta agregar el botón para realizar la compra.

@@ -116,7 +116,8 @@ export default {
             rubroSeleccionado: [],
             insumos: [],
             insumoSeleccionado: [],
-            rubrocreado: false
+            rubrocreado: false,
+            currentUser: undefined
         }
     },
 

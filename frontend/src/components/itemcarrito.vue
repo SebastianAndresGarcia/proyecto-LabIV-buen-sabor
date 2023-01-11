@@ -12,7 +12,7 @@
                         <div style="color: black;" class="d-flex flex-no-wrap justify-space-between">
 
                             <div>
-                                <v-card-title class="text-h6" v-text="item.denominacion"></v-card-title>
+                                <div class="text-overline mt-2" v-text="item.denominacion"></div>
                                 <v-card-subtitle>
                                     <h2>${{ item.precioVenta }}</h2>
                                 </v-card-subtitle>
@@ -25,13 +25,13 @@
                                             <a class="arrow-up_touch" @click="agregarProducto(item._id, 1, i)"></a>
                                         </div>
                                     </v-row>
-                                    <v-btn color="black" class="ml-2 mt-5" outlined rounded small
-                                        @click="eliminar(item._id)">
-                                        Eliminar
-                                    </v-btn>
+                                    <v-btn color="black" outlined rounded small
+                                            @click="eliminar(item._id)">
+                                            <v-icon>mdi-trash-can</v-icon>
+                                        </v-btn>
                                 </v-card-actions>
                             </div>
-                            <v-avatar class="ma-3" size="100" tile>
+                            <v-avatar class="ma-3" size="70" tile>
                                 <v-img v-if="String(item.imagen).indexOf('http') >= 0" :src="item.imagen"></v-img>
                                 <v-img v-else :src="`../images/` + item.imagen"></v-img>
                             </v-avatar>
@@ -39,8 +39,8 @@
                     </v-card>
                 </v-col>
             </v-row>
-            <v-row dense>
-                <v-btn block color="info" href="http://localhost:8080/micarrito">Finalizar Compra</v-btn>
+            <v-row style="justify-content: center; margin-top: 5%;" dense>
+                <v-btn block rounded color="success" href="http://localhost:8080/micarrito">Finalizar Compra</v-btn>
             </v-row>
         </v-container>
     </v-card>
