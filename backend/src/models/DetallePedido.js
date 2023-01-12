@@ -14,15 +14,15 @@ const DetallePedido = mongoose.model(
     },
     
     articuloinsumoid: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'ArticuloInsumo'
     },
     articulomanufacturadoid: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'ArticuloManufacturado'
     },
     pedidoid: {
-        type:Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Pedido'
     }
 

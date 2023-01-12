@@ -43,13 +43,9 @@ const Pedidos = mongoose.model(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'DetallePedido',
             required: true
-        }],
-        MercadoPagoDatos:
-        {
-            type: MercadoPagoDatos.schema,
-            ref: 'MercadoPagoDatos'
-        }
-
+        }]
+    }, {
+        timestamps: true  //va a crear los campos createdAt y updatedAt
     }))
 
-module.exports=Pedidos
+module.exports = Pedidos

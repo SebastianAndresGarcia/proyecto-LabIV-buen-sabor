@@ -8,6 +8,7 @@ const controllerArticuloInsumo = require('../controllers/ArticuloInsumoControlle
 const controllerDetalleArticuloManufacturado = require('../controllers/DetalleArticuloManufacturadoController')
 const controllerUser = require('../controllers/user.controller')
 const controllerRoles = require('../controllers/Roles.controller')
+const controllerPedidos = require('../controllers/PedidosController')
 
 const { verifySignUp } = require("../middlewares");
 const controller = require("../controllers/auth.controller");
@@ -59,4 +60,6 @@ router.delete('/EliminarInsumo/:id', controllerArticuloInsumo.deleteArticuloInsu
 router.get('/empleados', controllerUser.getEmpleados)
 router.post('/ActualizarUsuario', controllerUser.updateUser)
 router.get('/Roles', controllerRoles.getRoles)
+router.post('/crearPedido', controllerPedidos.createPedido)
+router.get('/Pedidos', controllerPedidos.getPedidos)
 module.exports = router

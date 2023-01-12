@@ -60,32 +60,30 @@ https://materialdesignicons.com/  ÍCONOS
     <v-navigation-drawer left height="100vh" class="app" v-model="drawer" app absolute temporary>
       <v-list v-if="currentUser == undefined" nav dense>
         <v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
-          <!-- <v-list-item :href="'./'">
-            <v-list-item-icon>
-              <v-icon>mdi-home</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title> Home </v-list-item-title>
-          </v-list-item> -->
           <v-row style="justify-content: flex-end; margin-top: 10%; margin-bottom: 10%;">
-            <v-btn outlined color="white" @click="drawer = false"><v-icon medium color="black">mdi-close</v-icon></v-btn>
+            <v-btn outlined color="white" @click="drawer = false"><v-icon medium
+                color="black">mdi-close</v-icon></v-btn>
           </v-row>
           <v-list-item style="margin-bottom: 10%;">
-
             <login-item></login-item>
           </v-list-item>
-
           <v-list-item>
-
             <register-item></register-item>
           </v-list-item>
-
         </v-list-item-group>
       </v-list>
 
       <v-card v-else height="100%">
-        <v-card-title style="color: black; justify-content: center; padding-top: 20%;">Bienvenido {{ currentUser.username }}</v-card-title>
+        <v-card-title style="color: black; justify-content: center; padding-top: 20%;">Bienvenido {{
+          currentUser.username
+        }}</v-card-title>
+        <v-list-item-group>
+          <v-list-item>Mis Compras</v-list-item>
+          <v-list-item>Mi Perfil</v-list-item>
+        </v-list-item-group>
         <v-card-subtitle>
-          <v-row style="text-decoration:underline; color: black; justify-content: center; margin-top: 30%;" class="mx-0">
+          <v-row style="text-decoration:underline; color: black; justify-content: center; margin-top: 30%;"
+            class="mx-0">
             <a @click="cerrarSesion()">
               <h3>Cerrar Sesión</h3>
             </a>

@@ -5,7 +5,6 @@
             <v-row class="text-h4" justify="center">Pedidos</v-row>
             <v-spacer></v-spacer>
             <v-spacer></v-spacer>
-            
         </v-card-title>
     </v-card>
 </template>
