@@ -78,7 +78,7 @@ https://materialdesignicons.com/  ÍCONOS
           currentUser.username
         }}</v-card-title>
         <v-list-item-group>
-          <v-list-item>Mis Compras</v-list-item>
+          <v-list-item><a style="text-decoration: none;" href="http://localhost:8080/MisCompras">Mis Compras</a></v-list-item>
           <v-list-item>Mi Perfil</v-list-item>
         </v-list-item-group>
         <v-card-subtitle>

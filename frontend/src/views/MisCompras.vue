@@ -1,6 +1,6 @@
 <template>
-    <v-container v-if='currentUser.roles.includes("ROLE_ADMIN")'>
-        <v-card v-if="pedidosData.length > 0" style="margin-top: 10px; justify:center">
+    <v-container>
+        <v-card v-if="miscompras.length > 0" style="margin-top: 10px; justify:center">
             <v-simple-table class="tabla">
                 <template v-slot:default>
                     <thead>
@@ -12,7 +12,7 @@
                                 <b>Pedido N°</b>
                             </th>
                             <th class="text-left">
-                                <b>horaEstimadaFin</b>
+                                <b>Estado</b>
                             </th>
                             <th class="text-left">
                                 <b>Total</b>
@@ -23,19 +23,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(pedido, index) in pedidosData" style="padding-top: 5px;">
+                        <tr v-for="(compra, index) in miscompras" style="padding-top: 5px;">
 
                             <td>
-                                {{ pedido.fecha }}
+                                {{ compra.fecha }}
                             </td>
                             <td>
-                                {{ pedido.numero }}
+                                {{ compra.numero }}
                             </td>
                             <td>
-                                {{ pedido.estado }}
+                                {{ compra.estado }}
                             </td>
                             <td>
-                                {{ pedido.horaEstimadaFin }}
+                                {{ compra.total }}
                             </td>
                             <td>
                                 <v-btn small>
@@ -51,58 +51,84 @@
 </template>
 <script>
 
-import AuthService from "@/service/auth.service.js"
 export default {
-
-    components: {
-
-    },
-    mounted() {
-        this.currentUser = AuthService.getCurrentUser()
-        this.verificarUsuario(this.currentUser)
-        this.getPedidos()
-    },
     data() {
         return {
-            currentUser: undefined,
-            pedidosData: []
-        };
+            miscompras: []
+        }
     },
+    components: {
+        
+    },
+    mounted() {
+        console.log(document.URL)
+        this.comprasUsuario((JSON.parse(localStorage.getItem('user'))).id)
+    },
+
     methods: {
-        async getPedidos() {
+        async comprasUsuario(id) {
             const res = await fetch(
-                "http://localhost:3000/pedidos"
+                `http://localhost:3000/pedidosxid/${id}/`
             );
             const resJson = await res.json();
             console.log(resJson);
-            this.pedidosData = resJson;
-        },
-        async verificarUsuario(currentUser) {
-            if (currentUser) {
-                if (!currentUser.roles.includes("ROLE_ADMIN")) {
-                    window.location.href = "/Home"
-                }
-            } else {
-                window.location.href = "/Home"
-            }
+            this.miscompras = resJson
         }
+        
     }
-};
+}    
 </script>
-<style scoped>
-.row {
-    text-align: justify;
-    align-items: center;
-    /**verticalmente */
-    display: flex;
-    margin-left: 0 auto;
-    padding-left: 15%;
-    padding-right: 15%;
+
+<style>
+.tabla {
+    padding: 5%;
 }
 
-.col {
-    justify-content: center;
-    text-align: justify;
-    margin-left: auto;
+a {
+    text-decoration: none;
+}
+
+.form-inline {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+}
+
+.form-inline label {
+    margin: 5px 10px 5px 0;
+}
+
+/* Style the input fields */
+.form-inline input {
+    vertical-align: middle;
+    margin: 5px 10px 5px 0;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+/* Style the submit button */
+.form-inline button {
+    padding: 10px 20px;
+    background-color: dodgerblue;
+    border: 1px solid #ddd;
+    color: white;
+}
+
+.form-inline button:hover {
+    background-color: royalblue;
+}
+
+/* Add responsiveness - display the form controls vertically instead of horizontally on screens that are less than 800px wide */
+@media (max-width: 800px) {
+    .form-inline input {
+        margin: 10px 0;
+    }
+
+    .form-inline {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
 }
 </style>

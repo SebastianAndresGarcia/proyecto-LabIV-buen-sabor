@@ -1,5 +1,6 @@
 <template>
     <v-container>
+        <!-- <post-compra :estado="estadoCompra">Ir a pagar</post-compra> -->
         <v-row>
             <v-col>
                 <h1>Mi Carrito</h1>
@@ -93,9 +94,11 @@
 </template>
 <script>
 import { eventBus } from "../main";
+import postcompra from "@/components/PostCompra.vue"
 export default {
     data() {
         return {
+            estadoCompra: { dialog: false, estadoCompra: false },
             cerrarCarro: false,
             items: [],
             carritoLength: 0,
@@ -105,7 +108,7 @@ export default {
             radios: "",
             pedido: {
                 fecha: new Date(),
-                numero: 1,
+                //numero: 1,
                 estado: "pendiente",
                 horaEstimadaFin: new Date(),
                 tipoEnvio: "",
@@ -120,6 +123,9 @@ export default {
 
             }
         };
+    },
+    components: {
+        "post-compra": postcompra
     },
     mounted() {
         this.getLocalStorage()
@@ -186,7 +192,7 @@ export default {
         async registrarPedido() {
             this.pedido = {
                 fecha: new Date(),
-                numero: 1,
+                //numero: 1,
                 estado: "pendiente",
                 horaEstimadaFin: new Date(),
                 tipoEnvio: this.radios,
@@ -222,11 +228,59 @@ export default {
             console.log("respuesta: ", resJson)
             if (respuesta.status === 200) {
                 console.log(respuesta.status)
+                //this.estadoCompra.estadoCompra=true
+                
             } else {
                 this.respuestaError = resJson.message
                 console.log("mensaje del servidor: " + this.respuestaError)
             }
-            //DESDE ACÁ ABRIRÍA UN DIALOG QUE DIGA EL ESTADO DEL PEDIDO Y REDIRIJA A "MIS COMPRAS"
+            this.mercadoPago()
+            this.pedido={}
+            // console.log("this.estadoCompra"+this.estadoCompra)
+            //this.estadoCompra.dialog=true
+        },
+        async mercadoPago() {
+            let urlServer = "http://localhost:3000/checkout";
+            let method = "POST";
+            const respuesta = await fetch(urlServer, {
+                method: method,
+                body: JSON.stringify({
+                    external_reference: this.pedido._id,
+                    description: this.items[0].denominacion,
+                    price: this.pedido.total,
+                    quantity: this.cantidad[0]
+                }),
+                headers: {
+                    "Content-type": "application/json",
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+                    'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'
+                },
+                mode: "cors"
+            });
+            const resJson = await respuesta.json()
+            console.log("respuesta: ", resJson)
+            if (respuesta.status === 200) {
+                console.log(respuesta.status)
+                this.limpiarCarrito()
+                
+            } else {
+                this.respuestaError = resJson.message
+                console.log("mensaje del servidor: " + this.respuestaError)
+            }
+        },
+        async borrarCarrito(){
+            for (let i = 0; i < this.items.length; i++) {
+                localStorage.limpiarCarrito(this.items[i]._id);
+            }
+        },
+        async getEstado(){
+            const res = await fetch( 
+                `http://localhost:3000/feedback`
+            );
+            const resJson = await res.json();
+            console.log("feedback",resJson);
+            
         }
     },
     created() {

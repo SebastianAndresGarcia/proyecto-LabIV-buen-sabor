@@ -5,9 +5,6 @@
             <v-row class="text-h4" justify="center">Listado de empleados</v-row>
             <v-spacer></v-spacer>
             <v-spacer></v-spacer>
-            <!--<v-btn color="primary" small dark class="mb-2" :href="'/Formulario/0'">
-                Nuevo Empleado
-            </v-btn>-->
             <Form-Empleado @nuevoEmpleado="handleMessage"> </Form-Empleado>
         </v-card-title>
         <empleado-item :empleados="empleadosData" @actualizadoEmpleado="handleMessage"></empleado-item>

@@ -52,7 +52,15 @@ const routes: Array<RouteConfig> = [
      // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */'../views/AbmEmpleados.vue')
+    component: () => import(/* webpackChunkName: "about" */'../views/AbmPedidos.vue')
+  },
+  {
+    path: '/MisCompras',
+    name: 'MisCompras',
+     // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */'../views/MisCompras.vue')
   },
   {
     path: '/*',   //tiene que quedar en último lugar, sino no me toma las rutas siguientes
