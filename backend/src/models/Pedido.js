@@ -9,7 +9,7 @@ const Pedidos = mongoose.model(
         },
         numero: {
             type: Number,
-            default: null
+            default: 0
         },
         estado: {
             type: String,

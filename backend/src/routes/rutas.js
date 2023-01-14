@@ -9,18 +9,11 @@ const controllerDetalleArticuloManufacturado = require('../controllers/DetalleAr
 const controllerUser = require('../controllers/user.controller')
 const controllerRoles = require('../controllers/Roles.controller')
 const controllerPedidos = require('../controllers/PedidosController')
+const controllerMercaPago = require('../controllerMPago/MercadoPagoController')
 
 const { verifySignUp } = require("../middlewares");
 const controller = require("../controllers/auth.controller");
 
-router.get('/test', (requ, resp) => resp.send("HOLA MUNDO"));
-router.use(function (req, res, next) {
-    res.header(
-        "Access-Control-Allow-Headers",
-        "x-access-token, Origin, Content-Type, Accept"
-    );
-    next();
-});
 router.post(
     "/api/auth/signup",
     [
@@ -62,4 +55,7 @@ router.post('/ActualizarUsuario', controllerUser.updateUser)
 router.get('/Roles', controllerRoles.getRoles)
 router.post('/crearPedido', controllerPedidos.createPedido)
 router.get('/Pedidos', controllerPedidos.getPedidos)
+router.get('/pedidosxid/:id', controllerPedidos.getPedidosxid)
+router.post("/checkout", controllerMercaPago.checkout)
+
 module.exports = router

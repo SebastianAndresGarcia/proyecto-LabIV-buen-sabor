@@ -1,17 +1,23 @@
 const Pedido = require('../models/Pedido');
+const User = require('../models/user.model');
 const DetallePedido = require('../models/DetallePedido');
 const ArticuloInsumo = require('../models/ArticuloInsumo');
 const ArticuloManufacturado = require('../models/ArticuloManufacturado')
 
 exports.createPedido = async (req, res) => {
+    const ultimoPedido = await Pedido.find().limit(1).sort({ $natural: -1 })
+    let num=0
+    if(ultimoPedido.length>0){
+         num=ultimoPedido[0].numero
+    }
     const pedido = new Pedido({
         fecha: req.body.fecha,
-        numero: req.body.numero,
+        numero: num + 1,
         estado: req.body.estado,
         horaEstimadaFin: req.body.horaEstimadaFin,
         tipoEnvio: req.body.tipoEnvio,
         total: req.body.total,
-        userid: req.body.userid,
+        userid: req.body.userid
         //domicilioid: req.body.domicilioid
     })
     const detalles = []
@@ -20,17 +26,16 @@ exports.createPedido = async (req, res) => {
     for (let x = 0; x < keys.length; x++) {
         detalles.push(detallesJson[keys[x]]);
     }
-    console.log("detalles", detalles)
-
     try {
         let tipoArticulo = ""
         const savedPedido = await pedido.save()
+        const updateUser = await User.findByIdAndUpdate(savedPedido.userid, { $addToSet: { "pedidosid": savedPedido._id } })
         for (let i = 0; i < detalles.length; i++) {
             console.log("entró al for " + detalles[i].articuloid)
             const ArticuloFound = await ArticuloManufacturado.findOne({ _id: detalles[i].articuloid })
             if (ArticuloFound) { tipoArticulo = "articulomanufacturadoid" }
             else { tipoArticulo = "articuloinsumoid" }
-            console.log("tipoArticulo"+tipoArticulo)
+            console.log("tipoArticulo" + tipoArticulo)
             const detallepedido = new DetallePedido({ "cantidad": detalles[i].cantidad, "subtotal": detalles[i].subtotal, [tipoArticulo]: detalles[i].articuloid, "pedidoid": savedPedido._id })
             const savedDetalle = await detallepedido.save()
             console.log("savedDetalle", savedDetalle)
@@ -53,15 +58,37 @@ exports.getPedidos = async (req, res) => {
             select: { denominacion: 1, _id: 1 }, //elijo solo los campos que quiero traer
         }
     })
-    .populate({
+        .populate({
+            path: "detallepedidoid", // populate blogs
+            populate: {
+                path: "articuloinsumoid", // in blogs, populate comments
+                select: { denominacion: 1, _id: 1 }, //elijo solo los campos que quiero traer
+            }
+        })
+    if (!pedidos)
+        return res.status(204).json();
+    //console.log(pedidos);
+    return res.json(pedidos)
+}
+
+exports.getPedidosxid = async (req, res) => {
+    const id = req.params.id
+    const pedidos = await Pedido.find({'userid':id}).populate({
         path: "detallepedidoid", // populate blogs
         populate: {
-            path: "articuloinsumoid", // in blogs, populate comments
+            path: "articulomanufacturadoid", // in blogs, populate comments
             select: { denominacion: 1, _id: 1 }, //elijo solo los campos que quiero traer
         }
     })
+        .populate({
+            path: "detallepedidoid", // populate blogs
+            populate: {
+                path: "articuloinsumoid", // in blogs, populate comments
+                select: { denominacion: 1, _id: 1 }, //elijo solo los campos que quiero traer
+            }
+        })
     if (!pedidos)
         return res.status(204).json();
-    console.log(pedidos);
+    //console.log(pedidos);
     return res.json(pedidos)
 }

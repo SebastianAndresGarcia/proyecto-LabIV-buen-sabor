@@ -3,7 +3,6 @@ const MercadoPagoDatos = mongoose.model(
     "MercadoPagoDatos",
     new mongoose.Schema({
 
-
     identificadorPago: {
         type: Number,
         required: true,

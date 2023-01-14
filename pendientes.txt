@@ -4,9 +4,18 @@ El menú login se queda oculto si arrastro hacia abajo la página.
 
 El carrousel no tiene funcionalidad, habría que vincularlo al carrito.
 
-El carrito le falta agregar el botón para realizar la compra.
-
 Falta desarrollar la vista "detalle manufacturado".
 
 El "sobre nosotros" no redirije bien, se queda en el tope de la página.
 
+___________________________________________________________________________
+MERCADO PAGO
+
+public key TEST-98d859f6-593f-4c8c-9fd0-d9c0fd7c9a8e
+access token TEST-7688520916959333-011315-ac6aa89652cb4ae1e81a0383af5df4ab-257082384
+
+Mastercard	5031 7557 3453 0604	123	11/25
+Visa	4509 9535 6623 3704	123	11/25
+American Express	3711 803032 57522	1234	11/25
+___________________________________________________________________________
+http://localhost:8080/MisCompras?collection_id=1311233932&collection_status=approved&payment_id=1311233932&status=approved&external_reference=null&payment_type=credit_card&merchant_order_id=7261430740&preference_id=257082384-39118ebc-38b1-4294-ad21-1ff54db6c08b&site_id=MLA&processing_mode=aggregator&merchant_account_id=null
