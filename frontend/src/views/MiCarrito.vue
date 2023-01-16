@@ -228,6 +228,7 @@ export default {
             console.log("respuesta: ", resJson)
             if (respuesta.status === 200) {
                 console.log(respuesta.status)
+                this.pedido=resJson
                 //this.estadoCompra.estadoCompra=true
                 
             } else {
@@ -269,9 +270,9 @@ export default {
                 console.log("mensaje del servidor: " + this.respuestaError)
             }
         },
-        async borrarCarrito(){
+        async limpiarCarrito(){
             for (let i = 0; i < this.items.length; i++) {
-                localStorage.limpiarCarrito(this.items[i]._id);
+                localStorage.removeItem(this.items[i]._id);
             }
         },
         async getEstado(){

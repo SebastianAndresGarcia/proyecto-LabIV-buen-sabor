@@ -4,13 +4,13 @@ mercadopago.configure({
     access_token: "TEST-7688520916959333-011315-ac6aa89652cb4ae1e81a0383af5df4ab-257082384",
 });
 exports.checkout = async (req, res) => {
-    console.log(req.body)
+    console.log("req.body",req.body)
     let preference = {
         items: [
             {
                 title: req.body.description,
                 unit_price: Number(req.body.price),
-                quantity: Number(req.body.quantity),
+                quantity: Number(req.body.quantity), 
             }
         ],
         back_urls: {
@@ -29,5 +29,13 @@ exports.checkout = async (req, res) => {
         }).catch(function (error) {
             console.log(error);
         });
+    // mercadopago.preferences.create(preference)
+	// 	.then(function (response) {
+	// 		res.json({
+	// 			id: response.body.id
+	// 		});
+	// 	}).catch(function (error) {
+	// 		console.log(error);
+	// 	});
     
 }

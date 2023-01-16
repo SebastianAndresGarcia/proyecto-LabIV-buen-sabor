@@ -18,4 +18,3 @@ Mastercard	5031 7557 3453 0604	123	11/25
 Visa	4509 9535 6623 3704	123	11/25
 American Express	3711 803032 57522	1234	11/25
 ___________________________________________________________________________
-http://localhost:8080/MisCompras?collection_id=1311233932&collection_status=approved&payment_id=1311233932&status=approved&external_reference=null&payment_type=credit_card&merchant_order_id=7261430740&preference_id=257082384-39118ebc-38b1-4294-ad21-1ff54db6c08b&site_id=MLA&processing_mode=aggregator&merchant_account_id=null

@@ -27,7 +27,7 @@ exports.deleteArticuloInsumo = async (req, res) => {
 }
 
 exports.updateArticuloInsumo = async (req, res) => {
-    const articulo = await ArticuloInsumo.findByIdAndUpdate(req.params.id, req.body)
+    const articulo = await ArticuloInsumo.findOneAndUpdate({denominacion: req.params.id}, req.body)
     res.json(articulo)
 }
 

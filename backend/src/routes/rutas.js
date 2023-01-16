@@ -56,6 +56,8 @@ router.get('/Roles', controllerRoles.getRoles)
 router.post('/crearPedido', controllerPedidos.createPedido)
 router.get('/Pedidos', controllerPedidos.getPedidos)
 router.get('/pedidosxid/:id', controllerPedidos.getPedidosxid)
+router.get('/pedidoxid/:id', controllerPedidos.Pedidosxid)
+router.post('/actualizarPedido/:id', controllerPedidos.actualizarPedido)
 router.post("/checkout", controllerMercaPago.checkout)
 
 module.exports = router

@@ -1,6 +1,7 @@
 <template>
     <v-container>
         <v-card v-if="miscompras.length > 0" style="margin-top: 10px; justify:center">
+            <v-card-title>Mis Pedidos</v-card-title>
             <v-simple-table class="tabla">
                 <template v-slot:default>
                     <thead>
@@ -38,9 +39,7 @@
                                 {{ compra.total }}
                             </td>
                             <td>
-                                <v-btn small>
-                                    VER DETALLE
-                                </v-btn>
+                                <detalle-pedido :pedidoParam="compra"></detalle-pedido>
                             </td>
                         </tr>
                     </tbody>
@@ -50,18 +49,19 @@
     </v-container>
 </template>
 <script>
-
+import detallePedido from '@/components/DetallePedido.vue'
 export default {
     data() {
         return {
-            miscompras: []
+            miscompras: [],
+            respuestaMercaPago: {}
         }
     },
     components: {
-        
+        "detalle-pedido": detallePedido
     },
     mounted() {
-        console.log(document.URL)
+        this.getParamsUrl(document.URL)
         this.comprasUsuario((JSON.parse(localStorage.getItem('user'))).id)
     },
 
@@ -73,8 +73,50 @@ export default {
             const resJson = await res.json();
             console.log(resJson);
             this.miscompras = resJson
+        },
+        async getParamsUrl(url) {
+            console.log(url);
+            url=new URL(url)
+            //aquí tienes dos opciones
+            const urlParams = new URLSearchParams(url.search);
+            //const urlParams2 = url.searchParams;
+            //son equivalentes
+            for (const [key, value] of urlParams) {
+                //console.log(key, ':', value);
+                this.respuestaMercaPago[key]= value
+            }
+            console.log(this.respuestaMercaPago)
+            // for (const [key, value] of urlParams2) {
+            //     console.log(key, ':', value);
+            // }
+            if(this.respuestaMercaPago.status){
+                // if(this.respuestaMercaPago.status=="approved"){
+                //     this.limpiarCarrito()
+                // }
+                this.setPedido(this.respuestaMercaPago.external_reference,
+                this.respuestaMercaPago.status)
+            }
+        },
+        async setPedido(id, status){
+            let urlServer = "http://localhost:3000/actualizarPedido/"+id 
+            let method = "POST";
+            const respuesta = await fetch(urlServer, {
+                method: method,
+                body: JSON.stringify({estado: this.respuestaMercaPago.status}),
+                headers: {
+                    "Content-type": "application/json",
+                },
+                mode: "cors",
+            });
+            const resJson = await respuesta.json()
+            console.log("respuesta: ", resJson)
+            if (respuesta.status === 200) {
+                console.log(respuesta.status)
+            } else {
+                this.respuestaError = resJson.message
+                console.log("mensaje del servidor: " + this.respuestaError)
+            }
         }
-        
     }
 }    
 </script>
