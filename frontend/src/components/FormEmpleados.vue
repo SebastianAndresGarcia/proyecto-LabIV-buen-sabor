@@ -47,6 +47,16 @@
                                 </v-text-field>
                             </v-col>
                             <v-col cols="12">
+                                <v-text-field label="Contraseña*" v-model="empleado.password" type="password"
+                                    required>
+                                </v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-text-field label="Confirmar Contraseña*" v-model="empleado.password"
+                                    type="password" required>
+                                </v-text-field>
+                            </v-col>
+                            <v-col cols="12">
                                 <v-text-field label="Teléfono*" v-model="empleado.telefono" type="Number" required>
                                 </v-text-field>
                             </v-col>
@@ -80,12 +90,10 @@
                     <v-divider class="mt-2"></v-divider>
 
                     <v-card-actions>
-
                         <v-btn text color="blue darken-1" @click="cerrardialog">
                             Cancel
                         </v-btn>
                         <v-spacer></v-spacer>
-
                         <v-btn text color="blue darken-1" type="submit">
                             Guardar
                         </v-btn>
@@ -112,7 +120,7 @@ export default {
             empleado: {
                 username: "",
                 email: "",
-                //password: "",
+                password: "",
                 nombre: "",
                 apellido: "",
                 fechaNacimiento: null,
@@ -139,18 +147,18 @@ export default {
             if (!this.datoEmpleado)
                 this.limpiar()
         },
-        limpiar(){
+        limpiar() {
             this.empleado = new Object({
-                    username: "",
-                    email: "",
-                    //password: "",
-                    nombre: "",
-                    apellido: "",
-                    fechaNacimiento: null,
-                    telefono: null,
-                    borrado: false,
-                    roles: { name: "" }
-                })
+                username: "",
+                email: "",
+                password: "",
+                nombre: "",
+                apellido: "",
+                fechaNacimiento: null,
+                telefono: null,
+                borrado: false,
+                roles: { name: "" }
+            })
         },
         async crearEmpleado() { //también cumple la fción de actualizar un empleado
             this.nuevoEmpleado = false

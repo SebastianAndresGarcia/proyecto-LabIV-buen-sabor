@@ -70,23 +70,13 @@ export default {
         };
     },
     mounted() {
-        this.getCookie()
+        this.getLocalStorage()
     },
 
     methods: {
         async getmanufacturados(id, cant) {
             console.log("id " + id + " cant " + cant)
-            // let index = (id.split('='))
-            // console.log("entrando con cookie:" + index[0].trim())
-            // const res = await fetch(
-            //     `http://localhost:3000/getManufacturadoXid/${index[0].trim()}`
-            // )
-            // const resJson = await res.json();
-            // console.log(resJson);
-            // this.items.push(resJson);
-            // this.cantidad.push(Number(id.slice(-1)))
-            // console.log("this.cantidad", this.cantidad)
-            // console.log("this.items", this.items)
+            
             const res = await fetch(
                 `http://localhost:3000/getManufacturadoXid/${id.trim()}`
             )
@@ -98,20 +88,8 @@ export default {
             console.log("this.cantidad", this.cantidad)
             console.log("this.items", this.items)
         },
-        async getCookie() {
-            // this.cantidad = []
-            // this.items = []
-            // console.log("document.cookie" + document.cookie)
-            // this.ca = await document.cookie.split(';'); //divido por cookie
-            // console.log("ca", this.ca)
-            // if (document.cookie)
-            //     this.carritoLength = this.ca.length
-            // else
-            //     this.carritoLength = 0
-            // for (let i = 0; i < this.ca.length; i++) {
-
-            //     this.getmanufacturados(this.ca[i])
-            // }
+        async getLocalStorage() {
+            
             this.cantidad = []
             this.items = []
             let claves = Object.keys(localStorage);
@@ -139,7 +117,7 @@ export default {
             //document.cookie = id + "=; max-age=0";
             window.localStorage.removeItem(id)
             eventBus.$emit("elimina-itemcarrito", id)
-            this.getCookie()
+            this.getLocalStorage()
         },
         agregarProducto(id, j, index) {
             this.cantidad[index] += j
@@ -147,8 +125,7 @@ export default {
                 this.eliminar(id)
             } else {
                 localStorage.setItem(id, JSON.stringify({ 'cantidad': this.cantidad[index] }))
-                document.cookie = id + "=" + id + "," + this.cantidad[index]
-                console.log("cookie", document.cookie)
+
                 eventBus.$emit("elimina-itemcarrito", '0')
                 eventBus.$emit("carrito-changed", this.cambioCarrito)
             }
@@ -166,7 +143,7 @@ export default {
         eventBus.$on("carrito-changed", async (data) => {
             if (data)
                 console.log("entró al if del itemcarrito, data: " + data)
-            this.getCookie()
+            this.getLocalStorage()
             //eventBus.$off("carrito-changed");
         });
     },

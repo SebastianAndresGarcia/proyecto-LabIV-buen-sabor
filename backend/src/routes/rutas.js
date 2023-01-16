@@ -59,5 +59,5 @@ router.get('/pedidosxid/:id', controllerPedidos.getPedidosxid)
 router.get('/pedidoxid/:id', controllerPedidos.Pedidosxid)
 router.post('/actualizarPedido/:id', controllerPedidos.actualizarPedido)
 router.post("/checkout", controllerMercaPago.checkout)
-
+router.post("/registrarPago", controllerMercaPago.savePayment)
 module.exports = router

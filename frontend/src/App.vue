@@ -16,6 +16,7 @@ import Vue from 'vue';
 import NavBarTop from "@/components/NavBarTop.vue";
 import footer from "@/components/Footer.vue";
 
+
 export default Vue.extend({
   name: 'App',
 

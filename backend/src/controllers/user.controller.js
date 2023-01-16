@@ -16,4 +16,4 @@ exports.getEmpleados = async (req, res) => {
 exports.updateUser = async (req, res) =>{
   const updatedUser = await User.findByIdAndUpdate(req.body._id, req.body)
   return res.json(updatedUser)
-}
+} 

@@ -3,36 +3,38 @@ const MercadoPagoDatos = mongoose.model(
     "MercadoPagoDatos",
     new mongoose.Schema({
 
-    identificadorPago: {
-        type: Number,
-        required: true,
-        unique: true
-    },
-    fechaCreacion: {
-        type: Date,
-        default: new Date()
-    },
-    fechaAprobacion: {
-        type: Date,
-        default: new Date()
-    },
-    formaPago: {
-        type: String
-    },
-    metodoPago: {
-        type: String
-    },
-    nroTarjeta: {
-        type: String
-    },
-    estado: {
-        type: String
-    },
-    pedidoid: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Pedido'
+        identificadorPago: {
+            type: Number,
+            required: true,
+            unique: true
+        },
+        // fechaCreacion: {
+        //     type: Date,
+        //     default: new Date()
+        // },
+        // fechaAprobacion: {
+        //     type: Date,
+        //     default: new Date()
+        // },
+        formaPago: {
+            type: String
+        },
+        metodoPago: {
+            type: String
+        },
+        nroTarjeta: {
+            type: String
+        },
+        estado: {
+            type: String
+        },
+        pedidoid: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Pedido'
+        }
+    }, {
+        timestamps: true  //va a crear los campos createdAt y updatedAt
     }
+    ));
 
-}));
-
-module.exports=MercadoPagoDatos
+module.exports = MercadoPagoDatos

@@ -8,6 +8,10 @@ Falta desarrollar la vista "detalle manufacturado".
 
 El "sobre nosotros" no redirije bien, se queda en el tope de la página.
 
+La compra por mercado pago hace problema de cors.
+
+
+
 ___________________________________________________________________________
 MERCADO PAGO
 

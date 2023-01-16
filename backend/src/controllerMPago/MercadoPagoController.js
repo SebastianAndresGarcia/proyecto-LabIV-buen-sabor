@@ -1,5 +1,7 @@
-const mercadopago = require("mercadopago");
+const MercadoPago = require('../models/MercadoPagoDatos');
+const Pedido = require('../models/Pedido');
 
+const mercadopago = require("mercadopago");
 mercadopago.configure({
     access_token: "TEST-7688520916959333-011315-ac6aa89652cb4ae1e81a0383af5df4ab-257082384",
 });
@@ -29,13 +31,15 @@ exports.checkout = async (req, res) => {
         }).catch(function (error) {
             console.log(error);
         });
-    // mercadopago.preferences.create(preference)
-	// 	.then(function (response) {
-	// 		res.json({
-	// 			id: response.body.id
-	// 		});
-	// 	}).catch(function (error) {
-	// 		console.log(error);
-	// 	});
-    
 }
+
+exports.savePayment = async (req, res) => {
+    const Pago = await MercadoPago.findOne({ identificadorPago: req.body.identificadorPago })
+    if (Pago){
+        return res.status(301).json({ message: 'The payment already exists' })
+    }
+    const registroPago = new MercadoPago(req.body)
+    const savedRegistro = await registroPago.save()
+    const updatedPedido = await Pedido.findByIdAndUpdate(savedRegistro.pedidoid, {mercadopagodatosid: savedRegistro._id} )
+    res.json(savedRegistro)
+} 

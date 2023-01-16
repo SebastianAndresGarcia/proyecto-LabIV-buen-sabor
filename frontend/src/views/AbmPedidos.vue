@@ -1,6 +1,20 @@
 <template>
     <v-container v-if='currentUser.roles.includes("ROLE_ADMIN")'>
         <v-card v-if="pedidosData.length > 0" style="margin-top: 10px; justify:center">
+            <v-row style="justify-content: center"><v-card-title>
+                    <h2><b>Pedidos</b></h2>
+                </v-card-title></v-row>
+            <v-row align="center">
+                <v-col cols="2">
+                    <v-subheader>
+                        Ver
+                    </v-subheader>
+                </v-col>
+
+                <v-col cols="10">
+                    <v-select v-model="select" :items="items" item-text="state" item-value="state"></v-select>
+                </v-col>
+            </v-row>
             <v-simple-table class="tabla">
                 <template v-slot:default>
                     <thead>
@@ -12,10 +26,10 @@
                                 <b>Pedido N°</b>
                             </th>
                             <th class="text-left">
-                                <b>horaEstimadaFin</b>
+                                <b>Estado</b>
                             </th>
                             <th class="text-left">
-                                <b>Total</b>
+                                <b>horaEstimadaFin</b>
                             </th>
                             <th class="text-left">
                                 <b>Ver Detalles</b>
@@ -23,7 +37,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(pedido, index) in pedidosData" style="padding-top: 5px;">
+                        <tr v-for="(pedido, index) in pedidosData" :key="index" style="padding-top: 5px;">
 
                             <td>
                                 {{ pedido.fecha }}
@@ -38,9 +52,7 @@
                                 {{ pedido.horaEstimadaFin }}
                             </td>
                             <td>
-                                <v-btn small>
-                                    VER DETALLE
-                                </v-btn>
+                                <detalle-pedido :pedidoParam="pedido"></detalle-pedido>
                             </td>
                         </tr>
                     </tbody>
@@ -52,10 +64,11 @@
 <script>
 
 import AuthService from "@/service/auth.service.js"
+import detallepedido from "@/components/DetallePedido.vue"
 export default {
 
     components: {
-
+        "detalle-pedido": detallepedido
     },
     mounted() {
         this.currentUser = AuthService.getCurrentUser()
@@ -65,7 +78,15 @@ export default {
     data() {
         return {
             currentUser: undefined,
-            pedidosData: []
+            pedidosData: [],
+            select: 'Pendiente',
+            items: [
+                { state: 'Ver Todo' },
+                { state: 'Pendiente' },
+                { state: 'Entregado' },
+                { state: 'Cancelado' },
+
+            ],
         };
     },
     methods: {
