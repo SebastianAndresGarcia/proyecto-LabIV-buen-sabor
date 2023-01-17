@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
-const Factura = new Schema({   
+const Factura = mongoose.model(
+    "Factura",
+    new mongoose.Schema({ 
     fecha: {
         type: Date,
         default: new Date()
@@ -26,23 +28,19 @@ const Factura = new Schema({
     totalCosto: {
         type: Number,
         default:null
-    },
-    userid: {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-        required: true
-    },
-    
+    },    
     detallefacturaid: [{
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'DetalleFactura',
         required: true
     }],
     pedidoid: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Pedido'
     }
-})
+}, {
+    timestamps: true  //va a crear los campos createdAt y updatedAt
+}))
 module.exports=Factura;
 
 /*import { Schema, model } from "mongoose";

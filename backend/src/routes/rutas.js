@@ -10,7 +10,7 @@ const controllerUser = require('../controllers/user.controller')
 const controllerRoles = require('../controllers/Roles.controller')
 const controllerPedidos = require('../controllers/PedidosController')
 const controllerMercaPago = require('../controllerMPago/MercadoPagoController')
-
+const controllerFacturas = require ('../controllers/FacturaController')
 const { verifySignUp } = require("../middlewares");
 const controller = require("../controllers/auth.controller");
 
@@ -60,4 +60,10 @@ router.get('/pedidoxid/:id', controllerPedidos.Pedidosxid)
 router.post('/actualizarPedido/:id', controllerPedidos.actualizarPedido)
 router.post("/checkout", controllerMercaPago.checkout)
 router.post("/registrarPago", controllerMercaPago.savePayment)
+
+router.post('/crearFactura', controllerFacturas.createFactura)
+router.get('/Facturas', controllerFacturas.getFacturas)
+router.get('/facturasxid/:id', controllerFacturas.getFacturasxid)
+router.get('/facturaxid/:id', controllerFacturas.Facturasxid)
+router.post('/actualizarFactura/:id', controllerFacturas.actualizarFactura)
 module.exports = router
