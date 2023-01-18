@@ -14,15 +14,15 @@ const DetalleFactura = mongoose.model(
     },
     
     articuloinsumoid: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'ArticuloInsumo'
     },
     articulomanufacturadoid: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'ArticuloManufacturado'
     },
     facturaid: {
-        type:Schema.Types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref: 'Factura'
     }
 

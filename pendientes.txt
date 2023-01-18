@@ -1,3 +1,4 @@
+17/01/23
 Funcionando ArticuloInsumos, habría que terminar el frontend para que se vea la funcionalidad recursiva. No están visibles las bebidas
 
 El menú login se queda oculto si arrastro hacia abajo la página.
