@@ -1,21 +1,13 @@
 <template>
     <v-container v-if='currentUser.roles.includes("ROLE_ADMIN")'>
-        <v-card v-if="pedidosData.length > 0" style="margin-top: 10px; justify:center">
+        <v-card style="margin-top: 20px; justify:center">
             <v-row style="justify-content: center"><v-card-title>
-                    <h2><b>Pedidos</b></h2>
+                    <h2><b>Facturas</b></h2>
                 </v-card-title></v-row>
             <v-row align="center">
-                <v-col cols="2">
-                    <v-subheader>
-                        Ver
-                    </v-subheader>
-                </v-col>
-
-                <v-col cols="10">
-                    <v-select v-model="select" :items="items" item-text="state" item-value="state"></v-select>
-                </v-col>
+             
             </v-row>
-            <v-simple-table class="tabla">
+            <v-simple-table class="tabla" v-if="facturasData.length > 0">
                 <template v-slot:default>
                     <thead>
                         <tr>
@@ -23,45 +15,54 @@
                                 <b>Fecha</b>
                             </th>
                             <th class="text-left">
-                                <b>Pedido N°</b>
+                                <b>Factura N°</b>
                             </th>
                             <th class="text-left">
-                                <b>Estado</b>
+                                <b>montoDescuento</b>
                             </th>
                             <th class="text-left">
-                                <b>horaEstimadaFin</b>
+                                <b>formaPago</b>
                             </th>
                             <th class="text-left">
-                                <b>Ver Detalles</b>
+                                <b>nroTarjeta</b>
+                            </th>
+                            <th class="text-left">
+                                <b>totalVenta</b>
+                            </th>
+                            <th class="text-left">
+                                <b>totalCosto</b>
+                            </th>
+                            <th class="text-left">
+                                <b>ENVIAR A CLIENTE</b>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(pedido, index) in pedidosData" :key="index" style="padding-top: 5px;">
+                        <tr v-for="(factura, index) in facturasData" :key="index" style="padding-top: 5px;">
 
                             <td>
-                                {{ pedido.fecha }}
+                                {{ factura.fecha }}
                             </td>
                             <td>
-                                {{ pedido.numero }}
+                                {{ factura.numero }}
                             </td>
                             <td>
-                                {{ pedido.estado }}
+                                {{ factura.montoDescuento }}
                             </td>
                             <td>
-                                {{ pedido.horaEstimadaFin }}
+                                {{ factura.formaPago }}
                             </td>
                             <td>
-                                <detalle-pedido :pedidoParam="pedido"></detalle-pedido>
+                                <detalle-pedido :pedidoParam="factura"></detalle-pedido>
                             </td>
-                            <td>
-                                <form-factura :pedidoParam="{'pedidoid':pedido._id, 'facturaid': pedido.facturaid }"></form-factura>
-                                
-                            </td>
+                            
                         </tr>
                     </tbody>
                 </template>
             </v-simple-table>
+            <div v-else>
+                <v-card-subtitle><b>NO HAY FACTURAS DISPONIBLES</b></v-card-subtitle>
+            </div>
         </v-card>
     </v-container>
 </template>
@@ -69,22 +70,20 @@
 
 import AuthService from "@/service/auth.service.js"
 import detallepedido from "@/components/DetallePedido.vue"
-import formfactura from "@/components/FormFactura.vue"
 export default {
 
     components: {
-        "detalle-pedido": detallepedido,
-        "form-factura": formfactura
+        "detalle-pedido": detallepedido
     },
     mounted() {
         this.currentUser = AuthService.getCurrentUser()
         this.verificarUsuario(this.currentUser)
-        this.getPedidos()
+        this.getFacturas()
     },
     data() {
         return {
             currentUser: undefined,
-            pedidosData: [],
+            facturasData: [],
             select: 'Pendiente',
             items: [
                 { state: 'Ver Todo' },
@@ -96,13 +95,13 @@ export default {
         };
     },
     methods: {
-        async getPedidos() {
+        async getFacturas() {
             const res = await fetch(
-                "http://localhost:3000/pedidos"
+                "http://localhost:3000/facturas"
             );
             const resJson = await res.json();
             console.log(resJson);
-            this.pedidosData = resJson;
+            this.facturasData = resJson;
         },
         async verificarUsuario(currentUser) {
             if (currentUser) {

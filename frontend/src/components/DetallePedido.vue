@@ -3,8 +3,10 @@
 
         <v-dialog v-model="dialog" temporary width="60%" height="100%">
             <template v-slot:activator="{ on, attrs }">
-                <v-btn @click="dialog = true" dark v-bind="attrs" v-on="on">
-                    Ver Detalle
+                <v-btn @click="dialog = true" icon  v-bind="attrs" v-on="on">
+                    
+                    <v-icon large>mdi-eye</v-icon>
+                    
                 </v-btn>
             </template>
 

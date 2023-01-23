@@ -100,7 +100,7 @@ exports.actualizarPedido = async (req, res) => {
 
 exports.Pedidosxid = async (req, res) => {
     const id = req.params.id
-    const pedidos = await Pedido.findById({id}).populate({
+    const pedidos = await Pedido.findById({_id:id}).populate({
         path: "detallepedidoid", // populate blogs
         populate: {
             path: "articulomanufacturadoid", // in blogs, populate comments
@@ -113,6 +113,9 @@ exports.Pedidosxid = async (req, res) => {
                 path: "articuloinsumoid", // in blogs, populate comments
                 select: { denominacion: 1, _id: 1 }, //elijo solo los campos que quiero traer
             }
+        }).populate({
+            path: "mercadopagodatosid",
+            //select: {formaPago: 1 , nroTarjeta: 1}
         })
     if (!pedidos)
         return res.status(204).json();

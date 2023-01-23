@@ -96,9 +96,32 @@ exports.actualizarFactura = async (req, res) => {
     res.json(updatefactura)
 }
 
-exports.Facturasxid = async (req, res) => {
+
+exports.Facturaxid = async (req, res) => {
     const id = req.params.id
     const pedidos = await Factura.findById({id}).populate({
+        path: "detallefacturaid", // populate blogs
+        populate: {
+            path: "articulomanufacturadoid", // in blogs, populate comments
+            select: { denominacion: 1, _id: 1, precioCompra: 1, precioVenta:1 }, //elijo solo los campos que quiero traer
+        }
+    })
+        .populate({
+            path: "detallefacturaid", // populate blogs
+            populate: {
+                path: "articuloinsumoid", // in blogs, populate comments
+                select: { denominacion: 1, _id: 1, precioCompra: 1, precioVenta:1 }, //elijo solo los campos que quiero traer
+            }
+        })
+    if (!pedidos)
+        return res.status(204).json();
+    //console.log(pedidos);
+    return res.json(pedidos)
+}
+
+exports.FacturaXpedidoid = async (req, res) => {
+    const id = req.params.id
+    const pedidos = await Factura.findOne({pedidoid: id}).populate({
         path: "detallefacturaid", // populate blogs
         populate: {
             path: "articulomanufacturadoid", // in blogs, populate comments

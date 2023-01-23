@@ -8,7 +8,8 @@ const Factura = mongoose.model(
     },
     numero: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     },
     montoDescuento: {
         type: Number,

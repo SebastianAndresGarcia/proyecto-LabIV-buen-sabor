@@ -64,6 +64,7 @@ router.post("/registrarPago", controllerMercaPago.savePayment)
 router.post('/crearFactura', controllerFacturas.createFactura)
 router.get('/Facturas', controllerFacturas.getFacturas)
 router.get('/facturasxid/:id', controllerFacturas.getFacturasxid)
-router.get('/facturaxid/:id', controllerFacturas.Facturasxid)
+router.get('/facturaxid/:id', controllerFacturas.Facturaxid)
+router.get('/FacturaXpedidoid/:id', controllerFacturas.FacturaXpedidoid)
 router.post('/actualizarFactura/:id', controllerFacturas.actualizarFactura)
 module.exports = router
