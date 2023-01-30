@@ -5,7 +5,7 @@
                     <h2><b>Facturas</b></h2>
                 </v-card-title></v-row>
             <v-row align="center">
-             
+
             </v-row>
             <v-simple-table class="tabla" v-if="facturasData.length > 0">
                 <template v-slot:default>
@@ -55,7 +55,7 @@
                             <td>
                                 <detalle-pedido :pedidoParam="factura"></detalle-pedido>
                             </td>
-                            
+
                         </tr>
                     </tbody>
                 </template>

@@ -1,67 +1,72 @@
 <template>
     <v-container v-if='currentUser.roles.includes("ROLE_ADMIN")'>
-        <v-card v-if="pedidosData.length > 0" style="margin-top: 10px; justify:center">
+        <v-card style="margin-top: 10px; justify:center">
             <v-row style="justify-content: center"><v-card-title>
                     <h2><b>Pedidos</b></h2>
-                </v-card-title></v-row>
-            <v-row align="center">
-                <v-col cols="2">
-                    <v-subheader>
-                        Ver
-                    </v-subheader>
-                </v-col>
-
-                <v-col cols="10">
-                    <v-select v-model="select" :items="items" item-text="state" item-value="state"></v-select>
-                </v-col>
+                </v-card-title>
             </v-row>
-            <v-simple-table class="tabla">
-                <template v-slot:default>
-                    <thead>
-                        <tr>
-                            <th class="text-left">
-                                <b>Fecha</b>
-                            </th>
-                            <th class="text-left">
-                                <b>Pedido N°</b>
-                            </th>
-                            <th class="text-left">
-                                <b>Estado</b>
-                            </th>
-                            <th class="text-left">
-                                <b>horaEstimadaFin</b>
-                            </th>
-                            <th class="text-left">
-                                <b>Ver Detalles</b>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(pedido, index) in pedidosData" :key="index" style="padding-top: 5px;">
+            <div v-if="pedidosData.length > 0">
+                <v-row align="center">
+                    <v-col cols="2">
+                        <v-subheader>
+                            Ver
+                        </v-subheader>
+                    </v-col>
 
-                            <td>
-                                {{ pedido.fecha }}
-                            </td>
-                            <td>
-                                {{ pedido.numero }}
-                            </td>
-                            <td>
-                                {{ pedido.estado }}
-                            </td>
-                            <td>
-                                {{ pedido.horaEstimadaFin }}
-                            </td>
-                            <td>
-                                <detalle-pedido :pedidoParam="pedido"></detalle-pedido>
-                            </td>
-                            <td>
-                                <form-factura :pedidoParam="{'pedidoid':pedido._id, 'facturaid': pedido.facturaid }"></form-factura>
-                                
-                            </td>
-                        </tr>
-                    </tbody>
-                </template>
-            </v-simple-table>
+                    <v-col cols="10">
+                        <v-select v-model="select" :items="items" item-text="state" item-value="state"></v-select>
+                    </v-col>
+                </v-row>
+                <v-simple-table class="tabla">
+                    <template v-slot:default>
+                        <thead>
+                            <tr>
+                                <th class="text-left">
+                                    <b>Fecha</b>
+                                </th>
+                                <th class="text-left">
+                                    <b>Pedido N°</b>
+                                </th>
+                                <th class="text-left">
+                                    <b>Estado</b>
+                                </th>
+                                <th class="text-left">
+                                    <b>horaEstimadaFin</b>
+                                </th>
+                                <th class="text-left">
+                                    <b>Ver Detalles</b>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(pedido, index) in pedidosData" :key="index" style="padding-top: 5px;">
+
+                                <td>
+                                    {{ pedido.fecha }}
+                                </td>
+                                <td>
+                                    {{ pedido.numero }}
+                                </td>
+                                <td>
+                                    {{ pedido.estado }}
+                                </td>
+                                <td>
+                                    {{ pedido.horaEstimadaFin }}
+                                </td>
+                                <td>
+                                    <detalle-pedido :pedidoParam="pedido"></detalle-pedido>
+                                </td>
+                                <td>
+                                    <form-factura
+                                        :pedidoParam="{ 'pedidoid': pedido._id, 'facturaid': pedido.facturaid }"></form-factura>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </template>
+                </v-simple-table>
+            </div>
+            <div v-else><v-card-subtitle><b>No tienes Pedidos aún</b></v-card-subtitle></div>
         </v-card>
     </v-container>
 </template>

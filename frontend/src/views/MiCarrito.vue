@@ -225,7 +225,7 @@ export default {
                 mode: "cors",
             });
             const resJson = await respuesta.json()
-            console.log("respuesta: ", resJson)
+            console.log("respuestaMercaPago: ", resJson)
             if (respuesta.status === 200) {
                 console.log(respuesta.status)
                 this.pedido=resJson
@@ -262,7 +262,8 @@ export default {
             const resJson = await respuesta.json()
             console.log("respuesta: ", resJson)
             if (respuesta.status === 200) {
-                console.log(respuesta.status)
+                console.log(resJson.body.init_point)
+                window.location.href=resJson.body.init_point
                 this.limpiarCarrito()
                 
             } else {

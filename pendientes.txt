@@ -9,7 +9,20 @@ Falta desarrollar la vista "detalle manufacturado".
 
 El "sobre nosotros" no redirije bien, se queda en el tope de la página.
 
-La compra por mercado pago hace problema de cors.
+La compra por mercado pago hace problema de cors. Corregido, tuve que enviar el link desde el back al front para evitar el cors.
+
+Implementar login con Google.
+
+Control de stock. Validar que los productos a la venta tengan stock de insumos.
+
+Validar el horario de atención, lunes a viernes de 12.00 a 22.00, sab. y dom. de 11.00 a 15.00hs.
+
+Impresión de Facturas en PDF para el cliente.
+
+Reportes en excel: Ranking comidas más pedidas en un periodo de tiempo determinado
+Ingresos (recaudaciones) por períodos de tiempo. Diario / Mensual
+Cantidad de pedidos agrupados por cliente en un determinado periodo de tiempo.
+Monto de Ganancia en un periodo de tiempo (ventas – costos)
 
 
 

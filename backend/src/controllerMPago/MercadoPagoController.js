@@ -6,13 +6,13 @@ mercadopago.configure({
     access_token: "TEST-7688520916959333-011315-ac6aa89652cb4ae1e81a0383af5df4ab-257082384",
 });
 exports.checkout = async (req, res) => {
-    console.log("req.body",req.body)
+    console.log("req.body", req.body)
     let preference = {
         items: [
             {
                 title: req.body.description,
                 unit_price: Number(req.body.price),
-                quantity: Number(req.body.quantity), 
+                quantity: Number(req.body.quantity),
             }
         ],
         back_urls: {
@@ -21,25 +21,36 @@ exports.checkout = async (req, res) => {
             "pending": "http://localhost:8080/feedback"
         },
         auto_return: "approved",
-        external_reference: req.body.external_reference
+        external_reference: req.body.external_reference,
+
+    }
+    respuesta = await mercadopago.preferences.create(preference)
+    console.log("res", respuesta)
+    try {
+        console.log("res.body.init_point" + respuesta.body.init_point)
+        return res.json(respuesta)
+    }
+    catch (error) {
+        console.log(error);
+        return res.json(error);
     }
 
-    mercadopago.preferences.create(preference)
-        .then(function (response) {
-            console.log("preferences", response.body)
-            res.redirect(response.body.init_point)
-        }).catch(function (error) {
-            console.log(error);
-        });
-}
+    // mercadopago.preferences.create(preference)
+    //     .then(function (response) {
+    //         console.log("preferences", response.body)
+    //         res.redirect(response.body.init_point)
+    //     }).catch(function (error) {
+    //         console.log(error);
+    //     });
 
+}
 exports.savePayment = async (req, res) => {
     const Pago = await MercadoPago.findOne({ identificadorPago: req.body.identificadorPago })
-    if (Pago){
+    if (Pago) {
         return res.status(301).json({ message: 'The payment already exists' })
     }
     const registroPago = new MercadoPago(req.body)
     const savedRegistro = await registroPago.save()
-    const updatedPedido = await Pedido.findByIdAndUpdate(savedRegistro.pedidoid, {mercadopagodatosid: savedRegistro._id} )
+    const updatedPedido = await Pedido.findByIdAndUpdate(savedRegistro.pedidoid, { mercadopagodatosid: savedRegistro._id })
     res.json(savedRegistro)
 } 

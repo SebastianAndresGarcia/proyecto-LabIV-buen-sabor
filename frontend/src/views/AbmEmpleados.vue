@@ -49,7 +49,7 @@ export default {
                 "http://localhost:3000/empleados"
             );
             const resJson = await res.json();
-            console.log(resJson);
+            console.log("abmempleadosGet ",resJson);
             this.empleadosData = resJson;
         },
         async handleMessage(value) {

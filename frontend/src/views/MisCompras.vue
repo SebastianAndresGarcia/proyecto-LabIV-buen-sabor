@@ -1,8 +1,8 @@
 <template>
     <v-container>
-        <v-card v-if="miscompras.length > 0" style="margin-top: 10px; justify:center">
+        <v-card  style="margin-top: 10px; justify:center">
             <v-card-title>Mis Pedidos</v-card-title>
-            <v-simple-table class="tabla">
+            <v-simple-table class="tabla" v-if="miscompras.length > 0">
                 <template v-slot:default>
                     <thead>
                         <tr>
@@ -45,6 +45,9 @@
                     </tbody>
                 </template>
             </v-simple-table>
+            <div v-else>
+            <v-card-title></v-card-title>
+        </div>
         </v-card>
     </v-container>
 </template>
