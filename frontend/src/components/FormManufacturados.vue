@@ -46,8 +46,24 @@
                                 <v-text-field label="Activo?*" v-model="ArticuloManufacturado.activo" required>
                                 </v-text-field>
                             </v-col>
+                            <v-col style="background-color:beige; height: 50px;">
+                                <v-row cols="6" align="center" justify="center">
+                                    <v-col cols="3"> <v-row align="center">
+                                            ¿ Es Promoción ?<v-checkbox v-model="enabled" hide-details
+                                                class="shrink mr-2 mt-0"></v-checkbox></v-row>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" v-if="enabled">
+                                        <v-slider v-model="form.age" :disabled="!enabled" :rules="rules.age" color="orange" label="Descuento %"
+                                             min="1" max="99" thumb-label></v-slider>
+                                    </v-col>
+                                    <!-- <v-col cols="3"><v-row align="center" v-if="enabled"> <v-text-field type="number"
+                                                :disabled="!enabled" label="Descuento %?"></v-text-field>
+
+                                        </v-row></v-col> -->
+                                </v-row>
+                            </v-col>
                             <v-col cols="12">
-                                <v-row  v-for="ins in cantidadInsumos" :key="ins.id">
+                                <v-row v-for="ins in cantidadInsumos" :key="ins.id">
                                     <v-col cols="4">
                                         <v-select label="Seleccione un insumo" outlined
                                             v-model="insumoSeleccionado[ins - 1]" :items="insumosData" item-value="_id"
@@ -56,7 +72,8 @@
                                         </v-select>
                                     </v-col>
                                     <v-col cols="2">
-                                        <v-text-field label="Cantidad" type="number" placeholder="1.0" step="0.01" min="0"
+                                        <v-text-field label="Cantidad" type="number" placeholder="1.0" step="0.01"
+                                            min="0"
                                             v-model="DetalleArticuloManufacturado[ins - 1].cantidad"></v-text-field>
                                     </v-col>
                                     <v-col cols="2">
@@ -70,7 +87,7 @@
                                 </v-row>
                                 <v-btn @click="crearSelectInsumo">Agregar Insumo</v-btn>
                             </v-col>
-                            <v-col cols="12">
+                            <v-col cols="12" hidden>
                                 <v-text-field v-model="ArticuloManufacturado.rubrogeneralid" required>
                                 </v-text-field>
                             </v-col>
@@ -103,6 +120,11 @@ export default {
     name: "register-item",
 
     data() {
+        const defaultForm = Object.freeze({
+     
+        age: 0,
+      
+      })
         return {
             dialog: false,
             cantidadInsumos: null,
@@ -120,6 +142,14 @@ export default {
                 rubrogeneralid: ""
             },
             DetalleArticuloManufacturado: [],
+            enabled: false,
+            form: Object.assign({}, defaultForm),
+            rules: {
+                age: [
+                    val => val < 10 ,
+                ]
+            },
+            defaultForm
         };
     },
     props: { idrubrogral: String, idmanufacturado: String },
@@ -300,8 +330,8 @@ export default {
                 this.insumoSeleccionado.push(resJson.detallearticulomanufacturadoid[i].ArticuloInsumoid)
             }
             console.log('this.cantidadInsumos', this.cantidadInsumos),
-            console.log('this.DetalleArticuloManufacturado', this.DetalleArticuloManufacturado),
-            console.log('this.insumoSeleccionado', this.insumoSeleccionado)
+                console.log('this.DetalleArticuloManufacturado', this.DetalleArticuloManufacturado),
+                console.log('this.insumoSeleccionado', this.insumoSeleccionado)
         }
     },
     watch: {
