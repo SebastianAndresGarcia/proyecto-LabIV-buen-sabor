@@ -26,6 +26,10 @@ const ArticuloManufacturado = mongoose.model(
         type: Boolean,
         default: null
     },
+    descuento: {
+        type: Number,
+        default: 0
+    },
     detallefacturaid: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'DetalleFactura'

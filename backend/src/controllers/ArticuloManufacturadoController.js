@@ -58,7 +58,12 @@ exports.getArticulosManufacturadosxrubro = async (req, res) => {
         return res.status(204).json();
     return res.json(manufacturados)
 }
-
+exports.getPromociones = async (req, res) => {
+    const manufacturados = await ArticuloManufacturado.find({ descuento: {$gt:0} });
+    if (!manufacturados)
+        return res.status(204).json();
+    return res.json(manufacturados)
+}
 exports.updateArticuloManufacturado = async (req, res) => {
     const ArticuloManufacturadoUpdated = await ArticuloManufacturado.findOneAndUpdate({ denominacion: req.params.id }, req.body.ArticuloManufacturado)
     

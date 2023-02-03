@@ -38,6 +38,7 @@ router.post('/crearRubroGeneral', controllerRubroGeneral.createRubroGeneral);
 router.get('/rubrosgeneral', controllerRubroGeneral.getRubrosGeneral);
 router.post('/crearArticuloManufacturado', controllerArticuloManufacturado.createArticuloManufacturado);
 router.get('/articulosmanufacturados', controllerArticuloManufacturado.getArticulosManufacturados);
+router.get('/getPromociones', controllerArticuloManufacturado.getPromociones);
 router.get('/articulosmanufacturadosxrubro/:id', controllerArticuloManufacturado.getArticulosManufacturadosxrubro);
 router.post('/actualizarArticuloManufacturado/:id', controllerArticuloManufacturado.updateArticuloManufacturado);
 router.get('/getManufacturadoXdenominacion/:id', controllerArticuloManufacturado.getManufacturadoXdenominacion);

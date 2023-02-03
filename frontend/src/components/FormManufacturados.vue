@@ -46,21 +46,26 @@
                                 <v-text-field label="Activo?*" v-model="ArticuloManufacturado.activo" required>
                                 </v-text-field>
                             </v-col>
-                            <v-col style="background-color:beige; height: 50px;">
-                                <v-row cols="6" align="center" justify="center">
-                                    <v-col cols="3"> <v-row align="center">
-                                            ¿ Es Promoción ?<v-checkbox v-model="enabled" hide-details
-                                                class="shrink mr-2 mt-0"></v-checkbox></v-row>
+                            <v-col >
+                                <v-container>
+                                <v-row style=" justify-content: center">
+                                    <v-col cols="3"> 
+                                          <v-text-field solo flat readonly value="¿ Es Promoción ?"></v-text-field>
                                     </v-col>
-                                    <v-col cols="12" sm="6" v-if="enabled">
+                                    <v-col cols="1">
+                                          <v-checkbox v-model="enabled" @click="conDescuento()" hide-details ></v-checkbox>
+                                    </v-col>     
+                                    <!-- <v-col cols="12" sm="6" v-if="enabled">
                                         <v-slider v-model="form.age" :disabled="!enabled" :rules="rules.age" color="orange" label="Descuento %"
                                              min="1" max="99" thumb-label></v-slider>
+                                    </v-col> -->
+                                    <v-col cols="3">
+                                        <div v-if="enabled">
+                                        <v-text-field outlined type="number" :disabled="!enabled" label="Descuento %" required v-model="ArticuloManufacturado.descuento"></v-text-field>
+                                    </div>
                                     </v-col>
-                                    <!-- <v-col cols="3"><v-row align="center" v-if="enabled"> <v-text-field type="number"
-                                                :disabled="!enabled" label="Descuento %?"></v-text-field>
-
-                                        </v-row></v-col> -->
                                 </v-row>
+                            </v-container>
                             </v-col>
                             <v-col cols="12">
                                 <v-row v-for="ins in cantidadInsumos" :key="ins.id">
@@ -77,7 +82,7 @@
                                             v-model="DetalleArticuloManufacturado[ins - 1].cantidad"></v-text-field>
                                     </v-col>
                                     <v-col cols="2">
-                                        <v-text-field label="Unidad Medida" readonly
+                                        <v-text-field label="Unidad Medida" readonly solo flat
                                             v-model="DetalleArticuloManufacturado[ins - 1].unidadMedida">
                                         </v-text-field>
                                     </v-col>
@@ -121,10 +126,10 @@ export default {
 
     data() {
         const defaultForm = Object.freeze({
-     
-        age: 0,
-      
-      })
+
+            age: 0,
+
+        })
         return {
             dialog: false,
             cantidadInsumos: null,
@@ -139,14 +144,15 @@ export default {
                 precioVenta: null,
                 imagen: "",
                 activo: null,
-                rubrogeneralid: ""
+                rubrogeneralid: "",
+                descuento: null
             },
             DetalleArticuloManufacturado: [],
             enabled: false,
             form: Object.assign({}, defaultForm),
             rules: {
                 age: [
-                    val => val < 10 ,
+                    val => val < 10,
                 ]
             },
             defaultForm
@@ -214,7 +220,8 @@ export default {
                 'denominacion': "",
                 'precioVenta': null,
                 'imagen': "",
-                'activo': null, 'rubrogeneralid': this.idrubrogral
+                'activo': null, 'rubrogeneralid': this.idrubrogral,
+                'descuento': null
             })
         },
         async crearManufacturado() { //también cumple la función de actualizar según el props activo
@@ -274,7 +281,8 @@ export default {
                 'precioVenta': null,
                 'imagen': "",
                 'activo': null,
-                'rubrogeneralid': this.idrubrogral
+                'rubrogeneralid': this.idrubrogral,
+                'descuento': null
             })
 
         },
@@ -318,8 +326,11 @@ export default {
                 'imagen': resJson.imagen,
                 'activo': resJson.activo,
                 'rubrogeneralid': resJson.rubrogeneralid,
+                'descuento': resJson.descuento
             })
-
+            if(this.ArticuloManufacturado.descuento>0){
+                this.enabled=true
+            }
             this.DetalleArticuloManufacturado = (
                 resJson.detallearticulomanufacturadoid
                 //'cantidad': resJson.detallearticulomanufacturadoid.cantidad,
@@ -332,6 +343,11 @@ export default {
             console.log('this.cantidadInsumos', this.cantidadInsumos),
                 console.log('this.DetalleArticuloManufacturado', this.DetalleArticuloManufacturado),
                 console.log('this.insumoSeleccionado', this.insumoSeleccionado)
+        },
+        async conDescuento(){
+            if(!this.enabled){
+                this.ArticuloManufacturado.descuento=0
+            }
         }
     },
     watch: {

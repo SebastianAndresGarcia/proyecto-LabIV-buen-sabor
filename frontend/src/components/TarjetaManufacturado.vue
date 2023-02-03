@@ -5,12 +5,22 @@
             <v-progress-linear color="deep-purple" height="10" indeterminate></v-progress-linear>
         </template>
 
-        <a :href="'./Detallemanufacturado/' + manufacturadoParam._id">
+        <a style="text-decoration:none" :href="'./Detallemanufacturado/' + manufacturadoParam._id">
             <span v-if="manufacturadoParam.imagen.indexOf('http') >= 0">
-                <v-img height="250" :src="this.manufacturadoParam.imagen" />
+                <v-img height="250" :src="this.manufacturadoParam.imagen">
+                    <v-row justify="center" v-if="manufacturadoParam.descuento>0">
+                        <div class="text-h3" style="font: bold; color: black;">
+                            <h3>-{{manufacturadoParam.descuento}} %</h3>
+                        </div>
+                    </v-row></v-img>
             </span>
             <span v-else>
-                <v-img height="250" :src="'/images/' + manufacturadoParam.imagen" alt="Image" />
+                <v-img height="250" :src="'/images/' + manufacturadoParam.imagen" alt="Image" >
+                    <v-row justify="center" v-if="manufacturadoParam.descuento>0">
+                        <div class="text-h3" style="font-weight: bold">
+                            <h3>-{{manufacturadoParam.descuento}} %</h3>
+                        </div>
+                    </v-row></v-img>
             </span>
         </a>
         <v-card-title>{{ manufacturadoParam.denominacion }}</v-card-title>
@@ -68,24 +78,24 @@ export default {
             currentUser: undefined
         };
     },
-    props: {manufacturadoParam: Object},
+    props: { manufacturadoParam: Object },
     mounted() {
         this.getLocalStorage(this.manufacturadoParam._id)
         console.log("manufacturadoParam", this.manufacturadoParam)
-        this.currentUser=AuthService.getCurrentUser()
+        this.currentUser = AuthService.getCurrentUser()
     },
     methods: {
         agregar(id) {
-            if(this.currentUser){
-            this.cantidad = 1
-            this.reserve = true
-            this.cambioCarrito = true
-            window.localStorage.setItem(id, JSON.stringify({'cantidad': this.cantidad}));
-            document.cookie = id + "=" + id + "," + 1
-            eventBus.$emit("carrito-changed", this.cambioCarrito)
-            //this.cambioCarrito=false
-            }else 
-            this.alert=true
+            if (this.currentUser) {
+                this.cantidad = 1
+                this.reserve = true
+                this.cambioCarrito = true
+                window.localStorage.setItem(id, JSON.stringify({ 'cantidad': this.cantidad }));
+                document.cookie = id + "=" + id + "," + 1
+                eventBus.$emit("carrito-changed", this.cambioCarrito)
+                //this.cambioCarrito=false
+            } else
+                this.alert = true
             this.$emit('abrirAlert', this.alert)
         },
         agregarProducto(id, i) {
@@ -95,12 +105,12 @@ export default {
                 document.cookie = id + "=; max-age=0";
             } else {
                 this.cantidad += i
-                window.localStorage.setItem(id, JSON.stringify({'cantidad': this.cantidad}))
+                window.localStorage.setItem(id, JSON.stringify({ 'cantidad': this.cantidad }))
                 document.cookie = id + "=" + id + "," + this.cantidad
 
                 if (this.cantidad == 0) {
                     this.reserve = false
-                    window.localStorage.removeItem( id)
+                    window.localStorage.removeItem(id)
                     document.cookie = id + "=; max-age=0"
                 }
                 console.log("cookie", document.cookie)
@@ -111,8 +121,8 @@ export default {
             this.getLocalStorage(this.manufacturadoParam._id) //está línea actualiza la vista gral del componente padre cuando se elimina desde el carrito
         },
         async getLocalStorage(id) {
-            
-            if(localStorage.getItem(id)){
+
+            if (localStorage.getItem(id)) {
                 this.reserve = true
                 this.cantidad = (JSON.parse(localStorage.getItem(id))).cantidad
                 //console.log("this.cantidad: "+this.cantidad)
@@ -122,11 +132,11 @@ export default {
     },
     created() {
         eventBus.$on("elimina-itemcarrito", async (data) => {
-            if (data!=0) {
+            if (data != 0) {
                 console.log("entró al if del itemcarrito, data: " + data)
                 this.agregarProducto(data, 0)
             }
-            else{
+            else {
                 this.getLocalStorage(this.manufacturadoParam._id)
             }
         });
@@ -167,5 +177,9 @@ export default {
     height: 38px;
     display: inline-block;
     cursor: pointer !important;
+}
+.text-h3 {
+    padding: 20px;
+    font-weight: bold;
 }
 </style>
