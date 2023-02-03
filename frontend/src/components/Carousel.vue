@@ -8,58 +8,7 @@
                 </div>
             </v-row>
         </v-carousel-item>
-        <detalle-manufacturado :manufacturado="art"></detalle-manufacturado>
-        <!-- <v-dialog v-model="dialog" persistent max-width="600px">
-            <template v-slot:activator="{ on, attrs }"></template>
-            <v-card>
-                <v-card-title>
-                    <span class="text-h5">{{ art.denominacion }}</span>
-                </v-card-title>
-                <template slot="progress">
-                    <v-progress-linear color="deep-purple" height="10" indeterminate></v-progress-linear>
-                </template>
-                <v-img height="250" :src="art.imagen" />
-                <v-card-text>
-                    <v-row align="center" class="mx-0">
-                        <v-rating :value="4.5" color="amber" dense half-increments readonly size="14"></v-rating>
-                        <div class="grey--text ms-4">
-                            4.5 (413)
-                        </div>
-                    </v-row>
-                    <div class="my-4 text-subtitle-1">
-                        $ {{ art.precioVenta }}
-                    </div>
-                    <div>Alguna descripción</div>
-                </v-card-text>
-
-                <v-divider class="mx-4"></v-divider>
-
-                <v-card-actions>
-                    <v-col>
-                        <v-row>
-                            <div>
-                                <v-btn color="deep-purple lighten-2" text>
-                                    Agregar al Carrito
-                                </v-btn>
-                            </div>
-                        </v-row>
-                        <v-row>
-                                <div  class="buttons_buy" style="display: flex;">
-                                    <a class="arrow-down_touch" @click="agregarProducto(item._id, -1)"></a>
-                                    <input readonly class="inputpromohome" v-model="cantidad">
-                                    <a class="arrow-up_touch" @click="agregarProducto(item._id, 1)"></a>
-                                </div>
-                            </v-row> 
-                        <v-row>
-                            <v-btn text color="blue darken-1" @click="dialog = false">
-                                Cancel
-                            </v-btn>
-                        </v-row>
-                    </v-col>
-                </v-card-actions>
-
-            </v-card>
-        </v-dialog> -->
+        <detalle-manufacturado :manufacturado="art" @limpiarObjeto="handlefunction"></detalle-manufacturado>
     </v-carousel>
 </template>
 
@@ -91,8 +40,10 @@ export default {
             console.log(this.items);
         },
         async abrirPromo(item) {
-            this.dialog = true
-            this.art = {item, 'dialog':this.dialog}
+            this.art = item
+        },
+        async handlefunction(){
+            this.art= null
         }
     }
 }

@@ -5,7 +5,7 @@
             <v-progress-linear color="deep-purple" height="10" indeterminate></v-progress-linear>
         </template>
 
-        <a style="text-decoration:none" :href="'./Detallemanufacturado/' + manufacturadoParam._id">
+        <div style="text-decoration:none; cursor:pointer"  @click="abrirDetalleManufacturado(manufacturadoParam)">
             <span v-if="manufacturadoParam.imagen.indexOf('http') >= 0">
                 <v-img height="250" :src="this.manufacturadoParam.imagen">
                     <v-row justify="center" v-if="manufacturadoParam.descuento>0">
@@ -22,7 +22,8 @@
                         </div>
                     </v-row></v-img>
             </span>
-        </a>
+        </div>
+        <detalle-manufacturado :manufacturado="art" @limpiarObjeto="handlefunction"></detalle-manufacturado>
         <v-card-title>{{ manufacturadoParam.denominacion }}</v-card-title>
 
         <v-card-text>
@@ -64,12 +65,14 @@
 
 </template>
 <script>
+import detallemanufacturado from "@/components/DetalleManufacturado.vue"
 import { eventBus } from "../main";
 import AuthService from "@/service/auth.service.js"
 export default {
 
     data() {
         return {
+            art: null,
             reserve: false,
             cantidad: 0,
             cambioCarrito: false,
@@ -77,6 +80,9 @@ export default {
             carritoLocalstorage: {},
             currentUser: undefined
         };
+    },
+    components: {
+        "detalle-manufacturado": detallemanufacturado
     },
     props: { manufacturadoParam: Object },
     mounted() {
@@ -91,7 +97,6 @@ export default {
                 this.reserve = true
                 this.cambioCarrito = true
                 window.localStorage.setItem(id, JSON.stringify({ 'cantidad': this.cantidad }));
-                document.cookie = id + "=" + id + "," + 1
                 eventBus.$emit("carrito-changed", this.cambioCarrito)
                 //this.cambioCarrito=false
             } else
@@ -129,6 +134,12 @@ export default {
             }
 
         },
+        async abrirDetalleManufacturado(item) {
+            this.art = item
+        },
+        async handlefunction(){
+            this.art= null
+        }
     },
     created() {
         eventBus.$on("elimina-itemcarrito", async (data) => {

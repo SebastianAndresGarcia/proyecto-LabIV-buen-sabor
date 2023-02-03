@@ -1,32 +1,30 @@
-17/01/23
-Funcionando ArticuloInsumos, habría que terminar el frontend para que se vea la funcionalidad recursiva. No están visibles las bebidas
+03/02/23
 
-El menú login se queda oculto si arrastro hacia abajo la página.
+A CORREGIR/IMPLEMENTAR:
+*Funcionando ArticuloInsumos, habría que terminar el frontend para que se vea la funcionalidad recursiva. No están visibles las bebidas
 
-El carrousel no tiene funcionalidad, habría que vincularlo al carrito.
+*El menú login se queda oculto si arrastro hacia abajo la página.
 
-Falta desarrollar la vista "detalle manufacturado".
+*El "sobre nosotros" no redirije bien, se queda en el tope de la página.
 
-El "sobre nosotros" no redirije bien, se queda en el tope de la página.
+*Implementar login con Google.
 
-La compra por mercado pago hace problema de cors. Corregido, tuve que enviar el link desde el back al front para evitar el cors.
+*Control de stock. Validar que los productos a la venta tengan stock de insumos.
 
-Implementar login con Google.
+*Validar el horario de atención, lunes a viernes de 12.00 a 22.00, sab. y dom. de 11.00 a 15.00hs.
 
-Control de stock. Validar que los productos a la venta tengan stock de insumos.
+*Impresión de Facturas en PDF para el cliente.
 
-Validar el horario de atención, lunes a viernes de 12.00 a 22.00, sab. y dom. de 11.00 a 15.00hs.
-
-Impresión de Facturas en PDF para el cliente.
-
-Reportes en excel: Ranking comidas más pedidas en un periodo de tiempo determinado
+*Reportes en excel: Ranking comidas más pedidas en un periodo de tiempo determinado
 Ingresos (recaudaciones) por períodos de tiempo. Diario / Mensual
 Cantidad de pedidos agrupados por cliente en un determinado periodo de tiempo.
 Monto de Ganancia en un periodo de tiempo (ventas – costos)
+________________________________________________________________________________________________________________________________________________________________________
 
+""WARNINGs"":
+Mercado pago hacía problema de cors. Corregido, tuve que enviar el link desde el back al front para evitar el cors.
 
-
-___________________________________________________________________________
+________________________________________________________________________________________________________________________________________________________________________
 MERCADO PAGO
 
 public key TEST-98d859f6-593f-4c8c-9fd0-d9c0fd7c9a8e
