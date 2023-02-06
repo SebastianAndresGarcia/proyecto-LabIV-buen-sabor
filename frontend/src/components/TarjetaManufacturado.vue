@@ -1,6 +1,6 @@
 <template>
 
-    <v-card class="justify-center" max-width="350">
+    <v-card class="justify-center" max-width="350" :disabled="!conStock" elevation="5">
         <template slot="progress">
             <v-progress-linear color="deep-purple" height="10" indeterminate></v-progress-linear>
         </template>
@@ -8,7 +8,7 @@
         <div style="text-decoration:none; cursor:pointer"  @click="abrirDetalleManufacturado(manufacturadoParam)">
             <span v-if="manufacturadoParam.imagen.indexOf('http') >= 0">
                 <v-img height="250" :src="this.manufacturadoParam.imagen">
-                    <v-row justify="left" v-if="manufacturadoParam.descuento>0">
+                    <v-row  v-if="manufacturadoParam.descuento>0">
                         <div class="circle " style="font: bold; color: red;">
                             <h4><b>-{{manufacturadoParam.descuento}} % OFF</b></h4>
                         </div>
@@ -43,8 +43,8 @@
 
         <v-divider class="mx-4"></v-divider>
 
-        <v-card-actions>
-            <v-col>
+        <v-card-actions >
+            <v-col v-if="conStock">
                 <v-row>
                     <div v-if="reserve == false">
                         <v-btn color="deep-purple lighten-2" text @click="agregar(manufacturadoParam._id)">
@@ -60,6 +60,9 @@
                     </div>
                 </v-row>
             </v-col>
+            <v-col v-else>
+               <b> SIN STOCK</b>
+            </v-col>
         </v-card-actions>
     </v-card>
 
@@ -68,6 +71,7 @@
 import detallemanufacturado from "@/components/DetalleManufacturado.vue"
 import { eventBus } from "../main";
 import AuthService from "@/service/auth.service.js"
+import {controlStock} from "@/funciones/ControlStock.js"
 export default {
 
     data() {
@@ -78,7 +82,8 @@ export default {
             cambioCarrito: false,
             alert: false,
             carritoLocalstorage: {},
-            currentUser: undefined
+            currentUser: undefined,
+            conStock: true
         };
     },
     components: {
@@ -89,6 +94,12 @@ export default {
         this.getLocalStorage(this.manufacturadoParam._id)
         console.log("manufacturadoParam", this.manufacturadoParam)
         this.currentUser = AuthService.getCurrentUser()
+        this.conStock = controlStock(this.manufacturadoParam.detallearticulomanufacturadoid)
+        console.log("conStock ",this.conStock)
+    },
+    beforeUpdate(){
+        this.conStock = controlStock(this.manufacturadoParam.detallearticulomanufacturadoid)
+        console.log("conStock beforeUpdate",this.conStock)
     },
     methods: {
         agregar(id) {

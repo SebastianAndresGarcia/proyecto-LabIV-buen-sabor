@@ -42,6 +42,13 @@ exports.createArticuloManufacturado = async (req, res) => {
 }
 exports.getArticulosManufacturados = async (req, res) => {
     const manufacturados = await ArticuloManufacturado.find()
+    .populate({
+        path: "detallearticulomanufacturadoid", // populate blogs
+        populate: {
+            path: "ArticuloInsumoid", // in blogs, populate comments
+            select: { denominacion: 1, stockActual: 1 }, //elijo solo los campos que quiero traer
+        }
+    })
     if (!manufacturados)
         return res.status(204).json();
     return res.json(manufacturados)
@@ -53,7 +60,14 @@ exports.getArticulosManufacturadosxrubro = async (req, res) => {
     const rubrogral = await RubroGeneral.find({ denominacion: [busqueda]});
     console.log(rubrogral) */
     //var array = [] = busqueda.split(",")
-    const manufacturados = await ArticuloManufacturado.find({ rubrogeneralid: busqueda });
+    const manufacturados = await ArticuloManufacturado.find({ rubrogeneralid: busqueda })
+    .populate({
+        path: "detallearticulomanufacturadoid", // populate blogs
+        populate: {
+            path: "ArticuloInsumoid", // in blogs, populate comments
+            select: { denominacion: 1, stockActual: 1 }, //elijo solo los campos que quiero traer
+        }
+    });
     if (!manufacturados)
         return res.status(204).json();
     return res.json(manufacturados)
@@ -137,6 +151,13 @@ exports.getManufacturadoXid = async (req, res) => {
     //const manufacturadoxid = await ArticuloManufacturado.findOne({ denominacion: busqueda }).populate('detallearticulomanufacturadoid', populate('ArticuloInsumoid'));
     //https://dev.to/paras594/how-to-use-populate-in-mongoose-node-js-mo0
     const manufacturadoxid = await ArticuloManufacturado.findOne({ _id: busqueda })
+    .populate({
+        path: "detallearticulomanufacturadoid", // populate blogs
+        populate: {
+            path: "ArticuloInsumoid", // in blogs, populate comments
+            select: { denominacion: 1, stockActual: 1 }, //elijo solo los campos que quiero traer
+        }
+    })
     if (!manufacturadoxid)
         return res.status(204).json();
     return res.json(manufacturadoxid)
