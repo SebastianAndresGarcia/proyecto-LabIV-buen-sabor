@@ -57,7 +57,7 @@ https://materialdesignicons.com/  ÍCONOS
         </v-tabs>
       </template>
     </v-app-bar>
-    <v-navigation-drawer left height="100vh" class="app" v-model="drawer" app absolute temporary>
+    <v-navigation-drawer left height="100vh" class="app" v-model="drawer" app temporary>
       <v-list v-if="currentUser == undefined" nav dense>
         <v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
           <v-row style="justify-content: flex-end; margin-top: 10%; margin-bottom: 10%;">

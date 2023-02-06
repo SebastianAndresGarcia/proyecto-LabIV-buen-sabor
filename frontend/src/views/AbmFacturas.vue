@@ -53,6 +53,15 @@
                                 {{ factura.formaPago }}
                             </td>
                             <td>
+                                {{ factura.nroTarjeta }}
+                            </td>
+                            <td>
+                                {{ factura.totalVenta }}
+                            </td>
+                            <td>
+                                {{ factura.totalCosto }}
+                            </td>
+                            <td>
                                 <detalle-pedido :pedidoParam="factura"></detalle-pedido>
                             </td>
 

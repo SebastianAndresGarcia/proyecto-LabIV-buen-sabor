@@ -68,6 +68,7 @@ export default {
     props: ["pedidoParam"],
     mounted() {
         //this.Pedidoxid(this.pedidoParam)
+        console.log(this.pedidoParam)
         this.pedido = this.pedidoParam
     },
 

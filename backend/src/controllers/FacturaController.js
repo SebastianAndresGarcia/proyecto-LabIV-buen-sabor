@@ -7,10 +7,11 @@ const ArticuloManufacturado = require('../models/ArticuloManufacturado')
 exports.createFactura = async (req, res) => {
     const ultimoFactura = await Factura.find().limit(1).sort({ $natural: -1 })
     let num=0
+    console.log(req.body)
     if(ultimoFactura.length>0){
          num=ultimoFactura[0].numero
     }
-    const Factura = new Factura({
+    const factura = new Factura({
         fecha: req.body.fecha,
         numero: num + 1,
         montoDescuento: req.body.montoDescuento,
@@ -21,23 +22,24 @@ exports.createFactura = async (req, res) => {
         pedidoid: req.body.pedidoid
     })
     const detalles = []
-    const detallesJson = req.body.DetalleFactura
+    const detallesJson = req.body.detallefacturaid
     const keys = Object.keys(detallesJson);
     for (let x = 0; x < keys.length; x++) {
         detalles.push(detallesJson[keys[x]]);
     }
+    console.log(detalles)
     try {
         let tipoArticulo = ""
-        const savedFactura = await Factura.save()
+        const savedFactura = await factura.save()
         const updatePedido = await Pedido.findByIdAndUpdate(savedFactura.pedidoid, {facturaid: savedFactura._id})
         for (let i = 0; i < detalles.length; i++) {
-            console.log("entró al for " + detalles[i].articuloid)
-            const ArticuloFound = await ArticuloManufacturado.findOne({ _id: detalles[i].articuloid })
+            console.log("entró al for " + detalles[i].articulomanufacturadoid.denominacion)
+            const ArticuloFound = await ArticuloManufacturado.findOne({ _id: detalles[i].articulomanufacturadoid._id })
             if (ArticuloFound) { tipoArticulo = "articulomanufacturadoid" }
             else { tipoArticulo = "articuloinsumoid" }
             console.log("tipoArticulo" + tipoArticulo)
-            const DetalleFactura = new DetalleFactura({ "cantidad": detalles[i].cantidad, "subtotal": detalles[i].subtotal, [tipoArticulo]: detalles[i].articuloid, "facturaid": savedFactura._id })
-            const savedDetalle = await DetalleFactura.save()
+            const detalleFactura = new DetalleFactura({ "cantidad": detalles[i].cantidad, "subtotal": detalles[i].subtotal, [tipoArticulo]: detalles[i].articuloid, "facturaid": savedFactura._id })
+            const savedDetalle = await detalleFactura.save()
             console.log("savedDetalle", savedDetalle)
             const updateManufacturado = await ArticuloManufacturado.findByIdAndUpdate(detalles[i].articuloid, { $addToSet: { "detallefacturaid": savedDetalle._id } })
             const updateInsumo = await ArticuloInsumo.findByIdAndUpdate(detalles[i].articuloid, { $addToSet: { "detallefacturaid": savedDetalle._id } })
@@ -99,7 +101,7 @@ exports.actualizarFactura = async (req, res) => {
 
 exports.Facturaxid = async (req, res) => {
     const id = req.params.id
-    const pedidos = await Factura.findById({id}).populate({
+    const pedidos = await Factura.findById({_id:id}).populate({
         path: "detallefacturaid", // populate blogs
         populate: {
             path: "articulomanufacturadoid", // in blogs, populate comments

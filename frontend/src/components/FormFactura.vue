@@ -57,7 +57,7 @@
                     </v-card-text>
                     <v-divider class="mt-2"></v-divider>
                     <v-card-actions>
-                        <v-btn text color="blue darken-1" @click="cerrardialog">
+                        <v-btn text color="blue darken-1" @click="dialog=false">
                             Cancel
                         </v-btn>
                         <v-spacer></v-spacer>
@@ -93,6 +93,7 @@ export default {
 
     },
     mounted() {
+        console.log("this.pedidoParam", this.pedidoParam)
         this.getFactura(this.pedidoParam)
     },
     props: ["pedidoParam"],
@@ -165,7 +166,7 @@ export default {
             if (pedidoParam.facturaid) {
                 
                 const res = await fetch(
-                    `http://localhost:3000/FacturaXpedidoid/${pedidoParam.facturaid}`
+                    `http://localhost:3000/facturaxid/${pedidoParam.facturaid}`
                 );
                 const resJson = await res.json();
                 console.log(resJson);

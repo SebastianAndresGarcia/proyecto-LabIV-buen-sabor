@@ -8,9 +8,9 @@
         <div style="text-decoration:none; cursor:pointer"  @click="abrirDetalleManufacturado(manufacturadoParam)">
             <span v-if="manufacturadoParam.imagen.indexOf('http') >= 0">
                 <v-img height="250" :src="this.manufacturadoParam.imagen">
-                    <v-row justify="center" v-if="manufacturadoParam.descuento>0">
-                        <div class="text-h3" style="font: bold; color: black;">
-                            <h3>-{{manufacturadoParam.descuento}} %</h3>
+                    <v-row justify="left" v-if="manufacturadoParam.descuento>0">
+                        <div class="circle " style="font: bold; color: red;">
+                            <h4><b>-{{manufacturadoParam.descuento}} % OFF</b></h4>
                         </div>
                     </v-row></v-img>
             </span>
@@ -189,8 +189,17 @@ export default {
     display: inline-block;
     cursor: pointer !important;
 }
-.text-h3 {
+.text-h4 {
     padding: 20px;
     font-weight: bold;
+}
+.circle {
+    margin: 5%;
+    font-weight: bold;
+    padding: 5%;
+    background: rgb(250, 251, 252);
+    border-radius: 50%;
+    border-style:solid;
+    border-color: black;
 }
 </style>

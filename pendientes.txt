@@ -1,15 +1,15 @@
 03/02/23
 
 A CORREGIR/IMPLEMENTAR:
-*Funcionando ArticuloInsumos, habría que terminar el frontend para que se vea la funcionalidad recursiva. No están visibles las bebidas
-
-*El menú login se queda oculto si arrastro hacia abajo la página.
+*Funcionando ArticuloInsumos, habría que terminar el frontend para que se vea la funcionalidad recursiva. No están visibles las bebidas.
 
 *El "sobre nosotros" no redirije bien, se queda en el tope de la página.
 
 *Implementar login con Google.
 
 *Control de stock. Validar que los productos a la venta tengan stock de insumos.
+
+*Manejo de estado de pedido por cajero/admin, cocinero.
 
 *Validar el horario de atención, lunes a viernes de 12.00 a 22.00, sab. y dom. de 11.00 a 15.00hs.
 

@@ -8,7 +8,12 @@
             <template slot="progress">
                 <v-progress-linear color="deep-purple" height="10" indeterminate></v-progress-linear>
             </template>
-            <v-img height="250" :src="manufacturado.imagen" />
+            <v-img height="250" :src="manufacturado.imagen">
+                <v-row justify="left" v-if="manufacturado.descuento > 0">
+                    <div class="circle " style="font: bold; color: red;">
+                        <h4><b>-{{ manufacturado.descuento }} % OFF</b></h4>
+                    </div>
+                </v-row></v-img>
             <v-card-title>
                 <span class="text-h5">{{ manufacturado.denominacion }}</span>
             </v-card-title>
@@ -112,11 +117,11 @@ export default {
             if (i == 0) {
                 this.reserve = false
                 window.localStorage.removeItem(id)
-              
+
             } else {
                 this.cantidad += i
                 window.localStorage.setItem(id, JSON.stringify({ 'cantidad': this.cantidad }))
-                
+
                 if (this.cantidad == 0) {
                     this.reserve = false
                     window.localStorage.removeItem(id)
@@ -151,3 +156,14 @@ export default {
     }
 }
 </script>
+<style>
+.circle {
+    margin: 5%;
+    font-weight: bold;
+    padding: 5%;
+    background: rgb(250, 251, 252);
+    border-radius: 50%;
+    border-style: solid;
+    border-color: black;
+}
+</style>
