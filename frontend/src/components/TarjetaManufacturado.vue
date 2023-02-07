@@ -71,7 +71,7 @@
 import detallemanufacturado from "@/components/DetalleManufacturado.vue"
 import { eventBus } from "../main";
 import AuthService from "@/service/auth.service.js"
-import {controlStock} from "@/funciones/ControlStock.js"
+import {controlStock, calcularInsumos} from "@/funciones/ControlStock.js"
 export default {
 
     data() {
@@ -108,6 +108,7 @@ export default {
                 this.reserve = true
                 this.cambioCarrito = true
                 window.localStorage.setItem(id, JSON.stringify({ 'cantidad': this.cantidad }));
+                console.log("calcularInsumos ",calcularInsumos(this.manufacturadoParam.detallearticulomanufacturadoid, this.cantidad))
                 eventBus.$emit("carrito-changed", this.cambioCarrito)
                 //this.cambioCarrito=false
             } else
@@ -122,7 +123,7 @@ export default {
             } else {
                 this.cantidad += i
                 window.localStorage.setItem(id, JSON.stringify({ 'cantidad': this.cantidad }))
-                document.cookie = id + "=" + id + "," + this.cantidad
+                console.log("calcularInsumos ",calcularInsumos(this.manufacturadoParam.detallearticulomanufacturadoid, i))
 
                 if (this.cantidad == 0) {
                     this.reserve = false

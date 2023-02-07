@@ -83,7 +83,7 @@
                     </v-card-text>
 
                     <v-card-action>
-                        <v-row style="justify-content: center; margin: 5%;" dense>
+                        <v-row v-if="subtotal>0" style="justify-content: center; margin: 5%;" dense>
                             <v-btn rounded @click="registrarPedido()" color="success">Ir a pagar</v-btn>
                         </v-row>
                     </v-card-action>
@@ -166,8 +166,8 @@ export default {
         },
         async eliminar(id) {
             window.localStorage.removeItem(id)
-            eventBus.$emit("elimina-itemcarrito", id)
-            this.getLocalStorage()
+            //eventBus.$emit("elimina-itemcarrito", id)
+            eventBus.$emit("carrito-changed", this.cambioCarrito)
         },
         agregarProducto(id, j, index) {
             this.cantidad[index] += j

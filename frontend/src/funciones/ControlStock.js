@@ -10,4 +10,41 @@ function controlStock(insumos) { //no le puedo poner async porque me quedaba la 
     }
     return true
 }
-export { controlStock };
+
+// export default calcularInsumos(id) { //no le puedo poner async porque me quedaba la promesa pendiente en donde yo invocaba la fcion
+//     console.log(id)
+//     const res = await fetch(
+//         "http://localhost:3000/articulosmanufacturados"
+//     )
+//     const resJson = res.json();
+//     console.log(resJson);
+//     this.manufacturadosData = resJson;
+//     return res.json()
+// }
+
+const calcularInsumos = async (detalle, i) => {
+    for (let i = 0; i < detalle.length; i++) {
+       let stock= detalle[i].ArticuloInsumoid.stockActual - (detalle[i].cantidad*i)
+       console.log("stock "+detalle[i].ArticuloInsumoid.denominacion+"-"+detalle[i].cantidad*i+" :"+stock)
+        let urlServer = "http://localhost:3000/ActualizarInsumo/" +  detalle[i].ArticuloInsumoid.denominacion;
+                let method = "POST";
+                const respuesta = await fetch(urlServer, {
+                    method: method,
+                    body: JSON.stringify({'stockActual':stock}),
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    mode: "cors",
+                });
+                
+                const resJson = await respuesta.json()
+                console.log("resJson calcularInsumos",resJson)
+        
+    }
+    // console.log("detalle ", detalle)
+    // const query = await fetch(URL+URI, options);
+    // const response = await query.json();
+}
+
+
+export { controlStock, calcularInsumos };

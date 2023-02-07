@@ -38,11 +38,11 @@
                                 </v-text-field>
                             </v-col>
                             <v-col cols="12">
-                                <v-text-field label="stockActual*" type="number" v-model="insumo.stockActual" required>
+                                <v-text-field label="stockActual*" type="number" v-model="insumo.stockActual" required placeholder="1.0" step="0.01" min="0">
                                 </v-text-field>
                             </v-col>
                             <v-col cols="12">
-                                <v-text-field label="stockMinimo*" type="number" v-model="insumo.stockMinimo" required>
+                                <v-text-field label="stockMinimo*" type="number" v-model="insumo.stockMinimo" required placeholder="1.0" step="0.01" min="0">
                                 </v-text-field>
                             </v-col>
                             
