@@ -1,7 +1,8 @@
 <template>
     <div style="margin-top:40px; margin-left: 50px; margin-bottom: 40px; ">
-        <v-dialog v-model="alert" max-width="400px"><v-alert color="red" prominent type="warning" >Inicie sesión para llenar su
-                carrito<v-btn text @click="alert=false">X</v-btn></v-alert></v-dialog>
+        <v-dialog v-model="alert" max-width="400px"><v-alert color="red" prominent type="warning">Inicie sesión para
+                llenar su
+                carrito<v-btn text @click="alert = false">X</v-btn></v-alert></v-dialog>
         <div style="margin:20px; display:inline-flex;" v-for="(manufacturado, index) in manufacturadosData"
             :key="index">
             <manufacturado-item :manufacturadoParam="manufacturado" @abrirAlert="handleMessage"></manufacturado-item>
@@ -47,7 +48,12 @@ export default {
             console.log("this.manufacturadosData", this.manufacturadosData)
         },
         handleMessage(value) {
-            this.alert = value
+            if (value >= 0) {
+                console.log("catchemit rubroId " + this.$route.params.id)
+                this.getmanufacturados(this.$route.params.id)
+            }
+            else
+                this.alert = value
         }
     }
 };

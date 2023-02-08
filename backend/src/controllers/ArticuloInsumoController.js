@@ -27,7 +27,7 @@ exports.deleteArticuloInsumo = async (req, res) => {
 }
 
 exports.updateArticuloInsumo = async (req, res) => {
-    
+    console.log("req.body update ", req.body)
     const articulo = await ArticuloInsumo.findOneAndUpdate({denominacion: req.params.id}, req.body)
     console.log("insumo actualizado stock",articulo)
     res.json(articulo)

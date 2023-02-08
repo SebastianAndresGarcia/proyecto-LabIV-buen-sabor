@@ -99,38 +99,41 @@ export default {
     },
     beforeUpdate(){
         this.conStock = controlStock(this.manufacturadoParam.detallearticulomanufacturadoid)
+        
         console.log("conStock beforeUpdate",this.conStock)
     },
     methods: {
-        agregar(id) {
+       async agregar(id) {
             if (this.currentUser) {
                 this.cantidad = 1
                 this.reserve = true
                 this.cambioCarrito = true
                 window.localStorage.setItem(id, JSON.stringify({ 'cantidad': this.cantidad }));
-                console.log("calcularInsumos ",calcularInsumos(this.manufacturadoParam.detallearticulomanufacturadoid, this.cantidad))
+                console.log("insumos agregar ",this.manufacturadoParam.detallearticulomanufacturadoid)
+                await calcularInsumos(this.manufacturadoParam.detallearticulomanufacturadoid, this.cantidad)
+                this.$emit('abrirAlert', 1)
                 eventBus.$emit("carrito-changed", this.cambioCarrito)
                 //this.cambioCarrito=false
             } else
                 this.alert = true
             this.$emit('abrirAlert', this.alert)
         },
-        agregarProducto(id, i) {
+       async agregarProducto(id, i) {
             if (i == 0) {
                 this.reserve = false
                 window.localStorage.removeItem(id)
-                document.cookie = id + "=; max-age=0";
+                
             } else {
                 this.cantidad += i
                 window.localStorage.setItem(id, JSON.stringify({ 'cantidad': this.cantidad }))
-                console.log("calcularInsumos ",calcularInsumos(this.manufacturadoParam.detallearticulomanufacturadoid, i))
-
+                console.log("insumos agregarProducto ",this.manufacturadoParam.detallearticulomanufacturadoid)
+                await calcularInsumos(this.manufacturadoParam.detallearticulomanufacturadoid, i)
+                this.$emit('abrirAlert', 1)
                 if (this.cantidad == 0) {
                     this.reserve = false
                     window.localStorage.removeItem(id)
-                    document.cookie = id + "=; max-age=0"
+                    
                 }
-                console.log("cookie", document.cookie)
                 this.cambioCarrito = true
                 eventBus.$emit("carrito-changed", this.cambioCarrito)
                 //this.cambioCarrito=false

@@ -22,10 +22,10 @@ function controlStock(insumos) { //no le puedo poner async porque me quedaba la 
 //     return res.json()
 // }
 
-const calcularInsumos = async (detalle, i) => {
+const calcularInsumos = async (detalle, j) => {
     for (let i = 0; i < detalle.length; i++) {
-       let stock= detalle[i].ArticuloInsumoid.stockActual - (detalle[i].cantidad*i)
-       console.log("stock "+detalle[i].ArticuloInsumoid.denominacion+"-"+detalle[i].cantidad*i+" :"+stock)
+       let stock= detalle[i].ArticuloInsumoid.stockActual - (detalle[i].cantidad*j)
+       console.log("stock "+detalle[i].ArticuloInsumoid.stockActual+"-"+detalle[i].cantidad*j+" :"+stock)
         let urlServer = "http://localhost:3000/ActualizarInsumo/" +  detalle[i].ArticuloInsumoid.denominacion;
                 let method = "POST";
                 const respuesta = await fetch(urlServer, {
@@ -36,9 +36,10 @@ const calcularInsumos = async (detalle, i) => {
                     },
                     mode: "cors",
                 });
-                
+                stock=0
                 const resJson = await respuesta.json()
                 console.log("resJson calcularInsumos",resJson)
+                
         
     }
     // console.log("detalle ", detalle)
