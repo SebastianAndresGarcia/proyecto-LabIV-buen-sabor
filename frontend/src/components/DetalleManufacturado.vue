@@ -70,6 +70,7 @@
 <script>
 import { eventBus } from "../main";
 import AuthService from "@/service/auth.service.js"
+import {controlStock, calcularInsumos} from "@/funciones/ControlStock.js"
 export default {
     name: 'Car-ousel',
     data() {
@@ -83,7 +84,8 @@ export default {
             currentUser: undefined,
             items: [{}], //no funciona el carrousel si no lo inicializo así
             dialog: false,
-            articulo: null
+            articulo: null,
+            limpiar: true
         }
     },
     props: ["manufacturado"],
@@ -94,12 +96,14 @@ export default {
         console.log("entró", this.manufacturado)
         if (this.manufacturado) {
             this.dialog = true
+            this.getLocalStorage(this.manufacturado._id)
         }
     },
     methods: {
         async cerrar() {
             this.dialog = false
-            this.$emit('limpiarObjeto', true)
+            this.$emit('limpiarObjeto', { close: true })
+            //this.$emit('limpiarObjeto', true)
         },
         async agregar(id) {
             if (this.currentUser) {
@@ -109,11 +113,13 @@ export default {
                 window.localStorage.setItem(id, JSON.stringify({ 'cantidad': this.cantidad }));
                 eventBus.$emit("carrito-changed", this.cambioCarrito)
                 eventBus.$emit("elimina-itemcarrito", '0')
+                await calcularInsumos(this.manufacturado.detallearticulomanufacturadoid, this.cantidad)
+                this.$emit('limpiarObjeto', { actualizarCarrousel: true })
             } else {
                 this.alert = true
             }
         },
-        agregarProducto(id, i) {
+        async agregarProducto(id, i) {
             if (i == 0) {
                 this.reserve = false
                 window.localStorage.removeItem(id)
@@ -131,7 +137,8 @@ export default {
                 this.cambioCarrito = true
                 eventBus.$emit("elimina-itemcarrito", '0')
                 eventBus.$emit("carrito-changed", this.cambioCarrito)
-
+                await calcularInsumos(this.manufacturado.detallearticulomanufacturadoid, i)
+                this.$emit('limpiarObjeto', { actualizarCarrousel: true })
                 //this.cambioCarrito=false
             }
             this.getLocalStorage(this.manufacturado._id) //está línea actualiza la vista gral del componente padre cuando se elimina desde el carrito

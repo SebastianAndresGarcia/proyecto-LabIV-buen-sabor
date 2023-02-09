@@ -42,8 +42,13 @@ export default {
         async abrirPromo(item) {
             this.art = item
         },
-        async handlefunction(){
-            this.art= null
+        async handlefunction(value){
+            console.log("value",value)
+            if(value.close)
+                {this.art= null}
+            if(value.actualizarCarrousel)    {
+                this.getPromociones()
+            }
         }
     }
 }
