@@ -37,17 +37,23 @@ export default {
             const resJson = await res.json();
 
             this.items = resJson;
-            console.log(this.items);
+            console.log("items getPromociones", this.items);
         },
         async abrirPromo(item) {
             this.art = item
         },
-        async handlefunction(value){
-            console.log("value",value)
-            if(value.close)
-                {this.art= null}
-            if(value.actualizarCarrousel)    {
+        async handlefunction(value) {
+            console.log("value", value)
+            if (value.close) {
+                this.art = null
                 this.getPromociones()
+            }
+            if (value.actualizarCarrousel) {
+                const res = await fetch(
+                `http://localhost:3000/getManufacturadoXid/${this.art._id}`
+                    )
+                const resJson = await res.json();
+                this.art= resJson 
             }
         }
     }

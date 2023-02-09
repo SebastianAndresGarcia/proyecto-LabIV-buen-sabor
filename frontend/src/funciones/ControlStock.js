@@ -24,28 +24,22 @@ function controlStock(insumos) { //no le puedo poner async porque me quedaba la 
 
 const calcularInsumos = async (detalle, j) => {
     for (let i = 0; i < detalle.length; i++) {
-       let stock= detalle[i].ArticuloInsumoid.stockActual - (detalle[i].cantidad*j)
-       console.log("stock "+detalle[i].ArticuloInsumoid.stockActual+"-"+detalle[i].cantidad*j+" :"+stock)
-        let urlServer = "http://localhost:3000/ActualizarInsumo/" +  detalle[i].ArticuloInsumoid.denominacion;
-                let method = "POST";
-                const respuesta = await fetch(urlServer, {
-                    method: method,
-                    body: JSON.stringify({'stockActual':stock}),
-                    headers: {
-                        "Content-type": "application/json",
-                    },
-                    mode: "cors",
-                });
-                stock=0
-                const resJson = await respuesta.json()
-                console.log("resJson calcularInsumos",resJson)
-                
-        
+        let stock = detalle[i].ArticuloInsumoid.stockActual - (detalle[i].cantidad * j)
+        console.log("stock " + detalle[i].ArticuloInsumoid.stockActual + "-" + detalle[i].cantidad * j + " :" + stock)
+        let urlServer = "http://localhost:3000/ActualizarInsumo/" + detalle[i].ArticuloInsumoid.denominacion;
+        let method = "POST";
+        const respuesta = await fetch(urlServer, {
+            method: method,
+            body: JSON.stringify({ 'stockActual': stock }),
+            headers: {
+                "Content-type": "application/json",
+            },
+            mode: "cors",
+        });
+        stock = 0
+        const resJson = await respuesta.json()
+        console.log("resJson calcularInsumos", resJson)
     }
-    // console.log("detalle ", detalle)
-    // const query = await fetch(URL+URI, options);
-    // const response = await query.json();
 }
-
 
 export { controlStock, calcularInsumos };
