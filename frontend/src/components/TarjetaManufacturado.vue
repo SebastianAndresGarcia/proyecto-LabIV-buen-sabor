@@ -5,20 +5,20 @@
             <v-progress-linear color="deep-purple" height="10" indeterminate></v-progress-linear>
         </template>
 
-        <div style="text-decoration:none; cursor:pointer"  @click="abrirDetalleManufacturado(manufacturadoParam)">
+        <div style="text-decoration:none; cursor:pointer" @click="abrirDetalleManufacturado(manufacturadoParam)">
             <span v-if="manufacturadoParam.imagen.indexOf('http') >= 0">
                 <v-img height="250" :src="this.manufacturadoParam.imagen">
-                    <v-row  v-if="manufacturadoParam.descuento>0">
+                    <v-row v-if="manufacturadoParam.descuento > 0">
                         <div class="circle " style="font: bold; color: red;">
-                            <h4><b>-{{manufacturadoParam.descuento}} % OFF</b></h4>
+                            <h4><b>-{{ manufacturadoParam.descuento }} % OFF</b></h4>
                         </div>
                     </v-row></v-img>
             </span>
             <span v-else>
-                <v-img height="250" :src="'/images/' + manufacturadoParam.imagen" alt="Image" >
-                    <v-row justify="center" v-if="manufacturadoParam.descuento>0">
+                <v-img height="250" :src="'/images/' + manufacturadoParam.imagen" alt="Image">
+                    <v-row justify="center" v-if="manufacturadoParam.descuento > 0">
                         <div class="text-h3" style="font-weight: bold">
-                            <h3>-{{manufacturadoParam.descuento}} %</h3>
+                            <h3>-{{ manufacturadoParam.descuento }} %</h3>
                         </div>
                     </v-row></v-img>
             </span>
@@ -43,7 +43,7 @@
 
         <v-divider class="mx-4"></v-divider>
 
-        <v-card-actions >
+        <v-card-actions>
             <v-col v-if="conStock">
                 <v-row>
                     <div v-if="reserve == false">
@@ -61,7 +61,7 @@
                 </v-row>
             </v-col>
             <v-col v-else>
-               <b> SIN STOCK</b>
+                <b> SIN STOCK</b>
             </v-col>
         </v-card-actions>
     </v-card>
@@ -71,7 +71,7 @@
 import detallemanufacturado from "@/components/DetalleManufacturado.vue"
 import { eventBus } from "../main";
 import AuthService from "@/service/auth.service.js"
-import {controlStock, calcularInsumos} from "@/funciones/ControlStock.js"
+import { controlStock, calcularInsumos } from "@/funciones/ControlStock.js"
 export default {
 
     data() {
@@ -95,21 +95,21 @@ export default {
         console.log("manufacturadoParam", this.manufacturadoParam)
         this.currentUser = AuthService.getCurrentUser()
         this.conStock = controlStock(this.manufacturadoParam.detallearticulomanufacturadoid)
-        console.log("conStock ",this.conStock)
+        console.log("conStock ", this.conStock)
     },
-    beforeUpdate(){
+    beforeUpdate() {
         this.conStock = controlStock(this.manufacturadoParam.detallearticulomanufacturadoid)
-        
-        console.log("conStock beforeUpdate",this.conStock)
+
+        console.log("conStock beforeUpdate", this.conStock)
     },
     methods: {
-       async agregar(id) {
+        async agregar(id) {
             if (this.currentUser) {
                 this.cantidad = 1
                 this.reserve = true
                 this.cambioCarrito = true
                 window.localStorage.setItem(id, JSON.stringify({ 'cantidad': this.cantidad }));
-                console.log("insumos agregar ",this.manufacturadoParam.detallearticulomanufacturadoid)
+                console.log("insumos agregar ", this.manufacturadoParam.detallearticulomanufacturadoid)
                 await calcularInsumos(this.manufacturadoParam.detallearticulomanufacturadoid, this.cantidad)
                 this.$emit('abrirAlert', 1)
                 eventBus.$emit("carrito-changed", this.cambioCarrito)
@@ -118,42 +118,50 @@ export default {
                 this.alert = true
             this.$emit('abrirAlert', this.alert)
         },
-       async agregarProducto(id, i) {
+        async agregarProducto(id, i) {
             if (i == 0) {
                 this.reserve = false
                 window.localStorage.removeItem(id)
-                
+
             } else {
                 this.cantidad += i
                 window.localStorage.setItem(id, JSON.stringify({ 'cantidad': this.cantidad }))
-                console.log("insumos agregarProducto ",this.manufacturadoParam.detallearticulomanufacturadoid)
+                console.log("insumos agregarProducto ", this.manufacturadoParam.detallearticulomanufacturadoid)
                 await calcularInsumos(this.manufacturadoParam.detallearticulomanufacturadoid, i)
                 this.$emit('abrirAlert', 1)
                 if (this.cantidad == 0) {
                     this.reserve = false
                     window.localStorage.removeItem(id)
-                    
                 }
-                this.cambioCarrito = true
-                eventBus.$emit("carrito-changed", this.cambioCarrito)
                 //this.cambioCarrito=false
             }
             this.getLocalStorage(this.manufacturadoParam._id) //está línea actualiza la vista gral del componente padre cuando se elimina desde el carrito
+            this.cambioCarrito = true
+            eventBus.$emit("carrito-changed", this.cambioCarrito)
         },
         async getLocalStorage(id) {
-
             if (localStorage.getItem(id)) {
                 this.reserve = true
                 this.cantidad = (JSON.parse(localStorage.getItem(id))).cantidad
                 //console.log("this.cantidad: "+this.cantidad)
             }
-
         },
         async abrirDetalleManufacturado(item) {
             this.art = item
         },
-        async handlefunction(){
-            this.art= null
+        async handlefunction(value) {
+            console.log("value", value)
+            if (value.close) {
+                this.art = null
+                this.$emit('abrirAlert', 1)
+            }
+            if (value.actualizarCarrousel) {
+                const res = await fetch(
+                    `http://localhost:3000/getManufacturadoXid/${this.art._id}`
+                )
+                const resJson = await res.json();
+                this.art = resJson
+            }
         }
     },
     created() {
@@ -204,17 +212,19 @@ export default {
     display: inline-block;
     cursor: pointer !important;
 }
+
 .text-h4 {
     padding: 20px;
     font-weight: bold;
 }
+
 .circle {
     margin: 5%;
     font-weight: bold;
     padding: 5%;
     background: rgb(250, 251, 252);
     border-radius: 50%;
-    border-style:solid;
+    border-style: solid;
     border-color: black;
 }
 </style>

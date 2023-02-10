@@ -13,7 +13,12 @@ https://materialdesignicons.com/  ÍCONOS
       <v-toolbar-title>EL BUEN SABOR</v-toolbar-title>
       <v-spacer></v-spacer>
 
-      <Carrito-item></Carrito-item>
+      <div v-if="!pathname.includes('/micarrito')" style="margin: 10px;">
+        <Carrito-item></Carrito-item>
+      </div>
+      <div v-else style="justify-content: center; margin: 10px;" >
+        <v-btn small dense elevation="20" rounded href="http://localhost:8080/ManufacXrubro/0" color="success">Seguir Comprando</v-btn>
+      </div>
 
       <v-menu v-if="currentUser" left bottom>
         <v-divider vertical></v-divider>
@@ -78,7 +83,8 @@ https://materialdesignicons.com/  ÍCONOS
           currentUser.username
         }}</v-card-title>
         <v-list-item-group>
-          <v-list-item><a style="text-decoration: none;" href="http://localhost:8080/MisCompras">Mis Compras</a></v-list-item>
+          <v-list-item><a style="text-decoration: none;" href="http://localhost:8080/MisCompras">Mis
+              Compras</a></v-list-item>
           <v-list-item>Mi Perfil</v-list-item>
         </v-list-item-group>
         <v-card-subtitle>
@@ -114,7 +120,8 @@ export default {
       group: null,
       rubros: [
         //{ denominacion: String }
-      ] //as Array<Object>,
+      ], //as Array<Object>,
+      pathname: ""
     };
   },
   components: {
@@ -129,6 +136,8 @@ export default {
       this.currentUser = this.user;
       if (this.user.roles.includes("ROLE_ADMIN")) { this.showAdminBoard = true }
     }
+    this.pathname = window.location.pathname //esto lo pongo para validar en el div del carrito que si navego en la vista 'Mi Carrito', no muestre en el navbar el 'Cart'
+    console.log("nombre de página " + pathname)
   },
   methods: {
     async getRubrosGeneral() {

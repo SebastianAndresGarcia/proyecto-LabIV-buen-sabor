@@ -20,15 +20,14 @@
                                 <v-card-actions>
                                     <v-row>
                                         <div class="buttons_buy" style="display: flex;">
-                                            <a class="arrow-down_touch" @click="agregarProducto(item._id, -1, i)"></a>
+                                            <a class="arrow-down_touch" @click="agregarProducto(item, -1, i)"></a>
                                             <input class="inputpromohome" v-model="cantidad[i]" readonly>
-                                            <a class="arrow-up_touch" @click="agregarProducto(item._id, 1, i)"></a>
+                                            <a class="arrow-up_touch" @click="agregarProducto(item, 1, i)"></a>
                                         </div>
                                     </v-row>
-                                    <v-btn color="black" outlined rounded small
-                                            @click="eliminar(item._id)">
-                                            <v-icon>mdi-trash-can</v-icon>
-                                        </v-btn>
+                                    <v-btn color="black" outlined rounded small @click="eliminar(item._id)">
+                                        <v-icon>mdi-trash-can</v-icon>
+                                    </v-btn>
                                 </v-card-actions>
                             </div>
                             <v-avatar class="ma-3" size="70" tile>
@@ -50,7 +49,7 @@
             <v-spacer></v-spacer>
             <v-btn outlined color="white" @click="cerrar()"><v-icon medium color="black">mdi-close</v-icon></v-btn>
         </v-card-title>
-        <v-card-text >
+        <v-card-text>
             <v-row style="color: black; justify-content: center; margin-top: 20%;" class="mx-0">
                 Su carrito se encuentra vacío
             </v-row>
@@ -59,6 +58,7 @@
 </template>
 <script>
 import { eventBus } from "../main";
+import { calcularInsumos } from "@/funciones/ControlStock.js"
 export default {
     data() {
         return {
@@ -76,7 +76,7 @@ export default {
     methods: {
         async getmanufacturados(id, cant) {
             console.log("id " + id + " cant " + cant)
-            
+
             const res = await fetch(
                 `http://localhost:3000/getManufacturadoXid/${id.trim()}`
             )
@@ -89,7 +89,7 @@ export default {
             console.log("this.items", this.items)
         },
         async getLocalStorage() {
-            
+
             this.cantidad = []
             this.items = []
             let claves = Object.keys(localStorage);
@@ -114,21 +114,23 @@ export default {
             }
         },
         async eliminar(id) {
-            //document.cookie = id + "=; max-age=0";
             window.localStorage.removeItem(id)
             eventBus.$emit("elimina-itemcarrito", id)
             this.getLocalStorage()
         },
-        agregarProducto(id, j, index) {
+        async agregarProducto(item, j, index) {
             this.cantidad[index] += j
+            await calcularInsumos(item.detallearticulomanufacturadoid, j)
+            this.items = []
             if (this.cantidad[index] == 0) {
-                this.eliminar(id)
+                this.eliminar(item._id)
             } else {
-                localStorage.setItem(id, JSON.stringify({ 'cantidad': this.cantidad[index] }))
+                localStorage.setItem(item._id, JSON.stringify({ 'cantidad': this.cantidad[index] }))
 
                 eventBus.$emit("elimina-itemcarrito", '0')
-                eventBus.$emit("carrito-changed", this.cambioCarrito)
+                //eventBus.$emit("carrito-changed", this.cambioCarrito)
             }
+            this.getLocalStorage()
             // this.cambioCarrito = true
             // eventBus.$emit("carrito-changed", this.cambioCarrito)
             //this.cambioCarrito=false

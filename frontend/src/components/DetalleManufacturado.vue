@@ -148,6 +148,10 @@ export default {
                 this.reserve = true
                 this.cantidad = (JSON.parse(localStorage.getItem(id))).cantidad
             }
+            else{
+                this.reserve=false
+                this.cantidad= 0
+            }
         },
     },
     created() {

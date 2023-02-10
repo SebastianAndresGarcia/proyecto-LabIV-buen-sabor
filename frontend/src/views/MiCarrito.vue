@@ -29,9 +29,9 @@
                                 <v-row>
                                     <v-col>
                                         <div class="buttons_buy" style="display: flex;">
-                                            <a class="arrow-down_touch" @click="agregarProducto(item._id, -1, i)"></a>
+                                            <a class="arrow-down_touch" @click="agregarProducto(item, -1, i)"></a>
                                             <input class="inputpromohome" v-model="cantidad[i]" readonly>
-                                            <a class="arrow-up_touch" @click="agregarProducto(item._id, 1, i)"></a>
+                                            <a class="arrow-up_touch" @click="agregarProducto(item, 1, i)"></a>
                                         </div>
                                     </v-col>
                                 </v-row>
@@ -82,11 +82,11 @@
                         </div>
                     </v-card-text>
 
-                    <v-card-action>
+                    <v-card-text>
                         <v-row v-if="subtotal>0" style="justify-content: center; margin: 5%;" dense>
                             <v-btn rounded @click="registrarPedido()" color="success">Ir a pagar</v-btn>
                         </v-row>
-                    </v-card-action>
+                    </v-card-text>
                 </v-card>
             </v-col>
         </v-row>
@@ -95,6 +95,7 @@
 <script>
 import { eventBus } from "../main";
 import postcompra from "@/components/PostCompra.vue"
+import {calcularInsumos} from "@/funciones/ControlStock.js"
 export default {
     data() {
         return {
@@ -167,21 +168,25 @@ export default {
         async eliminar(id) {
             window.localStorage.removeItem(id)
             //eventBus.$emit("elimina-itemcarrito", id)
-            eventBus.$emit("carrito-changed", this.cambioCarrito)
+            // eventBus.$emit("carrito-changed", this.cambioCarrito)
         },
-        agregarProducto(id, j, index) {
+        async agregarProducto(item, j, index) {
             this.cantidad[index] += j
+            await calcularInsumos(item.detallearticulomanufacturadoid, j)
+            this.items=[]
             if (this.cantidad[index] == 0) {
-                this.eliminar(id)
+                this.eliminar(item._id)
             } else {
-                localStorage.setItem(id, JSON.stringify({ 'cantidad': this.cantidad[index] }))
-                eventBus.$emit("elimina-itemcarrito", '0')
-                eventBus.$emit("carrito-changed", this.cambioCarrito)
+                
+                localStorage.setItem(item._id, JSON.stringify({ 'cantidad': this.cantidad[index] }))
+                // eventBus.$emit("elimina-itemcarrito", '0')
+                // eventBus.$emit("carrito-changed", this.cambioCarrito)
             }
+            this.getLocalStorage()
         },
         cerrar() {
             this.cerrarCarro = true
-            this.$emit('carritoLength', { close: this.cerrarCarro })
+            // this.$emit('carritoLength', { close: this.cerrarCarro })
         },
         async calculaSubtotal() {
             this.subtotal = 0
@@ -283,20 +288,6 @@ export default {
             const resJson = await res.json();
             console.log("feedback",resJson);
             
-        }
-    },
-    created() {
-        eventBus.$on("carrito-changed", async (data) => {
-            if (data)
-                console.log("entró al if del itemcarrito, data: " + data)
-            this.getLocalStorage()
-            //eventBus.$off("carrito-changed");
-        });
-    },
-    watch: {
-        carritoLength: function () {
-            this.$emit('carritoLength', { tamanio: this.carritoLength })
-            //this.cerrarCarro=true
         }
     }
 }
