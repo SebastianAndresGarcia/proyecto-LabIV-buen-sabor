@@ -45,7 +45,7 @@
                         <v-col cols="1">
                             <v-row><v-card-subtitle><b></b></v-card-subtitle></v-row>
                             <v-row style="justify-content: center">
-                                <v-btn color="red" icon rounded large @click="eliminar(item._id)">
+                                <v-btn color="red" icon rounded large @click="eliminar(item)">
                                     <v-icon>mdi-trash-can</v-icon>
                                 </v-btn>
                             </v-row>
@@ -165,22 +165,22 @@ export default {
                 this.carritoLength = 0
             }
         },
-        async eliminar(id) {
-            window.localStorage.removeItem(id)
-            //eventBus.$emit("elimina-itemcarrito", id)
-            // eventBus.$emit("carrito-changed", this.cambioCarrito)
+        async eliminar(item) {
+            if(this.cantidad>0)
+            {await calcularInsumos(item.detallearticulomanufacturadoid, -this.cantidad)}
+            window.localStorage.removeItem(item._id)
+            this.getLocalStorage()
+            //eventBus.$emit("elimina-itemcarrito", item._id)
         },
         async agregarProducto(item, j, index) {
             this.cantidad[index] += j
             await calcularInsumos(item.detallearticulomanufacturadoid, j)
             this.items=[]
             if (this.cantidad[index] == 0) {
-                this.eliminar(item._id)
+                this.eliminar(item)
             } else {
                 
                 localStorage.setItem(item._id, JSON.stringify({ 'cantidad': this.cantidad[index] }))
-                // eventBus.$emit("elimina-itemcarrito", '0')
-                // eventBus.$emit("carrito-changed", this.cambioCarrito)
             }
             this.getLocalStorage()
         },

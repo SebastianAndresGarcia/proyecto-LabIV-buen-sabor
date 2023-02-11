@@ -34,3 +34,42 @@ Mastercard	5031 7557 3453 0604	123	11/25
 Visa	4509 9535 6623 3704	123	11/25
 American Express	3711 803032 57522	1234	11/25
 ___________________________________________________________________________
+detalleManufacturado
+<v-card-actions>
+            <v-col v-if="conStock">
+                <v-row>
+                    <div v-if="reserve == false">
+                        <v-btn color="deep-purple lighten-2" text @click="agregar(manufacturadoParam._id)">
+                            Agregar al Carrito
+                        </v-btn>
+                    </div>
+                </v-row>
+                <v-row>
+                    <div v-if="reserve == true" class="buttons_buy" style="display: flex;">
+                        <a class="arrow-down_touch" @click="agregarProducto(manufacturadoParam._id, -1)"></a>
+                        <input readonly class="inputpromohome" v-model="cantidad">
+                        <a class="arrow-up_touch" @click="agregarProducto(manufacturadoParam._id, 1)"></a>
+                    </div>
+                </v-row>
+            </v-col>
+            <v-col v-else-if="!conStock&&cantidad>0">
+                <v-row>
+                    <div v-if="reserve == false">
+                        <v-btn color="deep-purple lighten-2" text @click="agregar(manufacturadoParam._id)">
+                            Agregar al Carrito
+                        </v-btn>
+                    </div>
+                </v-row>
+                <v-row align="center">
+                    <div v-if="reserve == true" class="buttons_buy" style="display: flex;">
+                        <a class="arrow-down_touch" @click="agregarProducto(manufacturadoParam._id, -1)"></a>
+                        <input readonly class="inputpromohome" v-model="cantidad">
+                        <h5><b>No hay más</b></h5>
+                    </div>
+                </v-row>
+            </v-col>
+            <v-col v-else>
+                <b> SIN STOCK</b>
+            </v-col>
+        </v-card-actions>
+........

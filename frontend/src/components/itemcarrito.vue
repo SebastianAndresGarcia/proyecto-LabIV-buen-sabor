@@ -25,7 +25,7 @@
                                             <a class="arrow-up_touch" @click="agregarProducto(item, 1, i)"></a>
                                         </div>
                                     </v-row>
-                                    <v-btn color="black" outlined rounded small @click="eliminar(item._id)">
+                                    <v-btn color="black" outlined rounded small @click="eliminar(item)">
                                         <v-icon>mdi-trash-can</v-icon>
                                     </v-btn>
                                 </v-card-actions>
@@ -113,27 +113,23 @@ export default {
                 this.carritoLength = 0
             }
         },
-        async eliminar(id) {
-            window.localStorage.removeItem(id)
-            eventBus.$emit("elimina-itemcarrito", id)
+        async eliminar(item) {
+            //await calcularInsumos(item.detallearticulomanufacturadoid, -this.cantidad)
+            window.localStorage.removeItem(item._id)
             this.getLocalStorage()
+            eventBus.$emit("elimina-itemcarrito", item._id)
         },
         async agregarProducto(item, j, index) {
             this.cantidad[index] += j
             await calcularInsumos(item.detallearticulomanufacturadoid, j)
             this.items = []
             if (this.cantidad[index] == 0) {
-                this.eliminar(item._id)
+                this.eliminar(item)
             } else {
                 localStorage.setItem(item._id, JSON.stringify({ 'cantidad': this.cantidad[index] }))
-
-                eventBus.$emit("elimina-itemcarrito", '0')
-                //eventBus.$emit("carrito-changed", this.cambioCarrito)
             }
             this.getLocalStorage()
-            // this.cambioCarrito = true
-            // eventBus.$emit("carrito-changed", this.cambioCarrito)
-            //this.cambioCarrito=false
+            eventBus.$emit("elimina-itemcarrito", '0')
         },
         cerrar() {
             this.cerrarCarro = true
@@ -144,15 +140,13 @@ export default {
     created() {
         eventBus.$on("carrito-changed", async (data) => {
             if (data)
-                console.log("entró al if del itemcarrito, data: " + data)
+                console.log("entró a carrito-changed del itemcarrito, data: " + data)
             this.getLocalStorage()
-            //eventBus.$off("carrito-changed");
         });
     },
     watch: {
         carritoLength: function () {
             this.$emit('carritoLength', { tamanio: this.carritoLength })
-            //this.cerrarCarro=true
         }
     }
 }

@@ -60,6 +60,7 @@
                     </div>
                 </v-row>
             </v-col>
+            
             <v-col v-else>
                 <b> SIN STOCK</b>
             </v-col>
@@ -161,14 +162,18 @@ export default {
                 )
                 const resJson = await res.json();
                 this.art = resJson
+                this.getLocalStorage(this.art._id)
             }
         }
-    },
+    }
+    ,
     created() {
         eventBus.$on("elimina-itemcarrito", async (data) => {
             if (data != 0) {
-                console.log("entró al if del itemcarrito, data: " + data)
+                console.log("entró al elimina-itemcarrito en TarjetaManufacturado, data: " + data)
                 this.agregarProducto(data, 0)
+                this.$emit('abrirAlert', 1)
+                //eventBus.$emit("carrito-changed", this.cambioCarrito= true)
             }
             else {
                 this.getLocalStorage(this.manufacturadoParam._id)

@@ -112,7 +112,7 @@ export default {
                 this.cambioCarrito = true
                 window.localStorage.setItem(id, JSON.stringify({ 'cantidad': this.cantidad }));
                 eventBus.$emit("carrito-changed", this.cambioCarrito)
-                eventBus.$emit("elimina-itemcarrito", '0')
+                //eventBus.$emit("elimina-itemcarrito", '0')
                 await calcularInsumos(this.manufacturado.detallearticulomanufacturadoid, this.cantidad)
                 this.$emit('limpiarObjeto', { actualizarCarrousel: true })
             } else {
@@ -131,17 +131,18 @@ export default {
                 if (this.cantidad == 0) {
                     this.reserve = false
                     window.localStorage.removeItem(id)
-                    eventBus.$emit("elimina-itemcarrito", id)
+                    
                 }
                 console.log("cookie", document.cookie)
                 this.cambioCarrito = true
-                eventBus.$emit("elimina-itemcarrito", '0')
-                eventBus.$emit("carrito-changed", this.cambioCarrito)
+                
+                //eventBus.$emit("carrito-changed", this.cambioCarrito)
                 await calcularInsumos(this.manufacturado.detallearticulomanufacturadoid, i)
                 this.$emit('limpiarObjeto', { actualizarCarrousel: true })
                 //this.cambioCarrito=false
             }
-            this.getLocalStorage(this.manufacturado._id) //está línea actualiza la vista gral del componente padre cuando se elimina desde el carrito
+            await this.getLocalStorage(this.manufacturado._id) //está línea actualiza la vista gral del componente padre cuando se elimina desde el carrito
+            eventBus.$emit("carrito-changed", this.cambioCarrito)
         },
         async getLocalStorage(id) {
             if (localStorage.getItem(id)) {
@@ -156,9 +157,11 @@ export default {
     },
     created() {
         eventBus.$on("elimina-itemcarrito", async (data) => {
+            console.log("antes de entrar if itemcarrito, data: " + data)
             if (data != 0) {
                 console.log("entró al if del itemcarrito, data: " + data)
                 this.agregarProducto(data, 0)
+                this.$emit('limpiarObjeto', { actualizarCarrousel: true })
             }
             else {
                 this.getLocalStorage(this.manufacturado._id)
