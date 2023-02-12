@@ -137,7 +137,7 @@ export default {
       if (this.user.roles.includes("ROLE_ADMIN")) { this.showAdminBoard = true }
     }
     this.pathname = window.location.pathname //esto lo pongo para validar en el div del carrito que si navego en la vista 'Mi Carrito', no muestre en el navbar el 'Cart'
-    console.log("nombre de página " + pathname)
+    //console.log("nombre de página " + pathname)
   },
   methods: {
     async getRubrosGeneral() {

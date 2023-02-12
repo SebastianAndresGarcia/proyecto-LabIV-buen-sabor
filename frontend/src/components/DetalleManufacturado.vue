@@ -9,7 +9,7 @@
                 <v-progress-linear color="deep-purple" height="10" indeterminate></v-progress-linear>
             </template>
             <v-img height="250" :src="manufacturado.imagen">
-                <v-row justify="left" v-if="manufacturado.descuento > 0">
+                <v-row style="justify-content: left" v-if="manufacturado.descuento > 0">
                     <div class="circle " style="font: bold; color: red;">
                         <h4><b>-{{ manufacturado.descuento }} % OFF</b></h4>
                     </div>
@@ -34,8 +34,8 @@
 
             <v-card-actions>
                 <v-col>
-                    <v-row justify="center">
-                        <div v-if="reserve == false" style="display: flex;">
+                    <v-row style="justify-content:center">
+                        <div v-if="reserve == false" style="display: flex">
                             <v-btn color="success" @click="agregar(manufacturado._id)">
                                 Agregar al Carrito
                             </v-btn>
@@ -46,11 +46,15 @@
                         <div v-if="reserve == true" class="buttons_buy" style="display: flex;">
                             <a class="arrow-down_touch" @click="agregarProducto(manufacturado._id, -1)"></a>
                             <input readonly class="inputpromohome" v-model="cantidad">
-                            <a class="arrow-up_touch" @click="agregarProducto(manufacturado._id, 1)"></a>
+                            <div v-if="conStock"> <a class="arrow-up_touch"
+                                    @click="agregarProducto(manufacturado._id, 1)"></a></div>
+                            <div v-else>
+                                <h5><b>No hay más</b></h5>
+                            </div>
                         </div>
                     </v-row>
 
-                    <v-row justify="right">
+                    <v-row style="justify-content:left">
                         <v-btn text color="black" @click="cerrar()">
                             CERRAR
                         </v-btn>
@@ -70,7 +74,7 @@
 <script>
 import { eventBus } from "../main";
 import AuthService from "@/service/auth.service.js"
-import {controlStock, calcularInsumos} from "@/funciones/ControlStock.js"
+import { controlStock, calcularInsumos } from "@/funciones/ControlStock.js"
 export default {
     name: 'Car-ousel',
     data() {
@@ -85,7 +89,8 @@ export default {
             items: [{}], //no funciona el carrousel si no lo inicializo así
             dialog: false,
             articulo: null,
-            limpiar: true
+            limpiar: true,
+            conStock: true
         }
     },
     props: ["manufacturado"],
@@ -98,6 +103,7 @@ export default {
             this.dialog = true
             this.getLocalStorage(this.manufacturado._id)
         }
+        if (this.manufacturado) this.conStock = controlStock(this.manufacturado.detallearticulomanufacturadoid)
     },
     methods: {
         async cerrar() {
@@ -123,19 +129,15 @@ export default {
             if (i == 0) {
                 this.reserve = false
                 window.localStorage.removeItem(id)
-
             } else {
                 this.cantidad += i
                 window.localStorage.setItem(id, JSON.stringify({ 'cantidad': this.cantidad }))
-
                 if (this.cantidad == 0) {
                     this.reserve = false
                     window.localStorage.removeItem(id)
-                    
                 }
                 console.log("cookie", document.cookie)
                 this.cambioCarrito = true
-                
                 //eventBus.$emit("carrito-changed", this.cambioCarrito)
                 await calcularInsumos(this.manufacturado.detallearticulomanufacturadoid, i)
                 this.$emit('limpiarObjeto', { actualizarCarrousel: true })
@@ -149,9 +151,9 @@ export default {
                 this.reserve = true
                 this.cantidad = (JSON.parse(localStorage.getItem(id))).cantidad
             }
-            else{
-                this.reserve=false
-                this.cantidad= 0
+            else {
+                this.reserve = false
+                this.cantidad = 0
             }
         },
     },

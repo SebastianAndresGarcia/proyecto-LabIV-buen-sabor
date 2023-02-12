@@ -6,7 +6,7 @@
                 <h1>Mi Carrito</h1>
             </v-col>
         </v-row>
-        <v-row>
+        <v-row v-if="items.length>0">
             <v-col cols="8">
                 <v-card outlined v-for="(item, i) in items" :key="i" cols="10" height="150px" width="100%"
                     style="display:inline-block; margin-bottom: 2px; background-color:beige;">
@@ -31,7 +31,12 @@
                                         <div class="buttons_buy" style="display: flex;">
                                             <a class="arrow-down_touch" @click="agregarProducto(item, -1, i)"></a>
                                             <input class="inputpromohome" v-model="cantidad[i]" readonly>
-                                            <a class="arrow-up_touch" @click="agregarProducto(item, 1, i)"></a>
+                                            <div v-if="conStock">
+                                                <a class="arrow-up_touch" @click="agregarProducto(item, 1, i)"></a>
+                                            </div>
+                                            <div v-else>
+                                                <h5><b>No hay más</b></h5>
+                                            </div>
                                         </div>
                                     </v-col>
                                 </v-row>
@@ -55,7 +60,7 @@
             </v-col>
             <v-divider vertical></v-divider>
             <v-col cols="4">
-                <v-card class="mx-auto" min-height="100%">
+                <v-card  class="mx-auto" min-height="100%">
                     <v-card-title><b>Resumen de la compra</b></v-card-title>
                     <v-card-text>
                         <v-row class="my-4 text-subtitle-1">
@@ -83,19 +88,20 @@
                     </v-card-text>
 
                     <v-card-text>
-                        <v-row v-if="subtotal>0" style="justify-content: center; margin: 5%;" dense>
+                        <v-row v-if="subtotal > 0 && radios" style="justify-content: center; margin: 5%;" dense>
                             <v-btn rounded @click="registrarPedido()" color="success">Ir a pagar</v-btn>
                         </v-row>
                     </v-card-text>
                 </v-card>
             </v-col>
         </v-row>
+        <div align="center" v-else><h1>Redirect to menu....</h1></div>
     </v-container>
 </template>
 <script>
 import { eventBus } from "../main";
 import postcompra from "@/components/PostCompra.vue"
-import {calcularInsumos} from "@/funciones/ControlStock.js"
+import { calcularInsumos, controlStock } from "@/funciones/ControlStock.js"
 export default {
     data() {
         return {
@@ -122,7 +128,8 @@ export default {
                     articuloid: null, //de articulomanufacturado y/o articuloinsumo(bebidas) en el backend lo asigno al que corresponda
                 }]
 
-            }
+            },
+            conStock: true
         };
     },
     components: {
@@ -141,6 +148,7 @@ export default {
             const resJson = await res.json();
             console.log(resJson);
             this.items.push(resJson);
+            this.conStock = controlStock(this.items[this.items.length - 1].detallearticulomanufacturadoid)
             this.carritoLength = this.items.length
             this.cantidad.push(cant)
             this.calculaSubtotal()
@@ -166,8 +174,9 @@ export default {
             }
         },
         async eliminar(item) {
-            if(this.cantidad>0)
-            {await calcularInsumos(item.detallearticulomanufacturadoid, -this.cantidad)}
+            if (this.cantidad > 0) {
+                await calcularInsumos(item.detallearticulomanufacturadoid, -this.cantidad)
+            }
             window.localStorage.removeItem(item._id)
             this.getLocalStorage()
             //eventBus.$emit("elimina-itemcarrito", item._id)
@@ -175,11 +184,11 @@ export default {
         async agregarProducto(item, j, index) {
             this.cantidad[index] += j
             await calcularInsumos(item.detallearticulomanufacturadoid, j)
-            this.items=[]
+            this.items = []
             if (this.cantidad[index] == 0) {
                 this.eliminar(item)
             } else {
-                
+
                 localStorage.setItem(item._id, JSON.stringify({ 'cantidad': this.cantidad[index] }))
             }
             this.getLocalStorage()
@@ -233,15 +242,15 @@ export default {
             console.log("respuestaMercaPago: ", resJson)
             if (respuesta.status === 200) {
                 console.log(respuesta.status)
-                this.pedido=resJson
+                this.pedido = resJson
                 //this.estadoCompra.estadoCompra=true
-                
+
             } else {
                 this.respuestaError = resJson.message
                 console.log("mensaje del servidor: " + this.respuestaError)
             }
             this.mercadoPago()
-            this.pedido={}
+            this.pedido = {}
             // console.log("this.estadoCompra"+this.estadoCompra)
             //this.estadoCompra.dialog=true
         },
@@ -268,26 +277,26 @@ export default {
             console.log("respuesta: ", resJson)
             if (respuesta.status === 200) {
                 console.log(resJson.body.init_point)
-                window.location.href=resJson.body.init_point
+                window.location.href = resJson.body.init_point
                 this.limpiarCarrito()
-                
+
             } else {
                 this.respuestaError = resJson.message
                 console.log("mensaje del servidor: " + this.respuestaError)
             }
         },
-        async limpiarCarrito(){
+        async limpiarCarrito() {
             for (let i = 0; i < this.items.length; i++) {
                 localStorage.removeItem(this.items[i]._id);
             }
         },
-        async getEstado(){
-            const res = await fetch( 
+        async getEstado() {
+            const res = await fetch(
                 `http://localhost:3000/feedback`
             );
             const resJson = await res.json();
-            console.log("feedback",resJson);
-            
+            console.log("feedback", resJson);
+
         }
     }
 }

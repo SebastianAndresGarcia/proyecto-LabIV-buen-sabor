@@ -132,13 +132,13 @@ export default {
         };
     },
     props: ["datoEmpleado"],
-
+    beforeMount(){this.empleado.roles=""},
     mounted() {
         this.getRoles()
-        console.log("datoEmpleado", this.datoEmpleado)
         if (this.datoEmpleado)
             this.empleado = this.datoEmpleado
-        this.empleado.roles = this.datoEmpleado.roles[0]
+            //console.log("this.empleado",this.datoEmpleado)
+        this.empleado.roles = this.datoEmpleado.roles[0] //esta línea me hace un error que se ve por consolaWeb, pero no jode el funcionamiento
     },
     methods: {
 
@@ -216,7 +216,7 @@ export default {
             )
             const resJson = await res.json()
             this.items = resJson
-            console.log("resJson ", resJson)
+            //console.log("resJson ", resJson)
         }
     },
     watch: {

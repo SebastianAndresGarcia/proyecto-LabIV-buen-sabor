@@ -39,7 +39,7 @@ export default {
             this.items = resJson;
             console.log("items getPromociones", this.items);
         },
-        async abrirPromo(item) {
+        abrirPromo(item) {
             this.art = item
         },
         async handlefunction(value) {

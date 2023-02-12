@@ -47,7 +47,7 @@
                         <td>
                             {{ empleado.email }}
                         </td>
-                        <td>
+                        <td >
                             {{ empleado.roles[0].name }}
 
                         </td>
@@ -83,7 +83,6 @@ export default {
     components: {
         'Form-Empleado': FormEmpleado
     },
-    //beforeMount(){},
     props: ["empleados"],
     methods: {
         async bajaempleado(idempleado) {

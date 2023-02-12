@@ -120,9 +120,11 @@ export default {
             currentUser: undefined
         }
     },
-
-    mounted() {
+    beforeMount() {
         this.currentUser = AuthService.getCurrentUser()
+    },
+    mounted() {
+        
         this.verificarUsuario(this.currentUser)
         this.getRubrosGeneral(),
         this.getRubrosArticulos()

@@ -1,6 +1,6 @@
 <template>
 
-    <v-card class="justify-center" max-width="350" :disabled="!conStock" elevation="5">
+    <v-card class="justify-center" max-width="350" :disabled="!conStock && cantidad == 0" elevation="5">
         <template slot="progress">
             <v-progress-linear color="deep-purple" height="10" indeterminate></v-progress-linear>
         </template>
@@ -60,7 +60,22 @@
                     </div>
                 </v-row>
             </v-col>
-            
+            <v-col v-else-if="!conStock && cantidad > 0">
+                <v-row>
+                    <div v-if="reserve == false">
+                        <v-btn color="deep-purple lighten-2" text @click="agregar(manufacturadoParam._id)">
+                            Agregar al Carrito
+                        </v-btn>
+                    </div>
+                </v-row>
+                <v-row align="center">
+                    <div v-if="reserve == true" class="buttons_buy" style="display: flex;">
+                        <a class="arrow-down_touch" @click="agregarProducto(manufacturadoParam._id, -1)"></a>
+                        <input readonly class="inputpromohome" v-model="cantidad">
+                        <h5><b>No hay más</b></h5>
+                    </div>
+                </v-row>
+            </v-col>
             <v-col v-else>
                 <b> SIN STOCK</b>
             </v-col>
@@ -100,7 +115,6 @@ export default {
     },
     beforeUpdate() {
         this.conStock = controlStock(this.manufacturadoParam.detallearticulomanufacturadoid)
-
         console.log("conStock beforeUpdate", this.conStock)
     },
     methods: {
@@ -112,12 +126,13 @@ export default {
                 window.localStorage.setItem(id, JSON.stringify({ 'cantidad': this.cantidad }));
                 console.log("insumos agregar ", this.manufacturadoParam.detallearticulomanufacturadoid)
                 await calcularInsumos(this.manufacturadoParam.detallearticulomanufacturadoid, this.cantidad)
+                this.conStock = controlStock(this.manufacturadoParam.detallearticulomanufacturadoid)
+                console.log("entró conStock " + this.conStock)
                 this.$emit('abrirAlert', 1)
                 eventBus.$emit("carrito-changed", this.cambioCarrito)
                 //this.cambioCarrito=false
             } else
-                this.alert = true
-            this.$emit('abrirAlert', this.alert)
+                this.$emit('abrirAlert', 0)
         },
         async agregarProducto(id, i) {
             if (i == 0) {
@@ -129,6 +144,7 @@ export default {
                 window.localStorage.setItem(id, JSON.stringify({ 'cantidad': this.cantidad }))
                 console.log("insumos agregarProducto ", this.manufacturadoParam.detallearticulomanufacturadoid)
                 await calcularInsumos(this.manufacturadoParam.detallearticulomanufacturadoid, i)
+                this.conStock = controlStock(this.manufacturadoParam.detallearticulomanufacturadoid)
                 this.$emit('abrirAlert', 1)
                 if (this.cantidad == 0) {
                     this.reserve = false
@@ -145,6 +161,10 @@ export default {
                 this.reserve = true
                 this.cantidad = (JSON.parse(localStorage.getItem(id))).cantidad
                 //console.log("this.cantidad: "+this.cantidad)
+            }
+            else {
+                this.reserve = false
+                this.cantidad = 0
             }
         },
         async abrirDetalleManufacturado(item) {
@@ -169,15 +189,18 @@ export default {
     ,
     created() {
         eventBus.$on("elimina-itemcarrito", async (data) => {
-            if (data != 0) {
+            if (data != 0) { //revisar bien si sirve este if, si no borrar
                 console.log("entró al elimina-itemcarrito en TarjetaManufacturado, data: " + data)
                 this.agregarProducto(data, 0)
                 this.$emit('abrirAlert', 1)
                 //eventBus.$emit("carrito-changed", this.cambioCarrito= true)
             }
             else {
+                console.log("entró al else")
+                this.$emit('abrirAlert', 1)
                 this.getLocalStorage(this.manufacturadoParam._id)
             }
+
         });
     }
 };

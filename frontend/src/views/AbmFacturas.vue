@@ -84,8 +84,10 @@ export default {
     components: {
         "detalle-pedido": detallepedido
     },
-    mounted() {
+    beforeMount() {
         this.currentUser = AuthService.getCurrentUser()
+    },
+    mounted() {
         this.verificarUsuario(this.currentUser)
         this.getFacturas()
     },

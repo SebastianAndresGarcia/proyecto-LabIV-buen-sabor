@@ -20,8 +20,11 @@ export default {
         'empleado-item': grillaEmpleados,
         'Form-Empleado': FormEmpleado
     },
-    mounted() {
+    beforeMount(){
         this.currentUser = AuthService.getCurrentUser()
+    },
+    mounted() {
+        
         this.verificarUsuario(this.currentUser)
         this.getEmpleados()
     },

@@ -81,7 +81,7 @@
                             </Form-Insumo>
                         </td>
                         <td>
-                            <v-btn icon v-bind="attrs" v-on="on" @click="eliminarInsumo(insumo._id)">
+                            <v-btn icon @click="eliminarInsumo(insumo._id)">
                                 <v-icon small>
                                     mdi-delete
                                 </v-icon>

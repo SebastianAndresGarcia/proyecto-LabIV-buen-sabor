@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-card  style="margin-top: 10px; justify:center">
+        <v-card style="margin-top: 10px; justify:center">
             <v-card-title>Mis Pedidos</v-card-title>
             <v-simple-table class="tabla" v-if="miscompras.length > 0">
                 <template v-slot:default>
@@ -46,8 +46,9 @@
                 </template>
             </v-simple-table>
             <div v-else>
-            <v-card-title></v-card-title>
-        </div>
+                <v-row style="justify-content: center; align-content: center;"><v-card-title>No has realizado ningún
+                        pedido</v-card-title></v-row>
+            </div>
         </v-card>
     </v-container>
 </template>
@@ -71,7 +72,7 @@ export default {
         this.comprasUsuario((JSON.parse(localStorage.getItem('user'))).id)
         //this.getParamsUrl(document.URL)
     },
-    beforeUpdate() {
+    beforeMount() {
         this.getParamsUrl(document.URL)
     },
     methods: {
@@ -83,7 +84,7 @@ export default {
             console.log(resJson);
             this.miscompras = resJson
         },
-        async getParamsUrl(url) {
+        getParamsUrl(url) {
             console.log(url);
             url = new URL(url)
             //aquí tienes dos opciones
@@ -166,7 +167,7 @@ export default {
             console.log("respuesta: ", resJson)
             if (respuesta.status === 200) {
                 console.log(respuesta.status)
-             
+
             } else {
                 this.respuestaError = resJson.message
                 console.log("mensaje del servidor: " + this.respuestaError)

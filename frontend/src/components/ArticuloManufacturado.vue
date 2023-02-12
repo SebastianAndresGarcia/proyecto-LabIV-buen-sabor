@@ -56,7 +56,7 @@
                             </Form-Manufacturado>
                         </td>
                         <td>
-                            <v-btn icon v-bind="attrs" v-on="on" @click="eliminarManufacturado(manufacturado._id)">
+                            <v-btn icon @click="eliminarManufacturado(manufacturado._id)">
                                 <v-icon small>
                                     mdi-delete
                                 </v-icon>
@@ -131,29 +131,27 @@ export default {
             this.manufacturadosData = resJson;
         },
         async eliminarManufacturado(id) {
-            let urlServer = `http://localhost:3000/eliminarArticuloManufacturado/${id}`;
+            console.log("eliminar manufact "+id)
+            // let urlServer = `http://localhost:3000/eliminarArticuloManufacturado/${id}`;
 
-            const res = await fetch(urlServer, {
-                "method": 'DELETE',
+            // const res = await fetch(urlServer, {
+            //     "method": 'DELETE',
 
-                "headers": {
-                    "Content-type": 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
-                mode: 'cors'
+            //     "headers": {
+            //         "Content-type": 'application/json',
+            //         'Access-Control-Allow-Origin': '*'
+            //     },
+            //     mode: 'cors'
 
-            });
-            const resJson = await res.json();
-            console.log("respuesta: ", resJson)
-            if (res.status === 200) {
-                console.log(res.status)
-                this.getManufacturadosxrubro(this.manufacturadoParam)
-            }
+            // });
+            // const resJson = await res.json();
+            // console.log("respuesta: ", resJson)
+            // if (res.status === 200) {
+            //     console.log(res.status)
+            //     this.getManufacturadosxrubro(this.manufacturadoParam)
+            // }
         },
 
-        /* async editarinstrumento(idinstrumento){
-            href('/Formulario/' + instrumento.id),
-         */
         handleMessage(value) {
             this.nuevoArt = value
             if (this.nuevoArt) {

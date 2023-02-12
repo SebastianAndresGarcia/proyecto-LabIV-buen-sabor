@@ -22,7 +22,12 @@
                                         <div class="buttons_buy" style="display: flex;">
                                             <a class="arrow-down_touch" @click="agregarProducto(item, -1, i)"></a>
                                             <input class="inputpromohome" v-model="cantidad[i]" readonly>
-                                            <a class="arrow-up_touch" @click="agregarProducto(item, 1, i)"></a>
+                                            <div v-if="conStock">
+                                                <a class="arrow-up_touch" @click="agregarProducto(item, 1, i)"></a>
+                                            </div>
+                                            <div v-else>
+                                                <h5><b>No hay más</b></h5>
+                                            </div>
                                         </div>
                                     </v-row>
                                     <v-btn color="black" outlined rounded small @click="eliminar(item)">
@@ -58,7 +63,7 @@
 </template>
 <script>
 import { eventBus } from "../main";
-import { calcularInsumos } from "@/funciones/ControlStock.js"
+import { calcularInsumos, controlStock } from "@/funciones/ControlStock.js"
 export default {
     data() {
         return {
@@ -66,7 +71,8 @@ export default {
             items: [],
             carritoLength: 0,
             eliminaItem: false,
-            cantidad: []
+            cantidad: [],
+            conStock: true
         };
     },
     mounted() {
@@ -84,6 +90,7 @@ export default {
             console.log(resJson);
             this.items.push(resJson);
             this.carritoLength = this.items.length
+            this.conStock = controlStock(this.items[this.items.length - 1].detallearticulomanufacturadoid)
             this.cantidad.push(cant)
             console.log("this.cantidad", this.cantidad)
             console.log("this.items", this.items)
@@ -114,7 +121,9 @@ export default {
             }
         },
         async eliminar(item) {
-            //await calcularInsumos(item.detallearticulomanufacturadoid, -this.cantidad)
+            if (this.cantidad > 0) {
+                await calcularInsumos(item.detallearticulomanufacturadoid, -this.cantidad)
+            }
             window.localStorage.removeItem(item._id)
             this.getLocalStorage()
             eventBus.$emit("elimina-itemcarrito", item._id)

@@ -53,7 +53,7 @@ export default {
                 this.getmanufacturados(this.$route.params.id)
             }
             else
-                this.alert = value
+                this.alert = true
         }
     }
 };
