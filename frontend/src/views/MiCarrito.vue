@@ -20,7 +20,8 @@
                         </v-col>
                         <v-col cols="2">
                             <v-row><v-card-subtitle><b>Valor Unitario</b></v-card-subtitle></v-row>
-                            <v-row style="justify-content: center">${{ item.precioVenta }}</v-row>
+                            <v-row style="justify-content: center"><div v-if="item.descuento>0"><del>${{ item.precioVenta }}</del>&nbsp-&nbsp$<b>{{ item.precioVenta-(item.precioVenta*item.descuento)/100 }}</b></div>
+                            <div v-else>${{ item.precioVenta }}</div></v-row>
                         </v-col>
                         <v-col cols="3">
                             <v-row
@@ -31,7 +32,7 @@
                                         <div class="buttons_buy" style="display: flex;">
                                             <a class="arrow-down_touch" @click="agregarProducto(item, -1, i)"></a>
                                             <input class="inputpromohome" v-model="cantidad[i]" readonly>
-                                            <div v-if="conStock">
+                                            <div v-if="conStock[i]">
                                                 <a class="arrow-up_touch" @click="agregarProducto(item, 1, i)"></a>
                                             </div>
                                             <div v-else>
@@ -45,12 +46,12 @@
                         <v-col cols="2">
                             <v-row
                                 style="justify-content: center"><v-card-subtitle><b>Total</b></v-card-subtitle></v-row>
-                            <v-row style="justify-content: center">${{ cantidad[i]* item.precioVenta }}</v-row>
+                            <v-row style="justify-content: center">${{ cantidad[i]* (item.precioVenta-(item.precioVenta*item.descuento)/100 )}}</v-row>
                         </v-col>
                         <v-col cols="1">
                             <v-row><v-card-subtitle><b></b></v-card-subtitle></v-row>
                             <v-row style="justify-content: center">
-                                <v-btn color="red" icon rounded large @click="eliminar(item)">
+                                <v-btn color="red" icon rounded large @click="eliminar(item, cantidad[i])">
                                     <v-icon>mdi-trash-can</v-icon>
                                 </v-btn>
                             </v-row>
@@ -111,6 +112,7 @@ export default {
             carritoLength: 0,
             eliminaItem: false,
             cantidad: [],
+            conStock: [],
             subtotal: 0,
             radios: "",
             pedido: {
@@ -148,7 +150,7 @@ export default {
             const resJson = await res.json();
             console.log(resJson);
             this.items.push(resJson);
-            this.conStock = controlStock(this.items[this.items.length - 1].detallearticulomanufacturadoid)
+            this.conStock.push(controlStock(this.items[this.items.length - 1].detallearticulomanufacturadoid))
             this.carritoLength = this.items.length
             this.cantidad.push(cant)
             this.calculaSubtotal()
@@ -156,6 +158,7 @@ export default {
         async getLocalStorage() {
             this.cantidad = []
             this.items = []
+            this.conStock = []
             let claves = Object.keys(localStorage);
             let carrovacio = true
             claves.forEach(clave => {
@@ -173,9 +176,9 @@ export default {
                 this.carritoLength = 0
             }
         },
-        async eliminar(item) {
-            if (this.cantidad > 0) {
-                await calcularInsumos(item.detallearticulomanufacturadoid, -this.cantidad)
+        async eliminar(item, cantidad) {
+            if (cantidad > 0) {
+                await calcularInsumos(item.detallearticulomanufacturadoid, -cantidad)
             }
             window.localStorage.removeItem(item._id)
             this.getLocalStorage()
@@ -183,10 +186,11 @@ export default {
         },
         async agregarProducto(item, j, index) {
             this.cantidad[index] += j
+            this.conStock[index] = controlStock(item.detallearticulomanufacturadoid)
             await calcularInsumos(item.detallearticulomanufacturadoid, j)
             this.items = []
             if (this.cantidad[index] == 0) {
-                this.eliminar(item)
+                this.eliminar(item, 0)
             } else {
 
                 localStorage.setItem(item._id, JSON.stringify({ 'cantidad': this.cantidad[index] }))
@@ -200,7 +204,7 @@ export default {
         async calculaSubtotal() {
             this.subtotal = 0
             for (let i = 0; i < this.items.length; i++) {
-                this.subtotal += this.items[i].precioVenta * this.cantidad[i]
+                this.subtotal += (this.items[i].precioVenta-(this.items[i].precioVenta*this.items[i].descuento)/100) * this.cantidad[i]
             }
         },
         async registrarPedido() {

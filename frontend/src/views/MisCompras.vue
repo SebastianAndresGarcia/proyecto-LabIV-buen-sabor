@@ -13,13 +13,19 @@
                                 <b>Pedido N°</b>
                             </th>
                             <th class="text-left">
-                                <b>Estado</b>
+                                <b>Pago</b>
                             </th>
                             <th class="text-left">
                                 <b>Total</b>
                             </th>
                             <th class="text-left">
                                 <b>Ver Detalles</b>
+                            </th>
+                            <th class="text-left">
+                                <b>Estado</b>
+                            </th>
+                            <th class="text-left">
+                                <b>Ver Factura</b>
                             </th>
                         </tr>
                     </thead>
@@ -40,6 +46,12 @@
                             </td>
                             <td>
                                 <detalle-pedido :pedidoParam="compra"></detalle-pedido>
+                            </td>
+                            <td>
+                                <b>En preparación...</b>
+                            </td>
+                            <td>
+                                <b>En proceso...</b>
                             </td>
                         </tr>
                     </tbody>

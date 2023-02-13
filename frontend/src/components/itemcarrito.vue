@@ -22,7 +22,7 @@
                                         <div class="buttons_buy" style="display: flex;">
                                             <a class="arrow-down_touch" @click="agregarProducto(item, -1, i)"></a>
                                             <input class="inputpromohome" v-model="cantidad[i]" readonly>
-                                            <div v-if="conStock">
+                                            <div v-if="conStock[i]">
                                                 <a class="arrow-up_touch" @click="agregarProducto(item, 1, i)"></a>
                                             </div>
                                             <div v-else>
@@ -30,7 +30,7 @@
                                             </div>
                                         </div>
                                     </v-row>
-                                    <v-btn color="black" outlined rounded small @click="eliminar(item)">
+                                    <v-btn color="black" outlined rounded small @click="eliminar(item, cantidad[i])">
                                         <v-icon>mdi-trash-can</v-icon>
                                     </v-btn>
                                 </v-card-actions>
@@ -90,7 +90,7 @@ export default {
             console.log(resJson);
             this.items.push(resJson);
             this.carritoLength = this.items.length
-            this.conStock = controlStock(this.items[this.items.length - 1].detallearticulomanufacturadoid)
+            this.conStock.push(controlStock(this.items[this.items.length - 1].detallearticulomanufacturadoid))
             this.cantidad.push(cant)
             console.log("this.cantidad", this.cantidad)
             console.log("this.items", this.items)
@@ -99,6 +99,7 @@ export default {
 
             this.cantidad = []
             this.items = []
+            this.conStock = []
             let claves = Object.keys(localStorage);
             let carrovacio = true
             claves.forEach(clave => {
@@ -120,25 +121,28 @@ export default {
                 this.carritoLength = 0
             }
         },
-        async eliminar(item) {
-            if (this.cantidad > 0) {
-                await calcularInsumos(item.detallearticulomanufacturadoid, -this.cantidad)
+        async eliminar(item, cantidad) {
+            if (cantidad > 0) {
+                await calcularInsumos(item.detallearticulomanufacturadoid, -cantidad)
             }
-            window.localStorage.removeItem(item._id)
+            this.items = []
+            localStorage.removeItem(item._id)
             this.getLocalStorage()
             eventBus.$emit("elimina-itemcarrito", item._id)
         },
         async agregarProducto(item, j, index) {
             this.cantidad[index] += j
+            this.conStock[index] = controlStock(item.detallearticulomanufacturadoid)
             await calcularInsumos(item.detallearticulomanufacturadoid, j)
             this.items = []
             if (this.cantidad[index] == 0) {
-                this.eliminar(item)
+                this.conStock[index] == 0
+                this.eliminar(item, 0)
             } else {
                 localStorage.setItem(item._id, JSON.stringify({ 'cantidad': this.cantidad[index] }))
+                eventBus.$emit("elimina-itemcarrito", '0')
+                this.getLocalStorage()
             }
-            this.getLocalStorage()
-            eventBus.$emit("elimina-itemcarrito", '0')
         },
         cerrar() {
             this.cerrarCarro = true

@@ -7,7 +7,7 @@ A CORREGIR/IMPLEMENTAR:
 
 *Implementar login con Google.
 
-*Control de stock. Validar que los productos a la venta tengan stock de insumos.
+*Control de stock, listo para el cliente, faltaría validar/rechazar pedido para confirmar/rechazar uso de los insumos.
 
 *Manejo de estado de pedido por cajero/admin, cocinero.
 
@@ -15,10 +15,12 @@ A CORREGIR/IMPLEMENTAR:
 
 *Impresión de Facturas en PDF para el cliente.
 
+*Aplicar descuentos a prod. marcados, 
+
 *Reportes en excel: Ranking comidas más pedidas en un periodo de tiempo determinado
 Ingresos (recaudaciones) por períodos de tiempo. Diario / Mensual
 Cantidad de pedidos agrupados por cliente en un determinado periodo de tiempo.
-Monto de Ganancia en un periodo de tiempo (ventas – costos)
+Monto de Ganancia en un periodo de tiempo (ventas - costos)
 ________________________________________________________________________________________________________________________________________________________________________
 
 ""WARNINGs"":
@@ -34,42 +36,4 @@ Mastercard	5031 7557 3453 0604	123	11/25
 Visa	4509 9535 6623 3704	123	11/25
 American Express	3711 803032 57522	1234	11/25
 ___________________________________________________________________________
-detalleManufacturado
-<v-card-actions>
-            <v-col v-if="conStock">
-                <v-row>
-                    <div v-if="reserve == false">
-                        <v-btn color="deep-purple lighten-2" text @click="agregar(manufacturadoParam._id)">
-                            Agregar al Carrito
-                        </v-btn>
-                    </div>
-                </v-row>
-                <v-row>
-                    <div v-if="reserve == true" class="buttons_buy" style="display: flex;">
-                        <a class="arrow-down_touch" @click="agregarProducto(manufacturadoParam._id, -1)"></a>
-                        <input readonly class="inputpromohome" v-model="cantidad">
-                        <a class="arrow-up_touch" @click="agregarProducto(manufacturadoParam._id, 1)"></a>
-                    </div>
-                </v-row>
-            </v-col>
-            <v-col v-else-if="!conStock&&cantidad>0">
-                <v-row>
-                    <div v-if="reserve == false">
-                        <v-btn color="deep-purple lighten-2" text @click="agregar(manufacturadoParam._id)">
-                            Agregar al Carrito
-                        </v-btn>
-                    </div>
-                </v-row>
-                <v-row align="center">
-                    <div v-if="reserve == true" class="buttons_buy" style="display: flex;">
-                        <a class="arrow-down_touch" @click="agregarProducto(manufacturadoParam._id, -1)"></a>
-                        <input readonly class="inputpromohome" v-model="cantidad">
-                        <h5><b>No hay más</b></h5>
-                    </div>
-                </v-row>
-            </v-col>
-            <v-col v-else>
-                <b> SIN STOCK</b>
-            </v-col>
-        </v-card-actions>
-........
+

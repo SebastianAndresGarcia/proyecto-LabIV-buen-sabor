@@ -33,11 +33,10 @@
                     4.5 (413)
                 </div>
             </v-row>
-
-            <div class="my-4 text-subtitle-1">
-                $ {{ manufacturadoParam.precioVenta }}
+            <div v-if="manufacturadoParam.descuento>0" class="my-4 text-subtitle-1">
+                <del>${{ manufacturadoParam.precioVenta }}</del>&nbsp&nbsp$<b>{{ manufacturadoParam.precioVenta-(manufacturadoParam.precioVenta*manufacturadoParam.descuento)/100 }}</b>
             </div>
-
+            <div v-else class="my-4 text-subtitle-1">${{ manufacturadoParam.precioVenta }}</div>
             <div>Alguna descripción</div>
         </v-card-text>
 
@@ -146,6 +145,7 @@ export default {
                 await calcularInsumos(this.manufacturadoParam.detallearticulomanufacturadoid, i)
                 this.conStock = controlStock(this.manufacturadoParam.detallearticulomanufacturadoid)
                 this.$emit('abrirAlert', 1)
+                eventBus.$emit("carrito-changed", this.cambioCarrito)
                 if (this.cantidad == 0) {
                     this.reserve = false
                     window.localStorage.removeItem(id)
@@ -154,7 +154,7 @@ export default {
             }
             this.getLocalStorage(this.manufacturadoParam._id) //está línea actualiza la vista gral del componente padre cuando se elimina desde el carrito
             this.cambioCarrito = true
-            eventBus.$emit("carrito-changed", this.cambioCarrito)
+            
         },
         async getLocalStorage(id) {
             if (localStorage.getItem(id)) {
