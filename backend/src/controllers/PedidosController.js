@@ -97,7 +97,7 @@ exports.getPedidosxid = async (req, res) => {
     return res.json(pedidos)
 }
 exports.getPedidosCocinero = async (req, res) => {
-    const estado = "approved"
+    const estado = "elaboracion"
     const pedidos = await Pedido.find({'estado': estado}).populate({
         path: "detallepedidoid", // populate blogs
         populate: {

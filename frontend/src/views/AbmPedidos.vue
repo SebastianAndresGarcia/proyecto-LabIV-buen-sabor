@@ -39,6 +39,9 @@
                                 <th class="text-left">
                                     <b>Estado</b>
                                 </th>
+                                <th class="text-left">
+                                    <h2><b>Acciones</b></h2>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -61,11 +64,18 @@
                                 </td>
                                 <td>
                                     {{ pedido.estado }}
+                                    <!--pendiente, elaboracion, terminado, entregado (local o delivery), facturado -->
                                 </td>
-                                <td>
-                                    <form-factura
-                                        :pedidoParam="{ 'pedidoid': pedido._id, 'facturaid': pedido.facturaid }"></form-factura>
-
+                                <td >
+                                    <div  v-if="pedido.estado === 'pendiente'">
+                                        <v-btn  small color="success" @click="cambiarEstado(pedido)">Enviar a Cocina</v-btn>
+                                    </div>
+                                    <div v-else-if="pedido.estado === 'terminado'">
+                                        <form-factura  :pedidoParam="{ 'pedidoid': pedido._id, 'facturaid': pedido.facturaid }"></form-factura>
+                                    </div>
+                                    <div v-else>
+                                        <b>Esperando a la cocina...</b>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -81,6 +91,8 @@
 import AuthService from "@/service/auth.service.js"
 import detallepedido from "@/components/DetallePedido.vue"
 import formfactura from "@/components/FormFactura.vue"
+
+
 export default {
 
     components: {
@@ -115,7 +127,7 @@ export default {
                 "http://localhost:3000/pedidos"
             );
             const resJson = await res.json();
-            console.log("resJson",resJson);
+            console.log("resJson", resJson);
             this.pedidosData = resJson;
         },
         async verificarUsuario(currentUser) {
@@ -125,6 +137,28 @@ export default {
                 }
             } else {
                 window.location.href = "/Home"
+            }
+        },
+        async cambiarEstado(pedido) {
+            pedido.estado = 'elaboracion'
+            let urlServer = "http://localhost:3000/actualizarPedido/" + pedido._id
+            let method = "POST";
+            const respuesta = await fetch(urlServer, {
+                method: method,
+                body: JSON.stringify({ estado: 'elaboracion' }),
+                headers: {
+                    "Content-type": "application/json",
+                },
+                mode: "cors",
+            });
+            const resJson = await respuesta.json()
+            console.log("respuesta: ", resJson)
+            if (respuesta.status === 200) {
+                console.log(respuesta.status)
+                
+            } else {
+                this.respuestaError = resJson.message
+                console.log("mensaje del servidor: " + this.respuestaError)
             }
         }
     }

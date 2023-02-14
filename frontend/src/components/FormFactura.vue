@@ -1,5 +1,5 @@
 <template>
-    <v-row justify="center">
+    <v-row >
         <v-dialog v-model="dialog" temporary max-width="700px">
             <template v-slot:activator="{ on, attrs }">
                 <div v-if="pedidoParam.facturaid">

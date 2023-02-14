@@ -30,7 +30,6 @@
                         </thead>
                         <tbody>
                             <tr v-for="(pedido, index) in pedidosData" :key="index" style="padding-top: 5px;">
-
                                 <td>
                                     {{ pedido.fecha }}
                                 </td>
@@ -44,14 +43,17 @@
                                     <detalle-pedido :pedidoParam="pedido"></detalle-pedido>
                                 </td>
                                 <td>
-                                    Cocinando...
+                                    {{ pedido.estado }}
+                                </td>
+                                <td>
+                                    <v-btn small color="success" @click="cambiarEstado(pedido)">Terminado</v-btn>
                                 </td>
                             </tr>
                         </tbody>
                     </template>
                 </v-simple-table>
             </div>
-            <div v-else><v-card-subtitle><b>No tienes Pedidos aún</b></v-card-subtitle></div>
+            <div v-else><v-row style="justify-content: center; margin-bottom: 10px;"><v-card-subtitle><b>No tienes Pedidos Pendientes</b></v-card-subtitle></v-row></div>
         </v-card>
     </v-container>
 </template>
@@ -80,7 +82,7 @@ export default {
     methods: {
         async getPedidos() {
             const res = await fetch(
-                "http://localhost:3000/pedidoscocinero"
+                "http://localhost:3000/pedidoscocinero"  //me traigo solo los pedidos que se encuentran en estado de 'elaboracion'
             );
             const resJson = await res.json();
             console.log(resJson);
@@ -94,6 +96,28 @@ export default {
             } else {
                 window.location.href = "/Home"
             }
+        },
+        async cambiarEstado(pedido){
+            pedido.estado='terminado'  //al marcar como terminados los pedidos, desaparecen de esta bandeja  y le figura como terminado al cajero/admin
+            let urlServer = "http://localhost:3000/actualizarPedido/" + pedido._id 
+            let method = "POST";
+            const respuesta = await fetch(urlServer, {
+                method: method,
+                body: JSON.stringify({ estado: 'terminado' }),
+                headers: {
+                    "Content-type": "application/json",
+                },
+                mode: "cors",
+            });
+            const resJson = await respuesta.json()
+            console.log("respuesta: ", resJson)
+            if (respuesta.status === 200) {
+                console.log(respuesta.status)
+             } else {
+                this.respuestaError = resJson.message
+                console.log("mensaje del servidor: " + this.respuestaError)
+            }
+            this.getPedidos()
         }
     }
 };
