@@ -57,13 +57,17 @@ exports.getPedidos = async (req, res) => {
             path: "articulomanufacturadoid", // in blogs, populate comments
             select: { denominacion: 1, _id: 1, imagen: 1 }, //elijo solo los campos que quiero traer
         }
-    })
+    })  //acá hay dos populate con path iguales, xq depende si en la bd va a haber un manufact o un insumo
         .populate({
             path: "detallepedidoid", // populate blogs
             populate: {
                 path: "articuloinsumoid", // in blogs, populate comments
                 select: { denominacion: 1, _id: 1 }, //elijo solo los campos que quiero traer
             }
+        })
+        .populate({
+            path: "mercadopagodatosid",
+            select: {estado: 1}
         })
     if (!pedidos)
         return res.status(204).json();
@@ -92,13 +96,34 @@ exports.getPedidosxid = async (req, res) => {
     //console.log(pedidos);
     return res.json(pedidos)
 }
+exports.getPedidosCocinero = async (req, res) => {
+    const estado = "approved"
+    const pedidos = await Pedido.find({'estado': estado}).populate({
+        path: "detallepedidoid", // populate blogs
+        populate: {
+            path: "articulomanufacturadoid", // in blogs, populate comments
+            select: { denominacion: 1, _id: 1, imagen: 1 }, //elijo solo los campos que quiero traer
+        }
+    })
+        .populate({
+            path: "detallepedidoid", // populate blogs
+            populate: {
+                path: "articuloinsumoid", // in blogs, populate comments
+                select: { denominacion: 1, _id: 1 }, //elijo solo los campos que quiero traer
+            }
+        })
+    if (!pedidos)
+        return res.status(204).json();
+    //console.log(pedidos);
+    return res.json(pedidos)
+}
 
 exports.actualizarPedido = async (req, res) => {
     const updatepedido = await Pedido.findByIdAndUpdate(req.params.id, req.body)
     res.json(updatepedido)
 }
 
-exports.Pedidosxid = async (req, res) => {
+exports.Pedidoxid = async (req, res) => {
     const id = req.params.id
     const pedidos = await Pedido.findById({_id:id}).populate({
         path: "detallepedidoid", // populate blogs

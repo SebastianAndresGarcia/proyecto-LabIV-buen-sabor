@@ -1,22 +1,12 @@
 <template>
     <v-container v-if='currentUser.roles.includes("ROLE_ADMIN")'>
         <v-card style="margin-top: 10px; justify:center">
-            <v-row style="justify-content: center"><v-card-title>
-                    <h2><b>Pedidos</b></h2>
+            <v-row style="justify-content: center; margin-bottom: 10px;"><v-card-title>
+                    <h2><b>Cocina</b></h2>
                 </v-card-title>
             </v-row>
             <div v-if="pedidosData.length > 0">
-                <v-row align="center">
-                    <v-col cols="2">
-                        <v-subheader>
-                            Ver
-                        </v-subheader>
-                    </v-col>
-
-                    <v-col cols="10">
-                        <v-select v-model="select" :items="items" item-text="state" item-value="state"></v-select>
-                    </v-col>
-                </v-row>
+                
                 <v-simple-table class="tabla">
                     <template v-slot:default>
                         <thead>
@@ -26,9 +16,6 @@
                                 </th>
                                 <th class="text-left">
                                     <b>Pedido N°</b>
-                                </th>
-                                <th class="text-left">
-                                    <b>Pago</b>
                                 </th>
                                 <th class="text-left">
                                     <b>horaEstimadaFin</b>
@@ -51,21 +38,13 @@
                                     {{ pedido.numero }}
                                 </td>
                                 <td>
-                                    {{ pedido.mercadopagodatosid.estado }}
-                                </td>
-                                <td>
                                     {{ pedido.horaEstimadaFin }}
                                 </td>
                                 <td>
                                     <detalle-pedido :pedidoParam="pedido"></detalle-pedido>
                                 </td>
                                 <td>
-                                    {{ pedido.estado }}
-                                </td>
-                                <td>
-                                    <form-factura
-                                        :pedidoParam="{ 'pedidoid': pedido._id, 'facturaid': pedido.facturaid }"></form-factura>
-
+                                    Cocinando...
                                 </td>
                             </tr>
                         </tbody>
@@ -80,12 +59,10 @@
 
 import AuthService from "@/service/auth.service.js"
 import detallepedido from "@/components/DetallePedido.vue"
-import formfactura from "@/components/FormFactura.vue"
-export default {
 
+export default {
     components: {
         "detalle-pedido": detallepedido,
-        "form-factura": formfactura
     },
     beforeMount() {
         this.currentUser = AuthService.getCurrentUser()
@@ -93,29 +70,20 @@ export default {
     mounted() {
         this.verificarUsuario(this.currentUser)
         this.getPedidos()
-        console.log("pedidos")
     },
     data() {
         return {
             currentUser: undefined,
-            pedidosData: [],
-            select: 'Pendiente',
-            items: [
-                { state: 'Ver Todo' },
-                { state: 'Pendiente' },
-                { state: 'En preparación' },
-                { state: 'Terminado' },
-
-            ],
+            pedidosData: []
         };
     },
     methods: {
         async getPedidos() {
             const res = await fetch(
-                "http://localhost:3000/pedidos"
+                "http://localhost:3000/pedidoscocinero"
             );
             const resJson = await res.json();
-            console.log("resJson",resJson);
+            console.log(resJson);
             this.pedidosData = resJson;
         },
         async verificarUsuario(currentUser) {
@@ -130,20 +98,3 @@ export default {
     }
 };
 </script>
-<style scoped>
-.row {
-    text-align: justify;
-    align-items: center;
-    /**verticalmente */
-    display: flex;
-    margin-left: 0 auto;
-    padding-left: 15%;
-    padding-right: 15%;
-}
-
-.col {
-    justify-content: center;
-    text-align: justify;
-    margin-left: auto;
-}
-</style>

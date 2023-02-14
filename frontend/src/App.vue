@@ -14,7 +14,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import NavBarTop from "@/components/NavBarTop.vue";
-import footer from "@/components/Footer.vue";
+//import footer from "@/components/Footer.vue";
 
 
 export default Vue.extend({
@@ -25,7 +25,7 @@ export default Vue.extend({
   }),
   components: {
     "top-nav-bar": NavBarTop,
-    "footer": footer,
+    //"footer": footer,
   }
 });
 </script>

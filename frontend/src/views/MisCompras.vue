@@ -156,7 +156,7 @@ export default {
             eventBus.$emit("carrito-changed", this.cambioCarrito)
         },
         async registrarPago() {
-            let urlServer = "http://localhost:3000/registrarPago"
+            let urlServer = "http://localhost:3000/registrarPago" //mercaPago schema
             let method = "POST";
             const respuesta = await fetch(urlServer, {
                 method: method,

@@ -56,9 +56,10 @@ router.post('/ActualizarUsuario', controllerUser.updateUser)
 router.get('/Roles', controllerRoles.getRoles)
 router.post('/crearPedido', controllerPedidos.createPedido)
 router.get('/Pedidos', controllerPedidos.getPedidos)
-router.get('/pedidosxid/:id', controllerPedidos.getPedidosxid)
-router.get('/pedidoxid/:id', controllerPedidos.Pedidosxid)
+router.get('/pedidosxid/:id', controllerPedidos.getPedidosxid) //todos los pedidos de un usuario
+router.get('/pedidoxid/:id', controllerPedidos.Pedidoxid) //un pedido por su id
 router.post('/actualizarPedido/:id', controllerPedidos.actualizarPedido)
+router.get('/pedidoscocinero', controllerPedidos.getPedidosCocinero)
 router.post("/checkout", controllerMercaPago.checkout)
 router.post("/registrarPago", controllerMercaPago.savePayment)
 
