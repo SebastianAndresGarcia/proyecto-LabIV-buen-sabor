@@ -105,7 +105,6 @@ export default {
     mounted() {
         this.verificarUsuario(this.currentUser)
         this.getPedidos()
-        console.log("pedidos")
     },
     data() {
         return {
@@ -129,6 +128,7 @@ export default {
             const resJson = await res.json();
             console.log("resJson", resJson);
             this.pedidosData = resJson;
+            setTimeout(() => this.getPedidos(), 10000) //milisegundos
         },
         async verificarUsuario(currentUser) {
             if (currentUser) {

@@ -6,7 +6,7 @@
                 </v-card-title>
             </v-row>
             <div v-if="pedidosData.length > 0">
-                
+
                 <v-simple-table class="tabla">
                     <template v-slot:default>
                         <thead>
@@ -53,7 +53,8 @@
                     </template>
                 </v-simple-table>
             </div>
-            <div v-else><v-row style="justify-content: center; margin-bottom: 10px;"><v-card-subtitle><b>No tienes Pedidos Pendientes</b></v-card-subtitle></v-row></div>
+            <div v-else><v-row style="justify-content: center; margin-bottom: 10px;"><v-card-subtitle><b>No tienes
+                            Pedidos Pendientes</b></v-card-subtitle></v-row></div>
         </v-card>
     </v-container>
 </template>
@@ -72,6 +73,7 @@ export default {
     mounted() {
         this.verificarUsuario(this.currentUser)
         this.getPedidos()
+        
     },
     data() {
         return {
@@ -81,12 +83,14 @@ export default {
     },
     methods: {
         async getPedidos() {
+            console.log("entró a getPedidos en Cocina")
             const res = await fetch(
                 "http://localhost:3000/pedidoscocinero"  //me traigo solo los pedidos que se encuentran en estado de 'elaboracion'
             );
             const resJson = await res.json();
             console.log(resJson);
             this.pedidosData = resJson;
+            setTimeout(() => this.getPedidos(), 10000) //milisegundos
         },
         async verificarUsuario(currentUser) {
             if (currentUser) {
@@ -97,9 +101,9 @@ export default {
                 window.location.href = "/Home"
             }
         },
-        async cambiarEstado(pedido){
-            pedido.estado='terminado'  //al marcar como terminados los pedidos, desaparecen de esta bandeja  y le figura como terminado al cajero/admin
-            let urlServer = "http://localhost:3000/actualizarPedido/" + pedido._id 
+        async cambiarEstado(pedido) {
+            pedido.estado = 'terminado'  //al marcar como terminados los pedidos, desaparecen de esta bandeja  y le figura como terminado al cajero/admin
+            let urlServer = "http://localhost:3000/actualizarPedido/" + pedido._id
             let method = "POST";
             const respuesta = await fetch(urlServer, {
                 method: method,
@@ -113,7 +117,7 @@ export default {
             console.log("respuesta: ", resJson)
             if (respuesta.status === 200) {
                 console.log(respuesta.status)
-             } else {
+            } else {
                 this.respuestaError = resJson.message
                 console.log("mensaje del servidor: " + this.respuestaError)
             }
