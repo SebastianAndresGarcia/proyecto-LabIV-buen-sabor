@@ -1,7 +1,7 @@
 03/02/23
 
 A CORREGIR/IMPLEMENTAR:
-*Funcionando ArticuloInsumos, habría que terminar el frontend para que se vea la funcionalidad recursiva. No están visibles las bebidas.
+*Renovada vistas de Manufacturados e insumos, corregir la vista recursiva, y al crear un Rubro no actualiza el formulario para Crear Insumo/Manufact
 
 *El "sobre nosotros" no redirije bien, se queda en el tope de la página.
 
@@ -15,7 +15,6 @@ A CORREGIR/IMPLEMENTAR:
 
 *Impresión de Facturas en PDF para el cliente.
 
-*Aplicar descuentos a prod. marcados, 
 
 *Reportes en excel: Ranking comidas más pedidas en un periodo de tiempo determinado
 Ingresos (recaudaciones) por períodos de tiempo. Diario / Mensual

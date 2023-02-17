@@ -51,12 +51,16 @@ exports.getArticuloInsumo = async (req, res) => { //trae un articulo
 }
 exports.getArticulosInsumosxrubro = async (req, res) => {
     console.log("req.params.id" + req.params.id)
-    const rubrosinsumos = await RubroArticulo.find({ "ancestors._id": req.params.id, $where: 'this.articuloinsumoid.length>0' }, { articuloinsumoid: 1 }).populate({ path: "articuloinsumoid" })
+    const busqueda = req.params.id;
+    var array=[] = busqueda.split(",")
+    console.log(array)
+    console.log("array.length "+array.length)
+    const rubrosinsumos = await RubroArticulo.find({  $or: [{"ancestors._id": {$in: array }}, {"_id":  {$in:array}}], $where: 'this.articuloinsumoid.length>0' }, { articuloinsumoid: 1 }).populate({ path: "articuloinsumoid" })
     console.log("rubro", rubrosinsumos.length)
     if (rubrosinsumos.length == 0)
     //const rubrosinsumos = await RubroArticulo.find({"ancestors._id": req.params.id, "articuloinsumoid": {$exists:true}}).populate({path: "articuloinsumoid"})
     {
-        const rubrosinsumos = await RubroArticulo.find({ "_id": req.params.id, "articuloinsumoid.0": { $exists: true } }).populate({ path: "articuloinsumoid" })
+        //const rubrosinsumos = await RubroArticulo.find({ "_id":   {$in:array} , "articuloinsumoid.0": { $exists: true } }).populate({ path: "articuloinsumoid" })
         console.log("rubrosinsumos1", rubrosinsumos.length)
         try {
             return res.json(rubrosinsumos[0].articuloinsumoid)

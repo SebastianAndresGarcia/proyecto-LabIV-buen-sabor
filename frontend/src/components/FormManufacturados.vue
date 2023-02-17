@@ -24,8 +24,7 @@
                         <v-row>
 
                             <v-col cols="12" sm="6" md="6">
-                                <v-text-field label="Denominacion*" v-model="ArticuloManufacturado.denominacion"
-                                    required>
+                                <v-text-field label="Denominacion*" v-model="ArticuloManufacturado.denominacion" required>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="6">
@@ -46,26 +45,25 @@
                                 <v-text-field label="Activo?*" v-model="ArticuloManufacturado.activo" required>
                                 </v-text-field>
                             </v-col>
-                            <v-col >
+                            <v-col>
                                 <v-container>
-                                <v-row style=" justify-content: center">
-                                    <v-col cols="3"> 
-                                          <v-text-field solo flat readonly value="¿ Es Promoción ?"></v-text-field>
-                                    </v-col>
-                                    <v-col cols="1">
-                                          <v-checkbox v-model="enabled" @click="conDescuento()" hide-details ></v-checkbox>
-                                    </v-col>     
-                                    <!-- <v-col cols="12" sm="6" v-if="enabled">
-                                        <v-slider v-model="form.age" :disabled="!enabled" :rules="rules.age" color="orange" label="Descuento %"
-                                             min="1" max="99" thumb-label></v-slider>
-                                    </v-col> -->
-                                    <v-col cols="3">
-                                        <div v-if="enabled">
-                                        <v-text-field outlined type="number" :disabled="!enabled" label="Descuento %" required v-model="ArticuloManufacturado.descuento"></v-text-field>
-                                    </div>
-                                    </v-col>
-                                </v-row>
-                            </v-container>
+                                    <v-row style=" justify-content: center">
+                                        <v-col cols="3">
+                                            <v-text-field solo flat readonly value="¿ Es Promoción ?"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="1">
+                                            <v-checkbox v-model="enabled" @click="conDescuento()" hide-details></v-checkbox>
+                                        </v-col>
+
+                                        <v-col cols="3">
+                                            <div v-if="enabled">
+                                                <v-text-field outlined type="number" :disabled="!enabled"
+                                                    label="Descuento %" required
+                                                    v-model="ArticuloManufacturado.descuento"></v-text-field>
+                                            </div>
+                                        </v-col>
+                                    </v-row>
+                                </v-container>
                             </v-col>
                             <v-col cols="12">
                                 <v-row v-for="ins in cantidadInsumos" :key="ins.id">
@@ -77,8 +75,7 @@
                                         </v-select>
                                     </v-col>
                                     <v-col cols="2">
-                                        <v-text-field label="Cantidad" type="number" placeholder="1.0" step="0.01"
-                                            min="0"
+                                        <v-text-field label="Cantidad" type="number" placeholder="1.0" step="0.01" min="0"
                                             v-model="DetalleArticuloManufacturado[ins - 1].cantidad"></v-text-field>
                                     </v-col>
                                     <v-col cols="2">
@@ -92,8 +89,20 @@
                                 </v-row>
                                 <v-btn @click="crearSelectInsumo">Agregar Insumo</v-btn>
                             </v-col>
-                            <v-col cols="12" hidden>
-                                <v-text-field v-model="ArticuloManufacturado.rubrogeneralid" required>
+                            <v-col v-if="idrubrogral">
+                                <v-select label="Seleccione un Rubro" outlined
+                                    v-model="ArticuloManufacturado.rubrogeneralid" :items="rubros" item-value="_id"
+                                    item-text="denominacion">
+                                    <template v-slot:prepend-item>
+
+                                        <v-divider class="mt-2"></v-divider>
+                                    </template>
+                                </v-select>
+                                {{ ArticuloManufacturado.rubrogeneralid }}
+                            </v-col>
+                            <v-col cols="12" v-else>
+                                <v-text-field disabled label="rubrogeneralid" v-model="ArticuloManufacturado.rubrogeneralid"
+                                    required>
                                 </v-text-field>
                             </v-col>
 
@@ -125,12 +134,9 @@ export default {
     name: "register-item",
 
     data() {
-        const defaultForm = Object.freeze({
-
-            age: 0,
-
-        })
+      
         return {
+            rubros: [],
             dialog: false,
             cantidadInsumos: null,
             aux: [],
@@ -149,16 +155,10 @@ export default {
             },
             DetalleArticuloManufacturado: [],
             enabled: false,
-            form: Object.assign({}, defaultForm),
-            rules: {
-                age: [
-                    val => val < 10,
-                ]
-            },
-            defaultForm
+
         };
     },
-    props: { idrubrogral: String, idmanufacturado: String },
+    props: { idrubrogral: Array, idmanufacturado: String },
     //props: ["manufacturadoid"],
     beforeUpdate() {
         //console.log("datos select ", this.insumoSeleccionado)
@@ -171,7 +171,8 @@ export default {
         console.log("idmanufacturado props " + this.idmanufacturado)
         this.getInsumos(),
             this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
-        console.log(this.idrubrogral)
+        //console.log(this.idrubrogral)
+        this.getRubrosGeneral()
         //this.getManufacturadoXdenominacion(this.idrubrogral[1]) 
     },
     methods: {
@@ -286,13 +287,23 @@ export default {
             })
 
         },
+        async getRubrosGeneral() {
+            const res = await fetch(
+                "http://localhost:3000/rubrosgeneral"
+            );
+            const resJson = await res.json();
+
+            this.rubros = resJson;
+            // console.log("RUBROS ", this.rubros);
+            // console.log("RUBROS tamaño", this.rubros.length);
+        },
         async getInsumos() {
             console.log()
             const res = await fetch(
                 "http://localhost:3000/articulosinsumos"
             );
             const resJson = await res.json();
-            console.log("insumosData", resJson);
+            // console.log("insumosData", resJson);
             this.insumosData = resJson;
         },
         onchange(id) {
@@ -303,10 +314,10 @@ export default {
             for (let i = 0; i < this.insumosData.length; i++) {
                 console.log(this.insumosData[i])
                 if (indice == this.insumosData[i]._id) {
-                    console.log("entró")
+                    // console.log("entró")
                     this.DetalleArticuloManufacturado[this.DetalleArticuloManufacturado.length - 1].unidadMedida = this.insumosData[i].unidadMedida
                     this.DetalleArticuloManufacturado[this.DetalleArticuloManufacturado.length - 1].articuloInsumoid = this.insumosData[i]._id
-                    console.log(this.DetalleArticuloManufacturado)
+                    // console.log(this.DetalleArticuloManufacturado)
                     break
                 }
             }
@@ -317,7 +328,7 @@ export default {
             )
             const resJson = await res.json()
 
-            console.log("resJson ", resJson)
+            // console.log("resJson ", resJson)
             this.ArticuloManufacturado = new Object({
 
                 'tiempoEstimadoCocina': resJson.tiempoEstimadoCocina,
@@ -328,8 +339,8 @@ export default {
                 'rubrogeneralid': resJson.rubrogeneralid,
                 'descuento': resJson.descuento
             })
-            if(this.ArticuloManufacturado.descuento>0){
-                this.enabled=true
+            if (this.ArticuloManufacturado.descuento > 0) {
+                this.enabled = true
             }
             this.DetalleArticuloManufacturado = (
                 resJson.detallearticulomanufacturadoid
@@ -340,13 +351,13 @@ export default {
             for (let i = 0; i < this.cantidadInsumos; i++) {
                 this.insumoSeleccionado.push(resJson.detallearticulomanufacturadoid[i].ArticuloInsumoid)
             }
-            console.log('this.cantidadInsumos', this.cantidadInsumos),
-                console.log('this.DetalleArticuloManufacturado', this.DetalleArticuloManufacturado),
-                console.log('this.insumoSeleccionado', this.insumoSeleccionado)
+            // console.log('this.cantidadInsumos', this.cantidadInsumos),
+            //     console.log('this.DetalleArticuloManufacturado', this.DetalleArticuloManufacturado),
+            //     console.log('this.insumoSeleccionado', this.insumoSeleccionado)
         },
-        async conDescuento(){
-            if(!this.enabled){
-                this.ArticuloManufacturado.descuento=0
+        async conDescuento() {
+            if (!this.enabled) {
+                this.ArticuloManufacturado.descuento = 0
             }
         }
     },

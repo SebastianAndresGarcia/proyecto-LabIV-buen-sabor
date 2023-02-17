@@ -56,11 +56,12 @@ exports.getArticulosManufacturados = async (req, res) => {
 
 exports.getArticulosManufacturadosxrubro = async (req, res) => {
     const busqueda = req.params.id;
+    var array=[] = busqueda.split(",")
     /*console.log("parametroRubro: ",req.params.id)
     const rubrogral = await RubroGeneral.find({ denominacion: [busqueda]});
     console.log(rubrogral) */
     //var array = [] = busqueda.split(",")
-    const manufacturados = await ArticuloManufacturado.find({ rubrogeneralid: busqueda })
+    const manufacturados = await ArticuloManufacturado.find({ rubrogeneralid: {$in:array} })
     .populate({
         path: "detallearticulomanufacturadoid", // populate blogs
         populate: {

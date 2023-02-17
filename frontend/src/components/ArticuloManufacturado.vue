@@ -1,5 +1,5 @@
 <template>
-    <v-card v-if="manufacturadoParam.length > 0" style="margin-top: 10px">
+    <v-card v-if="manufacturadoParam" style="margin-top: 10px">
         <v-card-title>
             Articulos Manufacturados
 
@@ -103,10 +103,10 @@ export default {
             this.getManufacturadosxrubro(this.manufacturadoParam)
     },
     props: ["manufacturadoParam"], //recibe el props de AbmArticulos
-    
 
     mounted() {
         console.log("manufacturadoParam", this.manufacturadoParam)
+        this.getManufacturadosxrubro(this.manufacturadoParam)
         //this.getManufacturados()
         //this.getManufacturadosxrubro(this.manufacturadoParam)
     },
@@ -121,17 +121,26 @@ export default {
             this.manufacturadosData = resJson;
         },
         async getManufacturadosxrubro(parametro) {
-
-            console.log("parametro: " + parametro)
-            const res = await fetch(
-                "http://localhost:3000/articulosmanufacturadosxrubro/" + parametro
-            );
-            const resJson = await res.json();
-            console.log(resJson);
-            this.manufacturadosData = resJson;
+            if (parametro == 0) {
+                console.log("parametro: " + parametro)
+                const res = await fetch(
+                    "http://localhost:3000/articulosmanufacturados/"
+                );
+                const resJson = await res.json();
+                console.log(resJson);
+                this.manufacturadosData = resJson;
+            }
+            else {
+                const res = await fetch(
+                    `http://localhost:3000/articulosmanufacturadosxrubro/${parametro}`
+                );
+                const resJson = await res.json();
+                console.log(resJson);
+                this.manufacturadosData = resJson;
+            }
         },
         async eliminarManufacturado(id) {
-            console.log("eliminar manufact "+id)
+            console.log("eliminar manufact " + id)
             // let urlServer = `http://localhost:3000/eliminarArticuloManufacturado/${id}`;
 
             // const res = await fetch(urlServer, {

@@ -54,10 +54,21 @@
                                 <v-text-field label="unidadMedida" v-model="insumo.unidadMedida" required>
                                 </v-text-field>
                             </v-col>
-                            <v-col cols="12">
-                                <v-text-field label="rubroArticuloid" v-model="insumo.RubroArticuloid" required>
+                            <v-col v-if="idrubroarticulo">
+                                <v-select label="Seleccione un Rubro" outlined v-model="insumo.RubroArticuloid"
+                                    :items="rubros" item-value="_id" item-text="denominacion">
+                                    <template v-slot:prepend-item>
+                                        
+                                        <v-divider class="mt-2"></v-divider>
+                                    </template>
+                                </v-select>
+                                {{ insumo.RubroArticuloid }}
+                            </v-col>
+                            <v-col v-else cols="12">
+                                <v-text-field disabled label="rubroArticuloid" v-model="insumo.RubroArticuloid" required>
                                 </v-text-field>
                             </v-col>
+                            
                         </v-row>
                         <small>*Todos los campos son obligatorios</small>
                     </v-card-text>
@@ -90,6 +101,8 @@ export default {
             modal: false,
             insumosData: [],
             nuevoInsumo: false,
+            rubros: [],
+            
             insumo: {
                 denominacion: "",
                 precioCompra: null,
@@ -106,7 +119,7 @@ export default {
 
         };
     },
-    props: { idrubroarticulo: String, idinsumo: String },
+    props: { idrubroarticulo: Array, idinsumo: String },
     //props: ["manufacturadoid"],
     beforeUpdate() {
         //console.log("datos select ", this.insumoSeleccionado)
@@ -119,6 +132,7 @@ export default {
         console.log("idrubroarticulo props ", this.idrubroarticulo)
         console.log("idinsumo props " + this.idinsumo)
         this.insumo.RubroArticuloid=this.idrubroarticulo
+        this.getRubrosArticulos()
         //this.getManufacturadoXdenominacion(this.idrubrogral[1]) 
     },
     methods: {
@@ -207,7 +221,18 @@ export default {
             console.log("resJson ", resJson)
             
 
-        }
+        },
+        async getRubrosArticulos() {
+            const res = await fetch(
+                "http://localhost:3000/rubros"
+            );
+            const resJson = await res.json();
+
+            this.rubros = resJson;
+            console.log("InsumosArticulos ", this.rubros);
+            
+
+        },
     },
     watch: {
         nuevoInsumo: function () {

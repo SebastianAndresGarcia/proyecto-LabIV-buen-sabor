@@ -2,12 +2,12 @@
   <v-row justify="center" align="center">
     <v-dialog v-model="dialog" persistent max-width="600px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn color="primary" dark class="mb-20" v-bind="attrs" v-on="on"> Crear Rubro-Insumo </v-btn>
+        <v-btn color="primary" dark class="mb-20" v-bind="attrs" v-on="on"> Crear Rubro </v-btn>
       </template>
 
       <v-card ref="form">
         <v-card-title>
-          <span class="text-h5">Crear Rubro-Insumo</span>
+          <span class="text-h5">Crear Rubro</span>
         </v-card-title>
 
         <form @submit.prevent="crearRubro">

@@ -1,17 +1,15 @@
 <template>
-    <v-card v-if="insumoParam.length > 0" style="margin-top: 10px; justify:center">
+    <v-card v-if="insumoParam" style="margin-top: 10px; justify:center">
         <v-card-title>
             Articulos Insumos
-
             <v-spacer></v-spacer>
             <Form-Insumo :idrubroarticulo="insumoParam" @nuevoInsumo="handleMessage">
             </Form-Insumo>
         </v-card-title>
-        <v-simple-table class="tabla" > <!--v-if="!insumosData==null"-->
+        <v-simple-table class="tabla"> <!--v-if="!insumosData==null"-->
             <template v-slot:default>
                 <thead>
                     <tr>
-
                         <th class="text-left">
                             <b>Denominacion</b>
                         </th>
@@ -29,20 +27,20 @@
                         <th class="text-left">
                             <b>Stock mínimo</b>
                         </th>
-                        
+
                         <th class="text-left">
                             <b>Unidad Medida</b>
                         </th>
-                        
+
                         <th class="text-left">
                             <b>Es Insumo</b>
                         </th>
 
                         <th class="text-left">
-                            algunBoton
+                            Editar
                         </th>
                         <th class="text-left">
-                            otroBoton
+                            Eliminar
                         </th>
                     </tr>
                 </thead>
@@ -56,7 +54,7 @@
                             {{ insumo.precioCompra }}
                         </td>
                         <td>
-                            {{ insumo.precioVenta}}
+                            {{ insumo.precioVenta }}
                         </td>
 
                         <td>
@@ -76,8 +74,7 @@
                         </td>
 
                         <td>
-                            <Form-Insumo :idinsumo="insumo.denominacion"
-                                @nuevoInsumo="handleMessage">
+                            <Form-Insumo :idinsumo="insumo.denominacion" @nuevoInsumo="handleMessage">
                             </Form-Insumo>
                         </td>
                         <td>
@@ -87,14 +84,13 @@
                                 </v-icon>
                             </v-btn>
                         </td>
-
                     </tr>
                 </tbody>
             </template>
         </v-simple-table>
-      <!--  <div v-else>
-            <h3 class="text-center">No existen insumos para esta categoría</h3>
-        </div> -->
+        <!--  <div v-else>
+                    <h3 class="text-center">No existen insumos para esta categoría</h3>
+                </div> -->
     </v-card>
     <div v-else>
         <h1 class="text-center">Seleccione un Rubro</h1>
@@ -106,7 +102,7 @@ export default {
     data() {
         return {
             insumosData: [{
-                _id:"",
+                _id: "",
                 denominacion: "",
                 precioCompra: null,
                 precioVenta: null,
@@ -121,31 +117,40 @@ export default {
             }],
         }
     },
-    components:{
+    components: {
         "Form-Insumo": forminsumo
     },
-    beforeUpdate(){ 
+    beforeUpdate() {
         console.log("asdasdasdasdasdsa"),
-        console.log("insumoParam", this.insumoParam)
-        if(this.insumoParam)
+            console.log("insumoParam", this.insumoParam)
+        if (this.insumoParam)
             this.getInsumosXrubro(this.insumoParam)
     },
     props: ["insumoParam"],
     mounted() {
         console.log("insumoParam", this.insumoParam)
-            //   this.getInsumos()
+        this.getInsumosXrubro(this.insumoParam)
     },
 
     methods: {
         async getInsumosXrubro(parametro) {
-            console.log(parametro)
-            const res = await fetch(
-                `http://localhost:3000/articulosinsumosXrubro/${parametro}`
+            //console.log("parametroGetInsumos " + parametro+" length "+parametro.length)
+            if (parametro.length == 0) {
+                const res = await fetch(
+                    'http://localhost:3000/articulosinsumos'
                 );
-            const resJson = await res.json();
-            console.log(resJson);
-            //if(resJson!=null)
-            this.insumosData = resJson;
+                const resJson = await res.json();
+                console.log(resJson);
+                //if(resJson!=null)
+                this.insumosData = resJson;
+            } else {
+                const res = await fetch(
+                    `http://localhost:3000/articulosinsumosXrubro/${parametro}`
+                );
+                const resJson = await res.json();
+                console.log(resJson);
+                this.insumosData = resJson;
+            }
         },
         handleMessage(value) {
             this.nuevoArt = value
@@ -156,16 +161,13 @@ export default {
         },
         async eliminarInsumo(id) {
             let urlServer = `http://localhost:3000/EliminarInsumo/${id}`;
-
             const res = await fetch(urlServer, {
                 "method": 'DELETE',
-
                 "headers": {
                     "Content-type": 'application/json',
                     'Access-Control-Allow-Origin': '*'
                 },
                 mode: 'cors'
-
             });
             const resJson = await res.json();
             console.log("respuesta: ", resJson)
