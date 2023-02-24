@@ -33,6 +33,9 @@
                                 <b>totalCosto</b>
                             </th>
                             <th class="text-left">
+                                <b>VER</b>
+                            </th>
+                            <th class="text-left">
                                 <b>ENVIAR A CLIENTE</b>
                             </th>
                         </tr>
@@ -94,15 +97,7 @@ export default {
     data() {
         return {
             currentUser: undefined,
-            facturasData: [],
-            select: 'Pendiente',
-            items: [
-                { state: 'Ver Todo' },
-                { state: 'Pendiente' },
-                { state: 'Entregado' },
-                { state: 'Cancelado' },
-
-            ],
+            facturasData: []
         };
     },
     methods: {

@@ -49,7 +49,7 @@ exports.getAncestorsRubroArticulo = async (req, res) => {
                 "_id": false,
                 "denominacion": true,
                 "ancestors.denominacion": true
-            }) 
+            })
             .exec();
         res.status(201).send({ "status": "success", "result": result });
     } catch (err) {
@@ -58,15 +58,15 @@ exports.getAncestorsRubroArticulo = async (req, res) => {
 }
 exports.getDescendentsRubroArticulo = async (req, res) => {
     try {
-        const result = await RubroArticulo.find( {"ancestors._id" : req.body._id })
-       
+        const result = await RubroArticulo.find({ "ancestors._id": req.body._id })
+
             .select({ "_id": false, "denominacion": true, "parent": true })
             .exec();
-        
+
         res.status(201).send({ "status": "success", "result": result });
     } catch (err) {
         res.status(500).send(err);
-    } 
+    }
 }
 
 
@@ -115,7 +115,35 @@ exports.getRubros = async (req, res) => {
     return res.json(rubros)
 }
 
+exports.getRubrosFalseInsumos = async (req, res) => {
 
+    // const rubrosinsumos = await RubroArticulo.find({ $where: 'this.articuloinsumoid.length>0' }, { denominacion: 1, ancestors: 1 })
+    //     .populate({ path: "articuloinsumoid", match: { esInsumo: false } })
+    // console.log("rubro", rubrosinsumos.length)
+    // console.log("rubrosinsumos2", rubrosinsumos)
+    // const articulos = []
+    // for (let i = 0; i < rubrosinsumos.length; i++) {
+    //     if (rubrosinsumos[i].articuloinsumoid.length > 0)
+    //         articulos.push(rubrosinsumos[i])
+    // }
+    // console.log(articulos)
+    // return res.json(articulos)
+
+    const resultado=[]
+    const rubros = await RubroArticulo.find
+    ({}).where('articuloinsumoid').ne([]) 
+    .populate({
+        path: "articuloinsumoid",
+        match: { "esInsumo": false },
+        select: { denominacion: 1, RubroArticuloid: 1 }
+    })
+    for (let i = 0; i < rubros.length; i++) {
+        if(rubros[i].articuloinsumoid.length>0)
+            resultado.push(rubros[i])
+    }
+    console.log(resultado)
+    return res.json(resultado)
+}
 
 exports.updateRubroArticulo = async (req, res) => {
     const rubroUpdated = await RubroArticulo.findByIdAndUpdate(req.body._id, { $addToSet: { "articuloinsumoid": req.body.articuloinsumoid } })

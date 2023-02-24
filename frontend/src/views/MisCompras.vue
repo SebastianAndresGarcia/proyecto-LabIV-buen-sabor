@@ -39,7 +39,7 @@
                                 {{ compra.numero }}
                             </td>
                             <td>
-                                {{ compra.estado }}
+                                {{ compra.mercadopagodatosid.estado }}
                             </td>
                             <td>
                                 {{ compra.total }}
@@ -48,7 +48,7 @@
                                 <detalle-pedido :pedidoParam="compra"></detalle-pedido>
                             </td>
                             <td>
-                                <b>En preparación...</b>
+                                <b>{{ compra.estado }}</b>
                             </td>
                             <td>
                                 <b>En proceso...</b>
@@ -124,7 +124,7 @@ export default {
             let method = "POST";
             const respuesta = await fetch(urlServer, {
                 method: method,
-                body: JSON.stringify({ estado: status }),
+                body: JSON.stringify({ estado: 'pendiente' }),
                 headers: {
                     "Content-type": "application/json",
                 },

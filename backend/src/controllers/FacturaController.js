@@ -30,19 +30,24 @@ exports.createFactura = async (req, res) => {
     console.log(detalles)
     try {
         let tipoArticulo = ""
+        let articuloid= ""
         const savedFactura = await factura.save()
         const updatePedido = await Pedido.findByIdAndUpdate(savedFactura.pedidoid, {facturaid: savedFactura._id})
         for (let i = 0; i < detalles.length; i++) {
-            console.log("entró al for " + detalles[i].articulomanufacturadoid.denominacion)
-            const ArticuloFound = await ArticuloManufacturado.findOne({ _id: detalles[i].articulomanufacturadoid._id })
-            if (ArticuloFound) { tipoArticulo = "articulomanufacturadoid" }
-            else { tipoArticulo = "articuloinsumoid" }
+            console.log("entró al for " + detalles[i])
+            //const ArticuloFound = await ArticuloManufacturado.findOne({ _id: detalles[i].articulomanufacturadoid._id })
+            if (detalles[i].articulomanufacturadoid) 
+                { tipoArticulo = "articulomanufacturadoid"
+                articuloid=detalles[i].articulomanufacturadoid._id }
+            else 
+                { tipoArticulo = "articuloinsumoid" 
+                articuloid=detalles[i].articuloinsumoid._id}
             console.log("tipoArticulo" + tipoArticulo)
-            const detalleFactura = new DetalleFactura({ "cantidad": detalles[i].cantidad, "subtotal": detalles[i].subtotal, [tipoArticulo]: detalles[i].articuloid, "facturaid": savedFactura._id })
+            const detalleFactura = new DetalleFactura({ "cantidad": detalles[i].cantidad, "subtotal": detalles[i].subtotal, [tipoArticulo]: articuloid, "facturaid": savedFactura._id })
             const savedDetalle = await detalleFactura.save()
             console.log("savedDetalle", savedDetalle)
-            const updateManufacturado = await ArticuloManufacturado.findByIdAndUpdate(detalles[i].articuloid, { $addToSet: { "detallefacturaid": savedDetalle._id } })
-            const updateInsumo = await ArticuloInsumo.findByIdAndUpdate(detalles[i].articuloid, { $addToSet: { "detallefacturaid": savedDetalle._id } })
+            const updateManufacturado = await ArticuloManufacturado.findByIdAndUpdate(articuloid, { $addToSet: { "detallefacturaid": savedDetalle._id } })
+            const updateInsumo = await ArticuloInsumo.findByIdAndUpdate(articuloid, { $addToSet: { "detallefacturaid": savedDetalle._id } })
             const updateFactura = await Factura.findByIdAndUpdate(savedFactura._id, { $addToSet: { "detallefacturaid": savedDetalle._id } })
         }
         res.json(savedFactura)
@@ -57,14 +62,14 @@ exports.getFacturas = async (req, res) => {
         path: "detallefacturaid", // populate blogs
         populate: {
             path: "articulomanufacturadoid", // in blogs, populate comments
-            select: { denominacion: 1, _id: 1, precioCompra: 1, precioVenta:1 }, //elijo solo los campos que quiero traer
+            select: { denominacion: 1, _id: 1, precioCompra: 1, imagen: 1 }, //elijo solo los campos que quiero traer
         }
     })
         .populate({
             path: "detallefacturaid", // populate blogs
             populate: {
                 path: "articuloinsumoid", // in blogs, populate comments
-                select: { denominacion: 1, _id: 1, precioCompra: 1, precioVenta:1 }, //elijo solo los campos que quiero traer
+                select: { denominacion: 1, _id: 1, precioCompra: 1 , imagen: 1}, //elijo solo los campos que quiero traer
             }
         })
     if (!facturas)

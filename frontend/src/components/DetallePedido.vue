@@ -12,8 +12,8 @@
 
             <v-card style="overflow: hidden;"> <!--overflow son las barras que aparece para scrollear la vista-->
                 <div style="margin:2%">
-                    <v-row><v-card-title> Pedido N° {{ pedido.numero }}</v-card-title></v-row>
-                    <v-row v-for="(item, i) in pedido.detallepedidoid" :key="i"
+                    <v-row><v-card-title> Pedido N° {{ pedidoParam.numero }}</v-card-title></v-row>
+                    <v-row v-for="(item, i) in detalle" :key="i"
                         style="align-content: center; justify-content: center; ">
                         <v-col cols="2" style="justify-content: center">
                             <v-row style="justify-content: center"><v-avatar style="justify-content: center" size="80"
@@ -62,14 +62,18 @@ export default {
         return {
             items: [],
             dialog: false,
-            pedido: {}
+            pedido: {},
+            detalle: []
         };
     },
     props: ["pedidoParam"],
     mounted() {
         //this.Pedidoxid(this.pedidoParam)
-        console.log(this.pedidoParam)
-        this.pedido = this.pedidoParam
+        console.log("pedidoParam",this.pedidoParam)
+        if(this.pedidoParam.detallepedidoid)
+            this.detalle = this.pedidoParam.detallepedidoid
+        else
+            this.detalle = this.pedidoParam.detallefacturaid
     },
 
     methods: {

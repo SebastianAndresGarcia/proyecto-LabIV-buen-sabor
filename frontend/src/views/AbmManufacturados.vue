@@ -30,7 +30,7 @@ import articuloManufacturado from "@/components/ArticuloManufacturado.vue";
 import CrearRubro from "@/components/CrearRubro.vue";
 import AuthService from "@/service/auth.service.js"
 export default {
-    name: "abm-articulos",
+    name: "abm-manufacturados",
     components: {
         "articulomanufacturado-item": articuloManufacturado,
         "Crear-Rubro": CrearRubro,

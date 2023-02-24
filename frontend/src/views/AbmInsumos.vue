@@ -32,7 +32,7 @@ import CrearRubro from "@/components/CrearRubro.vue";
 import CrearInsumo from "@/components/CrearInsumo.vue"
 import AuthService from "@/service/auth.service.js"
 export default {
-    name: "abm-articulos",
+    name: "abm-insumos",
     components: {
 
         "articuloinsumo-item": articuloInsumo,

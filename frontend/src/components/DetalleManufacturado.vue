@@ -170,7 +170,7 @@ export default {
                 this.$emit('limpiarObjeto', { actualizarCarrousel: true })
             }
             else {
-                this.getLocalStorage(this.manufacturado._id)
+              //  this.getLocalStorage(this.manufacturado._id)
             }
         });
     }

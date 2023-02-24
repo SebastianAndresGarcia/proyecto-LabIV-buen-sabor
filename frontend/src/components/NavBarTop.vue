@@ -145,7 +145,14 @@ export default {
         "http://localhost:3000/rubrosgeneral"
       );
       const resJson = await res.json();
-      this.rubros = resJson
+      this.rubros = resJson    
+      const respuesta = await fetch(
+        "http://localhost:3000/rubrosInsumos"
+      );
+      const resJsn = await respuesta.json();
+      resJsn.forEach(element => {
+        this.rubros.push(element)
+      });
       this.rubros.push({ 'denominacion': "Ver todo", '_id': 0 })
     },
     async cerrarSesion() {

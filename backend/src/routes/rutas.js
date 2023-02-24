@@ -11,6 +11,7 @@ const controllerRoles = require('../controllers/Roles.controller')
 const controllerPedidos = require('../controllers/PedidosController')
 const controllerMercaPago = require('../controllerMPago/MercadoPagoController')
 const controllerFacturas = require ('../controllers/FacturaController')
+const controllerEstadisticas = require ('../controllers/EstadisticasController')
 const { verifySignUp } = require("../middlewares");
 const controller = require("../controllers/auth.controller");
 
@@ -31,13 +32,15 @@ router.get('/verAncestrosRubroArticulo', controllerRubroArticulo.getAncestorsRub
 router.get('/verDescendentesRubroArticulo', controllerRubroArticulo.getDescendentsRubroArticulo);
 router.post('/actualizarRubroArticulo', controllerRubroArticulo.updateRubroArticulo);
 router.post('/ActualizarRubroGeneral', controllerRubroGeneral.updateRubroGeneral);
-router.get('/rubros/', controllerRubroArticulo.getRubros);
+router.get('/rubros', controllerRubroArticulo.getRubros);
 router.post('/agregarSubRubro', controllerRubroArticulo.agregarSubRubro);
+router.get('/rubrosInsumos', controllerRubroArticulo.getRubrosFalseInsumos);
 // router.post('/agregarArticuloRubro', agregarArticuloRubro);  //comentar-descomentar ctrol+k+c  ctrl+k+u
 router.post('/crearRubroGeneral', controllerRubroGeneral.createRubroGeneral);
 router.get('/rubrosgeneral', controllerRubroGeneral.getRubrosGeneral);
 router.post('/crearArticuloManufacturado', controllerArticuloManufacturado.createArticuloManufacturado);
 router.get('/articulosmanufacturados', controllerArticuloManufacturado.getArticulosManufacturados);
+router.get('/articulosmanufacturadosInsumos', controllerArticuloManufacturado.getArticulosManufacturadosInsumos);
 router.get('/getPromociones', controllerArticuloManufacturado.getPromociones);
 router.get('/articulosmanufacturadosxrubro/:id', controllerArticuloManufacturado.getArticulosManufacturadosxrubro);
 router.post('/actualizarArticuloManufacturado/:id', controllerArticuloManufacturado.updateArticuloManufacturado);
@@ -49,6 +52,8 @@ router.post('/crearArticuloInsumo', controllerArticuloInsumo.createArticuloInsum
 router.get('/ArticuloInsumo/:id', controllerArticuloInsumo.getArticuloInsumo)
 router.get('/ArticulosInsumos', controllerArticuloInsumo.getArticulosInsumos)
 router.get('/articulosinsumosXrubro/:id', controllerArticuloInsumo.getArticulosInsumosxrubro)
+router.get('/insumosXrubro/:id', controllerArticuloInsumo.getArticulosInsumosFalsexRubro)
+router.get('/articulosinsumosfalse', controllerArticuloInsumo.getArticulosInsumosFalse)
 router.post('/ActualizarInsumo/:id', controllerArticuloInsumo.updateArticuloInsumo)
 router.delete('/EliminarInsumo/:id', controllerArticuloInsumo.deleteArticuloInsumo)
 router.get('/empleados', controllerUser.getEmpleados)
@@ -69,4 +74,6 @@ router.get('/facturasxid/:id', controllerFacturas.getFacturasxid)
 router.get('/facturaxid/:id', controllerFacturas.Facturaxid)
 router.get('/FacturaXpedidoid/:id', controllerFacturas.FacturaXpedidoid)
 router.post('/actualizarFactura/:id', controllerFacturas.actualizarFactura)
+router.get('/manufacturadosVendidos', controllerEstadisticas.manufacturadosVendidos)
+
 module.exports = router

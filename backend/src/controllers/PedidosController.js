@@ -6,9 +6,9 @@ const ArticuloManufacturado = require('../models/ArticuloManufacturado')
 
 exports.createPedido = async (req, res) => {
     const ultimoPedido = await Pedido.find().limit(1).sort({ $natural: -1 })
-    let num=0
-    if(ultimoPedido.length>0){
-         num=ultimoPedido[0].numero
+    let num = 0
+    if (ultimoPedido.length > 0) {
+        num = ultimoPedido[0].numero
     }
     const pedido = new Pedido({
         fecha: req.body.fecha,
@@ -33,8 +33,10 @@ exports.createPedido = async (req, res) => {
         for (let i = 0; i < detalles.length; i++) {
             console.log("entró al for " + detalles[i].articuloid)
             const ArticuloFound = await ArticuloManufacturado.findOne({ _id: detalles[i].articuloid })
-            if (ArticuloFound) { tipoArticulo = "articulomanufacturadoid" }
-            else { tipoArticulo = "articuloinsumoid" }
+            if (ArticuloFound) 
+                { tipoArticulo = "articulomanufacturadoid" }
+            else 
+                { tipoArticulo = "articuloinsumoid" }
             console.log("tipoArticulo" + tipoArticulo)
             const detallepedido = new DetallePedido({ "cantidad": detalles[i].cantidad, "subtotal": detalles[i].subtotal, [tipoArticulo]: detalles[i].articuloid, "pedidoid": savedPedido._id })
             const savedDetalle = await detallepedido.save()
@@ -67,7 +69,7 @@ exports.getPedidos = async (req, res) => {
         })
         .populate({
             path: "mercadopagodatosid",
-            select: {estado: 1}
+            select: { estado: 1 }
         })
     if (!pedidos)
         return res.status(204).json();
@@ -77,7 +79,7 @@ exports.getPedidos = async (req, res) => {
 
 exports.getPedidosxid = async (req, res) => {
     const id = req.params.id
-    const pedidos = await Pedido.find({'userid':id}).populate({
+    const pedidos = await Pedido.find({ 'userid': id }).populate({
         path: "detallepedidoid", // populate blogs
         populate: {
             path: "articulomanufacturadoid", // in blogs, populate comments
@@ -91,6 +93,11 @@ exports.getPedidosxid = async (req, res) => {
                 select: { denominacion: 1, _id: 1 }, //elijo solo los campos que quiero traer
             }
         })
+        .populate({
+            path: "mercadopagodatosid", // populate blogs
+            select: { estado: 1, _id: 1 }, //elijo solo los campos que quiero traer
+
+        })
     if (!pedidos)
         return res.status(204).json();
     //console.log(pedidos);
@@ -98,7 +105,7 @@ exports.getPedidosxid = async (req, res) => {
 }
 exports.getPedidosCocinero = async (req, res) => {
     const estado = "elaboracion"
-    const pedidos = await Pedido.find({'estado': estado}).populate({
+    const pedidos = await Pedido.find({ 'estado': estado }).populate({
         path: "detallepedidoid", // populate blogs
         populate: {
             path: "articulomanufacturadoid", // in blogs, populate comments
@@ -125,7 +132,7 @@ exports.actualizarPedido = async (req, res) => {
 
 exports.Pedidoxid = async (req, res) => {
     const id = req.params.id
-    const pedidos = await Pedido.findById({_id:id}).populate({
+    const pedidos = await Pedido.findById({ _id: id }).populate({
         path: "detallepedidoid", // populate blogs
         populate: {
             path: "articulomanufacturadoid", // in blogs, populate comments
