@@ -7,12 +7,14 @@
         </v-card-title>
         <v-container>
             <v-row dense>
+                <input class="inputpromohome" v-model="probando" readonly>
                 <v-col v-for="(item, i) in items" :key="i" cols="12">
                     <v-card :color="'white'">
                         <div style="color: black;" class="d-flex flex-no-wrap justify-space-between">
 
                             <div>
                                 <div class="text-overline mt-2" v-text="item.denominacion"></div>
+                                
                                 <v-card-subtitle>
                                     <h2>${{ item.precioVenta }}</h2>
                                 </v-card-subtitle>
@@ -35,10 +37,12 @@
                                     </v-btn>
                                 </v-card-actions>
                             </div>
-                            <v-avatar class="ma-3" size="70" tile>
-                                <v-img v-if="String(item.imagen).indexOf('http') >= 0" :src="item.imagen"></v-img>
-                                <v-img v-else :src="`../images/` + item.imagen"></v-img>
-                            </v-avatar>
+                            <div v-if="item.imagen">
+                                <v-avatar class="ma-3" size="70" tile>
+                                    <v-img v-if="String(item.imagen).indexOf('http') >= 0" :src="item.imagen"></v-img>
+                                    <v-img v-else :src="`../images/` + item.imagen"></v-img>
+                                </v-avatar>
+                            </div>
                         </div>
                     </v-card>
                 </v-col>
@@ -63,7 +67,7 @@
 </template>
 <script>
 import { eventBus } from "../main";
-import { calcularInsumos, controlStock } from "@/funciones/ControlStock.js"
+import { calcularInsumos, controlStock, getArticuloActualizado } from "@/funciones/ControlStock.js"
 export default {
     data() {
         return {
@@ -72,7 +76,9 @@ export default {
             carritoLength: 0,
             eliminaItem: false,
             cantidad: [],
-            conStock: true
+            conStock: true,
+            probando: null,
+            articulo: null
         };
     },
     mounted() {
@@ -82,15 +88,24 @@ export default {
     methods: {
         async getmanufacturados(id, cant) {
             console.log("id " + id + " cant " + cant)
+            try {
+                const res = await fetch(
+                    `http://localhost:3000/getManufacturadoXid/${id}`
+                )
+                const resJson = await res.json();
+                console.log("resJson-getManufacturadoxid", resJson);
+                this.items.push(resJson);
+            } catch (e) {
+                const res = await fetch(
+                    `http://localhost:3000/ArticuloInsumoxid/${id}`
+                )
+                const resJson = await res.json();
+                console.log("resJson-getManufacturadoxid", resJson);
+                this.items.push(resJson);
+            }
 
-            const res = await fetch(
-                `http://localhost:3000/getManufacturadoXid/${id.trim()}`
-            )
-            const resJson = await res.json();
-            console.log(resJson);
-            this.items.push(resJson);
             this.carritoLength = this.items.length
-            this.conStock.push(controlStock(this.items[this.items.length - 1].detallearticulomanufacturadoid))
+            this.conStock.push(controlStock(this.items[this.items.length - 1]))
             this.cantidad.push(cant)
             console.log("this.cantidad", this.cantidad)
             console.log("this.items", this.items)
@@ -123,7 +138,8 @@ export default {
         },
         async eliminar(item, cantidad) {
             if (cantidad > 0) {
-                await calcularInsumos(item.detallearticulomanufacturadoid, -cantidad)
+                this.articulo = await getArticuloActualizado(item._id) //me traigo el manufact/insumo con los stock actualizados
+                this.items[index]=await calcularInsumos(this.articulo, -cantidad)
             }
             this.items = []
             localStorage.removeItem(item._id)
@@ -131,18 +147,25 @@ export default {
             eventBus.$emit("elimina-itemcarrito", item._id)
         },
         async agregarProducto(item, j, index) {
+            this.probando+=1
+            //console.log("this.probando "+this.probando)
             this.cantidad[index] += j
-            this.conStock[index] = controlStock(item.detallearticulomanufacturadoid)
-            await calcularInsumos(item.detallearticulomanufacturadoid, j)
-            this.items = []
+            this.articulo = await getArticuloActualizado(item._id) //me traigo el manufact/insumo con los stock actualizados
+            this.conStock[index] = await controlStock(this.articulo)
+            console.log("this.conStock"+this.conStock[index])
+            this.articulo=await calcularInsumos(this.articulo, j)
+            //console.log("this.item[index] ", this.items[index])
+            //this.items = []
             if (this.cantidad[index] == 0) {
-                this.conStock[index] == 0
+                this.conStock[index] == false
                 this.eliminar(item, 0)
             } else {
                 localStorage.setItem(item._id, JSON.stringify({ 'cantidad': this.cantidad[index] }))
                 eventBus.$emit("elimina-itemcarrito", '0')
-                this.getLocalStorage()
+               // this.getLocalStorage()
             }
+            this.conStock[index] = await controlStock(this.articulo)
+            console.log("this.conStock"+this.conStock[index])
         },
         cerrar() {
             this.cerrarCarro = true

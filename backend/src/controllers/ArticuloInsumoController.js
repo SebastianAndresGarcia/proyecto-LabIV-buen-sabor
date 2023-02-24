@@ -28,17 +28,17 @@ exports.deleteArticuloInsumo = async (req, res) => {
 
 exports.updateArticuloInsumo = async (req, res) => {
     console.log("req.body update ", req.body)
-    try {
-        const articulo = await ArticuloInsumo.findOneAndUpdate({ _id: req.params.id }, req.body)
-        console.log("insumo actualizado stock", articulo)
-        res.json(articulo)
-    } catch (e) {
         const articulo = await ArticuloInsumo.findOneAndUpdate({ denominacion: req.params.id }, req.body)
         console.log("insumo actualizado stock", articulo)
         res.json(articulo)
-    }
 }
 
+exports.updateArticuloInsumoxid = async (req, res) => {
+    console.log("req.body update ", req.body)
+        const articulo = await ArticuloInsumo.findOneAndUpdate({ _id: req.params.id }, req.body)
+        console.log("insumo actualizado stock", articulo)
+        res.json(articulo)
+}
 exports.getArticulosInsumos = async (req, res) => { //trae todos los articulosinsumos
     const insumos = await ArticuloInsumo.find()
     if (!insumos)
@@ -47,22 +47,22 @@ exports.getArticulosInsumos = async (req, res) => { //trae todos los articulosin
     return res.json(insumos)
 }
 exports.getArticuloInsumo = async (req, res) => { //trae un articulo
-    try {
-        const insumo = await ArticuloInsumo.findOne({ _id: req.params.id })
-        if (!insumo)
-            return res.status(204).json();
-        console.log(insumo);
-        return res.json(insumo)
-        //const insumo = await ArticuloInsumo.findOne({ $or: [{ '_id': req.params.id }, { 'denominacion': req.params.id }] })
-        
-    } catch (e) {
-        const insumo = await ArticuloInsumo.findOne({ denominacion: req.params.id })
-        if (!insumo)
-            return res.status(204).json();
-        console.log(insumo);
-        return res.json(insumo)
-    }
 
+    const insumo = await ArticuloInsumo.findOne({ denominacion: req.params.id })
+    if (!insumo)
+        return res.status(204).json();
+    console.log(insumo);
+    return res.json(insumo)
+
+}
+
+exports.getArticuloInsumoxid = async (req, res) => { //trae un articulo
+
+    const insumo = await ArticuloInsumo.findOne({ _id: req.params.id })
+    if (!insumo)
+        return res.status(204).json();
+    console.log(insumo);
+    return res.json(insumo)
 }
 exports.getArticulosInsumosxrubro = async (req, res) => {
     console.log("req.params.id" + req.params.id)

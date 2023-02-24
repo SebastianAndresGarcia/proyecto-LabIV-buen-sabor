@@ -5,7 +5,7 @@
             <v-progress-linear color="deep-purple" height="10" indeterminate></v-progress-linear>
         </template>
 
-        <div style="text-decoration:none; cursor:pointer" @click="abrirDetalleManufacturado(manufacturadoParam)">
+        <div v-if="manufacturadoParam.imagen" style="text-decoration:none; cursor:pointer" @click="abrirDetalleManufacturado(manufacturadoParam)">
             <span v-if="manufacturadoParam.imagen.indexOf('http') >= 0">
                 <v-img height="250" :src="this.manufacturadoParam.imagen">
                     <v-row v-if="manufacturadoParam.descuento > 0">
@@ -107,14 +107,14 @@ export default {
     props: { manufacturadoParam: Object },
     mounted() {
         this.getLocalStorage(this.manufacturadoParam._id)
-        console.log("manufacturadoParam", this.manufacturadoParam)
+        //console.log("manufacturadoParam", this.manufacturadoParam)
         this.currentUser = AuthService.getCurrentUser()
-        this.conStock = controlStock(this.manufacturadoParam.detallearticulomanufacturadoid)
-        console.log("conStock ", this.conStock)
+        this.conStock = controlStock(this.manufacturadoParam)
+        //console.log("conStock ", this.conStock)
     },
     beforeUpdate() {
-        this.conStock = controlStock(this.manufacturadoParam.detallearticulomanufacturadoid)
-        console.log("conStock beforeUpdate", this.conStock)
+        this.conStock = controlStock(this.manufacturadoParam)
+        //console.log("conStock beforeUpdate", this.conStock)
     },
     methods: {
         async agregar(id) {
@@ -123,9 +123,9 @@ export default {
                 this.reserve = true
                 this.cambioCarrito = true
                 window.localStorage.setItem(id, JSON.stringify({ 'cantidad': this.cantidad }));
-                console.log("insumos agregar ", this.manufacturadoParam.detallearticulomanufacturadoid)
-                await calcularInsumos(this.manufacturadoParam.detallearticulomanufacturadoid, this.cantidad)
-                this.conStock = controlStock(this.manufacturadoParam.detallearticulomanufacturadoid)
+                console.log("insumos agregar ", this.manufacturadoParam)
+                await calcularInsumos(this.manufacturadoParam, this.cantidad)
+                this.conStock = controlStock(this.manufacturadoParam)
                 console.log("entró conStock " + this.conStock)
                 this.$emit('abrirAlert', 1)
                 eventBus.$emit("carrito-changed", this.cambioCarrito)
@@ -141,9 +141,9 @@ export default {
             } else {
                 this.cantidad += i
                 window.localStorage.setItem(id, JSON.stringify({ 'cantidad': this.cantidad }))
-                console.log("insumos agregarProducto ", this.manufacturadoParam.detallearticulomanufacturadoid)
-                await calcularInsumos(this.manufacturadoParam.detallearticulomanufacturadoid, i)
-                this.conStock = controlStock(this.manufacturadoParam.detallearticulomanufacturadoid)
+                console.log("insumos agregarProducto ", this.manufacturadoParam)
+                await calcularInsumos(this.manufacturadoParam, i)
+                this.conStock = controlStock(this.manufacturadoParam)
                 this.$emit('abrirAlert', 1)
                 eventBus.$emit("carrito-changed", this.cambioCarrito)
                 if (this.cantidad == 0) {
@@ -177,12 +177,14 @@ export default {
                 this.$emit('abrirAlert', 1)
             }
             if (value.actualizarCarrousel) {
-                const res = await fetch(
-                    `http://localhost:3000/getManufacturadoXid/${this.art._id}`
-                )
-                const resJson = await res.json();
-                this.art = resJson
-                this.getLocalStorage(this.art._id)
+                try {
+                    const res = await fetch(
+                        `http://localhost:3000/getManufacturadoXid/${this.art._id}`
+                    )
+                    const resJson = await res.json();
+                    this.art = resJson
+                    this.getLocalStorage(this.art._id)
+                } catch (e) { }
             }
         }
     }

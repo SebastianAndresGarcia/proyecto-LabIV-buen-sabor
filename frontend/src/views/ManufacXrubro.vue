@@ -31,10 +31,10 @@ export default {
         async getmanufacturados(id) {
             if (id == 0) {
                 const res = await fetch(
-                    "http://localhost:3000/articulosmanufacturados"
+                    "http://localhost:3000/articulosmanufacturadosInsumos"
                 )
                 const resJson = await res.json();
-                console.log(resJson);
+                //console.log(resJson);
                 this.manufacturadosData = resJson;
             }
             else {
@@ -45,7 +45,7 @@ export default {
                 //console.log(resJson);
                 this.manufacturadosData = resJson;
             }
-            console.log("this.manufacturadosData", this.manufacturadosData)
+            //console.log("this.manufacturadosData", this.manufacturadosData)
         },
         handleMessage(value) {
             if (value >= 0) {

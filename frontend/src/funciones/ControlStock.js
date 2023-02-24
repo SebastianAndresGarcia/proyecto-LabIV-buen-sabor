@@ -1,7 +1,8 @@
 //control stock
 function controlStock(insumos) { //no le puedo poner async porque me quedaba la promesa pendiente en donde yo invocaba la fcion
-    console.log("en controlStock", insumos)
-    if (insumos.detallearticulomanufacturadoid.length>0) { //con esto filtro si es un array o viene solo un number
+    //console.log("en controlStock", insumos)
+    //console.log(insumos)
+    if (insumos.detallearticulomanufacturadoid[0]) {
         for (let i = 0; i < insumos.detallearticulomanufacturadoid.length; i++) {
             if (insumos.detallearticulomanufacturadoid[i].cantidad > insumos.detallearticulomanufacturadoid[i].ArticuloInsumoid.stockActual) {
                 console.log(insumos.detallearticulomanufacturadoid[i].cantidad + ">" + insumos.detallearticulomanufacturadoid[i].ArticuloInsumoid.stockActual)
@@ -9,11 +10,9 @@ function controlStock(insumos) { //no le puedo poner async porque me quedaba la 
                 break
             }
         }
-    }
-    else {
-        if (insumos < 1) {
+    } else {
+        if (insumos.stockActual < 1)
             return false
-        }
     }
     return true
 }
@@ -29,13 +28,14 @@ function controlStock(insumos) { //no le puedo poner async porque me quedaba la 
 //     return res.json()
 // }
 
-const calcularInsumos = async (detalle, j) => {
-    console.log("detalle calcularInsumos", detalle)
-    if (detalle[0]) { //con esto filtro si es un array o viene solo un number
-        for (let i = 0; i < detalle.length; i++) {
-            let stock = detalle[i].ArticuloInsumoid.stockActual - (detalle[i].cantidad * j)
-            console.log("stock " + detalle[i].ArticuloInsumoid.stockActual + "-" + detalle[i].cantidad * j + " :" + stock)
-            let urlServer = "http://localhost:3000/ActualizarInsumo/" + detalle[i].ArticuloInsumoid.denominacion;
+//const calcularInsumos = async (detalle, j) => {
+async function calcularInsumos(detalle, j) {
+    console.log("detalle calcularInsumos..", detalle)
+    if (detalle.detallearticulomanufacturadoid[0]) {
+        for (let i = 0; i < detalle.detallearticulomanufacturadoid.length; i++) {
+            let stock = detalle.detallearticulomanufacturadoid[i].ArticuloInsumoid.stockActual - (detalle.detallearticulomanufacturadoid[i].cantidad * j)
+            console.log("stock " + detalle.detallearticulomanufacturadoid[i].ArticuloInsumoid.stockActual + "-" + detalle.detallearticulomanufacturadoid[i].cantidad * j + " :" + stock)
+            let urlServer = "http://localhost:3000/ActualizarInsumo/" + detalle.detallearticulomanufacturadoid[i].ArticuloInsumoid.denominacion;
             let method = "POST";
             const respuesta = await fetch(urlServer, {
                 method: method,
@@ -49,11 +49,17 @@ const calcularInsumos = async (detalle, j) => {
             const resJson = await respuesta.json()
             console.log("resJson calcularInsumos", resJson)
         }
+        const res = await fetch(
+            `http://localhost:3000/getManufacturadoXid/${detalle._id}`
+        )
+        const resJson = await res.json();
+        const array = resJson
+        return array
     }
     else {
         let stock = detalle.stockActual - j
-        console.log("stock(2) " + detalle.stockActual + "-" + j + " =" + stock)
-        let urlServer = "http://localhost:3000/ActualizarInsumo/" + detalle._id;
+        console.log("stock (2)" + detalle.stockActual + "-" + j + " :" + stock)
+        let urlServer = "http://localhost:3000/ActualizarInsumo/" + detalle.denominacion;
         let method = "POST";
         const respuesta = await fetch(urlServer, {
             method: method,
@@ -63,10 +69,36 @@ const calcularInsumos = async (detalle, j) => {
             },
             mode: "cors",
         });
-        stock = 0
         const resJson = await respuesta.json()
         console.log("resJson calcularInsumos(2)", resJson)
+
+        const res = await fetch(
+            `http://localhost:3000/ArticuloInsumoxid/${detalle._id}`
+        )
+        const resJson2 = await res.json();
+        const array = resJson2
+        return array
     }
 }
 
-export { controlStock, calcularInsumos };
+async function getArticuloActualizado(id) {
+    console.log("id getArticuloActualizado..", id)
+    try {
+        const res = await fetch(
+            `http://localhost:3000/getManufacturadoXid/${id}`
+        )
+        const resJson = await res.json();
+        const array = resJson
+        return array
+    } catch (e) {
+        const res = await fetch(
+            `http://localhost:3000/ArticuloInsumoxid/${id}`
+        )
+        const resJson2 = await res.json();
+        const array = resJson2
+        return array
+    }
+
+}
+
+export { controlStock, calcularInsumos, getArticuloActualizado };
