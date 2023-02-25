@@ -14,7 +14,7 @@
 
                             <div>
                                 <div class="text-overline mt-2" v-text="item.denominacion"></div>
-                                
+
                                 <v-card-subtitle>
                                     <h2>${{ item.precioVenta }}</h2>
                                 </v-card-subtitle>
@@ -76,7 +76,7 @@ export default {
             carritoLength: 0,
             eliminaItem: false,
             cantidad: [],
-            conStock: true,
+            conStock: [],
             probando: null,
             articulo: null
         };
@@ -139,7 +139,7 @@ export default {
         async eliminar(item, cantidad) {
             if (cantidad > 0) {
                 this.articulo = await getArticuloActualizado(item._id) //me traigo el manufact/insumo con los stock actualizados
-                this.items[index]=await calcularInsumos(this.articulo, -cantidad)
+                this.items[index] = await calcularInsumos(this.articulo, -cantidad)
             }
             this.items = []
             localStorage.removeItem(item._id)
@@ -147,25 +147,31 @@ export default {
             eventBus.$emit("elimina-itemcarrito", item._id)
         },
         async agregarProducto(item, j, index) {
-            this.probando+=1
+            this.probando += 1
             //console.log("this.probando "+this.probando)
             this.cantidad[index] += j
             this.articulo = await getArticuloActualizado(item._id) //me traigo el manufact/insumo con los stock actualizados
-            this.conStock[index] = await controlStock(this.articulo)
-            console.log("this.conStock"+this.conStock[index])
-            this.articulo=await calcularInsumos(this.articulo, j)
+            this.articulo = await calcularInsumos(this.articulo, j)
             //console.log("this.item[index] ", this.items[index])
             //this.items = []
+            let contStockauxiliar=this.conStock[index]
+            console.log("contStockauxiliar "+contStockauxiliar)
+            this.conStock[index] = controlStock(this.articulo)
+            console.log("this.conStock" + this.conStock[index])
+
             if (this.cantidad[index] == 0) {
                 this.conStock[index] == false
                 this.eliminar(item, 0)
             } else {
                 localStorage.setItem(item._id, JSON.stringify({ 'cantidad': this.cantidad[index] }))
+                if (contStockauxiliar!=this.conStock[index]) { //detecto variaciones del conStock para que me habilite/dehabilite el agregar mas articulos
+                    console.log("stocknegativo...actualiza")
+                    this.getLocalStorage() 
+                }
                 eventBus.$emit("elimina-itemcarrito", '0')
-               // this.getLocalStorage()
+
             }
-            this.conStock[index] = await controlStock(this.articulo)
-            console.log("this.conStock"+this.conStock[index])
+
         },
         cerrar() {
             this.cerrarCarro = true

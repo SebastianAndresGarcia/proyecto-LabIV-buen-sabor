@@ -45,6 +45,14 @@ export default {
                 //console.log(resJson);
                 this.manufacturadosData = resJson;
             }
+            if(this.manufacturadosData.length==0){
+                const res = await fetch(
+                    `http://localhost:3000/insumosXrubro/${id}`
+                )
+                const resJson = await res.json();
+                //console.log(resJson);
+                this.manufacturadosData = resJson;
+            }
             //console.log("this.manufacturadosData", this.manufacturadosData)
         },
         handleMessage(value) {
