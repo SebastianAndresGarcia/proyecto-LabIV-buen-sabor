@@ -6,7 +6,7 @@
                 <h1>Mi Carrito</h1>
             </v-col>
         </v-row>
-        <v-row v-if="items.length>0">
+        <v-row v-if="items.length > 0">
             <v-col cols="8">
                 <v-card outlined v-for="(item, i) in items" :key="i" cols="10" height="150px" width="100%"
                     style="display:inline-block; margin-bottom: 2px; background-color:beige;">
@@ -20,8 +20,11 @@
                         </v-col>
                         <v-col cols="2">
                             <v-row><v-card-subtitle><b>Valor Unitario</b></v-card-subtitle></v-row>
-                            <v-row style="justify-content: center"><div v-if="item.descuento>0"><del>${{ item.precioVenta }}</del>&nbsp-&nbsp$<b>{{ item.precioVenta-(item.precioVenta*item.descuento)/100 }}</b></div>
-                            <div v-else>${{ item.precioVenta }}</div></v-row>
+                            <v-row style="justify-content: center">
+                                <div v-if="item.descuento > 0"><del>${{ item.precioVenta }}</del>&nbsp-&nbsp$<b>{{
+                                    item.precioVenta - (item.precioVenta * item.descuento) / 100 }}</b></div>
+                                <div v-else>${{ item.precioVenta }}</div>
+                            </v-row>
                         </v-col>
                         <v-col cols="3">
                             <v-row
@@ -44,9 +47,10 @@
                             </v-card-actions>
                         </v-col>
                         <v-col cols="2">
-                            <v-row
-                                style="justify-content: center"><v-card-subtitle><b>Total</b></v-card-subtitle></v-row>
-                            <v-row style="justify-content: center">${{ cantidad[i]* (item.precioVenta-(item.precioVenta*item.descuento)/100 )}}</v-row>
+                            <v-row style="justify-content: center"><v-card-subtitle><b>Total</b></v-card-subtitle></v-row>
+                            <v-row v-if="item.descuento > 0" style="justify-content: center">${{ cantidad[i] *
+                                (item.precioVenta - (item.precioVenta * item.descuento) / 100) }}</v-row>
+                            <v-row v-else style="justify-content: center">${{ cantidad[i] * item.precioVenta }}</v-row>
                         </v-col>
                         <v-col cols="1">
                             <v-row><v-card-subtitle><b></b></v-card-subtitle></v-row>
@@ -61,7 +65,7 @@
             </v-col>
             <v-divider vertical></v-divider>
             <v-col cols="4">
-                <v-card  class="mx-auto" min-height="100%">
+                <v-card class="mx-auto" min-height="100%">
                     <v-card-title><b>Resumen de la compra</b></v-card-title>
                     <v-card-text>
                         <v-row class="my-4 text-subtitle-1">
@@ -78,13 +82,13 @@
                             <v-row class="my-4 text-subtitle-1"><v-col cols="5"><b>Costo de Envío</b></v-col> <v-col
                                     style="text-align: right;" cols="5"><b>$ 500</b></v-col></v-row>
                             <v-row class="my-4 text-subtitle-1"> <v-col cols="5"><b>Total</b></v-col> <v-col
-                                    style="text-align: right;" cols="5"><b>$ {{ subtotal+ 500}}</b></v-col></v-row>
+                                    style="text-align: right;" cols="5"><b>$ {{ subtotal + 500 }}</b></v-col></v-row>
                         </div>
                         <div v-if="radios == 'local'">
                             <v-row class="my-4 text-subtitle-1"> <v-col cols="5"><b>10% Descuento</b></v-col> <v-col
-                                    cols="5" style="text-align: right;"><b>-$ {{ 0.1* subtotal }}</b></v-col></v-row>
+                                    cols="5" style="text-align: right;"><b>-$ {{ 0.1 * subtotal }}</b></v-col></v-row>
                             <v-row class="my-4 text-subtitle-1"> <v-col cols="5"><b>Total</b></v-col> <v-col cols="5"
-                                    style="text-align: right;"><b>${{ subtotal*0.9 }}</b></v-col></v-row>
+                                    style="text-align: right;"><b>${{ subtotal * 0.9 }}</b></v-col></v-row>
                         </div>
                     </v-card-text>
 
@@ -96,13 +100,15 @@
                 </v-card>
             </v-col>
         </v-row>
-        <div align="center" v-else><h1>Redirect to menu....</h1></div>
+        <div align="center" v-else>
+            <h1>Redirect to menu....</h1>
+        </div>
     </v-container>
 </template>
 <script>
 import { eventBus } from "../main";
 import postcompra from "@/components/PostCompra.vue"
-import { calcularInsumos, controlStock } from "@/funciones/ControlStock.js"
+import { calcularInsumos, controlStock, getArticuloActualizado } from "@/funciones/ControlStock.js"
 export default {
     data() {
         return {
@@ -143,14 +149,29 @@ export default {
 
     methods: {
         async getmanufacturados(id, cant) {
-            console.log("id " + id + " cant " + cant)
-            const res = await fetch(
-                `http://localhost:3000/getManufacturadoXid/${id}`
-            )
-            const resJson = await res.json();
-            console.log(resJson);
-            this.items.push(resJson);
-            this.conStock.push(controlStock(this.items[this.items.length - 1].detallearticulomanufacturadoid))
+            try {
+                const res = await fetch(
+                    `http://localhost:3000/getManufacturadoXid/${id}`
+                )
+                const resJson = await res.json();
+                console.log("resJson-getManufacturadoxid", resJson);
+                this.items.push(resJson);
+            } catch (e) {
+                const res = await fetch(
+                    `http://localhost:3000/ArticuloInsumoxid/${id}`
+                )
+                const resJson = await res.json();
+                console.log("resJson-getManufacturadoxid", resJson);
+                this.items.push(resJson);
+            }
+            // console.log("id " + id + " cant " + cant)
+            // const res = await fetch(
+            //     `http://localhost:3000/getManufacturadoXid/${id}`
+            // )
+            // const resJson = await res.json();
+            // console.log(resJson);
+            // this.items.push(resJson);
+            this.conStock.push(controlStock(this.items[this.items.length - 1]))
             this.carritoLength = this.items.length
             this.cantidad.push(cant)
             this.calculaSubtotal()
@@ -178,7 +199,7 @@ export default {
         },
         async eliminar(item, cantidad) {
             if (cantidad > 0) {
-                await calcularInsumos(item.detallearticulomanufacturadoid, -cantidad)
+                await calcularInsumos(item, -cantidad)
             }
             window.localStorage.removeItem(item._id)
             this.getLocalStorage()
@@ -186,16 +207,30 @@ export default {
         },
         async agregarProducto(item, j, index) {
             this.cantidad[index] += j
-            this.conStock[index] = controlStock(item.detallearticulomanufacturadoid)
-            await calcularInsumos(item.detallearticulomanufacturadoid, j)
-            this.items = []
+            //this.conStock[index] = controlStock(item)
+            this.articulo = await getArticuloActualizado(item._id) //me traigo el manufact/insumo con los stock actualizados
+            this.articulo = await calcularInsumos(item, j)
+            let contStockauxiliar = this.conStock[index]
+            this.conStock[index] = controlStock(this.articulo)
             if (this.cantidad[index] == 0) {
+                this.conStock[index] == false
                 this.eliminar(item, 0)
             } else {
-
                 localStorage.setItem(item._id, JSON.stringify({ 'cantidad': this.cantidad[index] }))
+                if (contStockauxiliar != this.conStock[index]) { //detecto variaciones del conStock para que me habilite/dehabilite el agregar mas articulos
+                    console.log("stocknegativo...actualiza")
+                    this.getLocalStorage()
+                }
+                eventBus.$emit("elimina-itemcarrito", '0')
+
             }
-            this.getLocalStorage()
+            // if (this.cantidad[index] == 0) {
+            //     this.eliminar(item, 0)
+            // } else {
+
+            //     localStorage.setItem(item._id, JSON.stringify({ 'cantidad': this.cantidad[index] }))
+            // }
+            // this.getLocalStorage()
         },
         cerrar() {
             this.cerrarCarro = true
@@ -204,7 +239,8 @@ export default {
         async calculaSubtotal() {
             this.subtotal = 0
             for (let i = 0; i < this.items.length; i++) {
-                this.subtotal += (this.items[i].precioVenta-(this.items[i].precioVenta*this.items[i].descuento)/100) * this.cantidad[i]
+                if (this.items[i].descuento > 0) { this.subtotal += (this.items[i].precioVenta - (this.items[i].precioVenta * this.items[i].descuento) / 100) * this.cantidad[i] }
+                else { this.subtotal += this.items[i].precioVenta * this.cantidad[i] }
             }
         },
         async registrarPedido() {

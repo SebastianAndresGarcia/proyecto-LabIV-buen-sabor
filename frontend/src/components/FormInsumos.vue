@@ -47,8 +47,12 @@
                             </v-col>
                             
                             <v-col cols="12">
-                                <v-text-field label="esInsumo?" v-model="insumo.esInsumo" required>
-                                </v-text-field>
+                                <!-- <v-text-field label="esInsumo?" v-model="insumo.esInsumo" required>
+                                </v-text-field> -->
+                                <v-select label="¿Es Insumo?" outlined 
+                                            v-model="insumo.esInsumo" :items="items" >
+
+                                </v-select>
                             </v-col>
                             <v-col cols="12">
                                 <v-text-field label="unidadMedida" v-model="insumo.unidadMedida" required>
@@ -99,7 +103,10 @@ export default {
         return {
             dialog: false,
             modal: false,
-            insumosData: [],
+            items: [
+               'true',
+               'false'
+            ],
             nuevoInsumo: false,
             rubros: [],
             
