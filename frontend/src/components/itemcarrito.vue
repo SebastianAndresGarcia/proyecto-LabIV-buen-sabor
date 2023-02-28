@@ -139,7 +139,7 @@ export default {
         async eliminar(item, cantidad) {
             if (cantidad > 0) {
                 this.articulo = await getArticuloActualizado(item._id) //me traigo el manufact/insumo con los stock actualizados
-                this.items[index] = await calcularInsumos(this.articulo, -cantidad)
+                this.articulo = await calcularInsumos(this.articulo, -cantidad)
             }
             this.items = []
             localStorage.removeItem(item._id)

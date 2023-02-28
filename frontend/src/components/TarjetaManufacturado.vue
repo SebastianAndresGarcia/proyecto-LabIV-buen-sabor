@@ -171,7 +171,7 @@ export default {
             this.art = item
         },
         async handlefunction(value) {
-            console.log("value", value)
+            console.log("value handlefunction", value)
             if (value.close) {
                 this.art = null
                 this.$emit('abrirAlert', 1)

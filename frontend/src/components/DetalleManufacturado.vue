@@ -106,7 +106,7 @@ export default {
             this.dialog = true
             this.getLocalStorage(this.manufacturado._id)
         }
-        if (this.manufacturado) this.conStock = controlStock(this.manufacturado.detallearticulomanufacturadoid)
+        if (this.manufacturado) this.conStock = controlStock(this.manufacturado)
     },
     methods: {
         async cerrar() {
@@ -122,7 +122,7 @@ export default {
                 window.localStorage.setItem(id, JSON.stringify({ 'cantidad': this.cantidad }));
                 eventBus.$emit("carrito-changed", this.cambioCarrito)
                 //eventBus.$emit("elimina-itemcarrito", '0')
-                await calcularInsumos(this.manufacturado.detallearticulomanufacturadoid, this.cantidad)
+                await calcularInsumos(this.manufacturado, this.cantidad)
                 this.$emit('limpiarObjeto', { actualizarCarrousel: true })
             } else {
                 this.alert = true
@@ -142,7 +142,7 @@ export default {
                 console.log("cookie", document.cookie)
                 this.cambioCarrito = true
                 //eventBus.$emit("carrito-changed", this.cambioCarrito)
-                await calcularInsumos(this.manufacturado.detallearticulomanufacturadoid, i)
+                await calcularInsumos(this.manufacturado, i)
                 this.$emit('limpiarObjeto', { actualizarCarrousel: true })
                 eventBus.$emit("carrito-changed", this.cambioCarrito)
                 //this.cambioCarrito=false

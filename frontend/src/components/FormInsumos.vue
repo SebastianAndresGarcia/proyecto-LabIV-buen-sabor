@@ -27,31 +27,28 @@
                                 <v-text-field label="Denominacion*" v-model="insumo.denominacion" required>
                                 </v-text-field>
                             </v-col>
-                           <v-col cols="12" sm="6" md="6">
-                                <v-text-field label="precioCompra*" type="number"
-                                    v-model="insumo.precioCompra"
+                            <v-col cols="12" sm="6" md="6">
+                                <v-text-field label="precioCompra*" type="number" v-model="insumo.precioCompra"
                                     hint="example of helper text only on focus" required></v-text-field>
                             </v-col>
                             <v-col cols="12">
-                                <v-text-field type="number" label="Precio de Venta*"
-                                    v-model="insumo.precioVenta" required>
+                                <v-text-field type="number" label="Precio de Venta*" v-model="insumo.precioVenta" required>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="12">
-                                <v-text-field label="stockActual*" type="number" v-model="insumo.stockActual" required placeholder="1.0" step="0.01" min="0">
+                                <v-text-field label="stockActual*" type="number" v-model="insumo.stockActual" required
+                                    placeholder="1.0" step="0.01" min="0">
                                 </v-text-field>
                             </v-col>
                             <v-col cols="12">
-                                <v-text-field label="stockMinimo*" type="number" v-model="insumo.stockMinimo" required placeholder="1.0" step="0.01" min="0">
+                                <v-text-field label="stockMinimo*" type="number" v-model="insumo.stockMinimo" required
+                                    placeholder="1.0" step="0.01" min="0">
                                 </v-text-field>
                             </v-col>
-                            
-                            <v-col cols="12">
-                                <!-- <v-text-field label="esInsumo?" v-model="insumo.esInsumo" required>
-                                </v-text-field> -->
-                                <v-select label="¿Es Insumo?" outlined 
-                                            v-model="insumo.esInsumo" :items="items" >
 
+                            <v-col cols="12">
+                                <v-select label="¿Es Insumo?" outlined item-text="state" item-value="value"
+                                    v-model="insumo.esInsumo" :items="items">
                                 </v-select>
                             </v-col>
                             <v-col cols="12">
@@ -62,7 +59,7 @@
                                 <v-select label="Seleccione un Rubro" outlined v-model="insumo.RubroArticuloid"
                                     :items="rubros" item-value="_id" item-text="denominacion">
                                     <template v-slot:prepend-item>
-                                        
+
                                         <v-divider class="mt-2"></v-divider>
                                     </template>
                                 </v-select>
@@ -72,7 +69,7 @@
                                 <v-text-field disabled label="rubroArticuloid" v-model="insumo.RubroArticuloid" required>
                                 </v-text-field>
                             </v-col>
-                            
+
                         </v-row>
                         <small>*Todos los campos son obligatorios</small>
                     </v-card-text>
@@ -104,12 +101,12 @@ export default {
             dialog: false,
             modal: false,
             items: [
-               'true',
-               'false'
+                { state: 'false', value: false },
+                { state: 'true', value: true },
             ],
             nuevoInsumo: false,
             rubros: [],
-            
+
             insumo: {
                 denominacion: "",
                 precioCompra: null,
@@ -138,7 +135,7 @@ export default {
     mounted() {
         console.log("idrubroarticulo props ", this.idrubroarticulo)
         console.log("idinsumo props " + this.idinsumo)
-        this.insumo.RubroArticuloid=this.idrubroarticulo
+        this.insumo.RubroArticuloid = this.idrubroarticulo
         this.getRubrosArticulos()
         //this.getManufacturadoXdenominacion(this.idrubrogral[1]) 
     },
@@ -224,9 +221,9 @@ export default {
                 'http://localhost:3000/ArticuloInsumo/' + id
             )
             const resJson = await res.json()
-            this.insumo=resJson
+            this.insumo = resJson
             console.log("resJson ", resJson)
-            
+
 
         },
         async getRubrosArticulos() {
@@ -237,7 +234,7 @@ export default {
 
             this.rubros = resJson;
             console.log("InsumosArticulos ", this.rubros);
-            
+
 
         },
     },
