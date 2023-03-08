@@ -16,8 +16,9 @@ https://materialdesignicons.com/  ÍCONOS
       <div v-if="!pathname.includes('/micarrito')" style="margin: 10px;">
         <Carrito-item></Carrito-item>
       </div>
-      <div v-else style="justify-content: center; margin: 10px;" >
-        <v-btn small dense elevation="20" rounded href="http://localhost:8080/ManufacXrubro/0" color="success">Seguir Comprando</v-btn>
+      <div v-else style="justify-content: center; margin: 10px;">
+        <v-btn small dense elevation="20" rounded href="http://localhost:8080/ManufacXrubro/0" color="success">Seguir
+          Comprando</v-btn>
       </div>
 
       <v-menu v-if="currentUser" left bottom>
@@ -53,12 +54,32 @@ https://materialdesignicons.com/  ÍCONOS
           </v-tab>
 
           <v-tab v-if="showAdminBoard">
-            <v-btn height="100%" block text href="http://localhost:8080/abmempleados">ABM EMPLEADOS</v-btn>
+            <v-menu bottom offset-y>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn height="100%" color="primary" v-bind="attrs" v-on="on"> ADMINISTRADOR </v-btn>
+              </template>
+              <v-list>
+                <v-list-item>
+                  <v-list-item-title><v-btn block text href="http://localhost:8080/abmempleados">ABM
+                      EMPLEADOS</v-btn></v-list-item-title></v-list-item>
+                <v-list-item><v-list-item-title><v-btn block text href="http://localhost:8080/abmmanufacturados">ABM
+                      MANUFACTURADOS</v-btn></v-list-item-title></v-list-item>
+                <v-list-item><v-list-item-title><v-btn block text href="http://localhost:8080/abminsumos">ABM
+                      INSUMOS</v-btn></v-list-item-title>
+                </v-list-item>
+                <v-list-item><v-list-item-title><v-btn block text href="http://localhost:8080/abmpedidos">BANDEJA
+                      PEDIDOS</v-btn></v-list-item-title>
+                </v-list-item>
+                <v-list-item><v-list-item-title><v-btn block text href="http://localhost:8080/pedidoscocinero">BANDEJA
+                      COCINA</v-btn></v-list-item-title>
+                </v-list-item>
+                <v-list-item><v-list-item-title><v-btn block text
+                      href="http://localhost:8080/estadisticas">ESTADISTICAS</v-btn></v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
           </v-tab>
-          <v-tab v-if="showAdminBoard">
-            <v-btn height="100%" block text href="http://localhost:8080/abmarticulos">ABM ARTICULOS</v-btn>
-          </v-tab>
-
+          
         </v-tabs>
       </template>
     </v-app-bar>
@@ -66,8 +87,7 @@ https://materialdesignicons.com/  ÍCONOS
       <v-list v-if="currentUser == undefined" nav dense>
         <v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
           <v-row style="justify-content: flex-end; margin-top: 10%; margin-bottom: 10%;">
-            <v-btn outlined color="white" @click="drawer = false"><v-icon medium
-                color="black">mdi-close</v-icon></v-btn>
+            <v-btn outlined color="white" @click="drawer = false"><v-icon medium color="black">mdi-close</v-icon></v-btn>
           </v-row>
           <v-list-item style="margin-bottom: 10%;">
             <login-item></login-item>
@@ -88,8 +108,7 @@ https://materialdesignicons.com/  ÍCONOS
           <v-list-item>Mi Perfil</v-list-item>
         </v-list-item-group>
         <v-card-subtitle>
-          <v-row style="text-decoration:underline; color: black; justify-content: center; margin-top: 30%;"
-            class="mx-0">
+          <v-row style="text-decoration:underline; color: black; justify-content: center; margin-top: 30%;" class="mx-0">
             <a @click="cerrarSesion()">
               <h3>Cerrar Sesión</h3>
             </a>
@@ -102,7 +121,8 @@ https://materialdesignicons.com/  ÍCONOS
   </div>
 </template>
 
-<script >//lang="ts"
+<script >
+//lang="ts"
 import register from "@/components/Register.vue";
 import login from "@/components/Login.vue";
 import carrito from "@/components/Carrito.vue"
@@ -145,7 +165,7 @@ export default {
         "http://localhost:3000/rubrosgeneral"
       );
       const resJson = await res.json();
-      this.rubros = resJson    
+      this.rubros = resJson
       const respuesta = await fetch(
         "http://localhost:3000/rubrosInsumos"
       );
@@ -165,6 +185,4 @@ export default {
 };
 </script>
 
-<style >
-
-</style>
+<style ></style>
