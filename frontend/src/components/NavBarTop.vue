@@ -70,6 +70,8 @@ https://materialdesignicons.com/  ÍCONOS
                 <v-list-item><v-list-item-title><v-btn block text href="http://localhost:8080/abmpedidos">BANDEJA
                       PEDIDOS</v-btn></v-list-item-title>
                 </v-list-item>
+                <v-list-item><v-list-item-title><v-btn block text href="http://localhost:8080/abmfacturas">ABM FACTURAS</v-btn></v-list-item-title>
+                </v-list-item>
                 <v-list-item><v-list-item-title><v-btn block text href="http://localhost:8080/pedidoscocinero">BANDEJA
                       COCINA</v-btn></v-list-item-title>
                 </v-list-item>

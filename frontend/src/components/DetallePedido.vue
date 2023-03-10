@@ -41,8 +41,8 @@
                         </v-col>
                     </v-row>
                     <v-row style="justify-content: right; margin-right: 2%;"><v-card-title><b>Total ${{
-                        pedido.total
-                    }}</b></v-card-title></v-row>
+                        pedidoParam.total
+                    }} {{ pedidoParam.totalVenta }}</b></v-card-title></v-row>
                     <v-row style="justify-content: right;">
                         <v-btn text color="blue darken-1" @click="dialog = false">
                             Cerrar

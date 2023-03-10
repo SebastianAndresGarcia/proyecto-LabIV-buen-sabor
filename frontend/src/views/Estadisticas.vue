@@ -5,15 +5,15 @@ Monto de Ganancia en un periodo de tiempo (ventas - costos) -->
 <template>
     <v-card style="margin: 10px" v-if='currentUser.roles.includes("ROLE_ADMIN")' elevation="4">
         <v-row style="margin: 10px; justify-content:center"><v-card-title><b>CENTRO DE ESTADISTICAS</b></v-card-title></v-row>
-        
-            
-                <v-card-text>
-                    <v-divider class="mt-2"></v-divider>
-                    <!-- <p>{{ insumoSeleccionado }}</p>  -->
-                   
-                </v-card-text>
-            
-        
+
+
+        <v-card-text>
+            <v-divider class="mt-2"></v-divider>
+            <!-- <p>{{ insumoSeleccionado }}</p>  -->
+
+        </v-card-text>
+
+
     </v-card>
 </template>
 <script >
@@ -26,7 +26,6 @@ export default {
     },
     data() {
         return {
-          
             currentUser: undefined
         }
     },
@@ -35,11 +34,11 @@ export default {
     },
     mounted() {
         this.verificarUsuario(this.currentUser)
-   
+
     },
 
     methods: {
-       
+
         async verificarUsuario(currentUser) {
             if (currentUser) {
                 if (!currentUser.roles.includes("ROLE_ADMIN")) {
