@@ -36,39 +36,50 @@ exports.manufacturadosVendidos = async (req, res) =>{
     dateHasta.setHours(0,0,0,0)
         
     let rankingComidas = []
-    const pedidos = await Factura.find({})
-    console.log("todas facturas", pedidos)
-        for(const pedido of pedidos){
-            console.log("dentro de for ", pedido)
-            const fechaFormateada = formatDate("2023-03-09")
-            console.log("fechaFormateada ",fechaFormateada)
+    const facturas = await Factura.find({}).populate({
+        path: "detallefacturaid", // populate blogs
+        populate: {
+            path: "articulomanufacturadoid", // in blogs, populate comments
+            select: { denominacion: 1, _id: 1, precioCompra: 1, imagen: 1 }, //elijo solo los campos que quiero traer
+        }
+    })
+    console.log("todas facturas", facturas)
+        for(const factura of facturas){
+            console.log("dentro de for factura.fecha", factura.fecha)
+            const fechaFormateada = (factura.fecha).toJSON().substr(0,10)
+            //fechaFormateada=fechaFormateada.substr(0,9)
+            console.log("fechaFormateada ",fechaFormateada) 
             const datePedido = new Date(fechaFormateada || null)
             datePedido.setHours(0,0,0,0)
             console.log("datePedido "+datePedido)
                 if(datePedido >= dateDesde && datePedido <= dateHasta){
-                    // for(const detalle of pedido.detallesPedidos){
-                    //     //Obtenemos los articulos pedidos en los pedidos que están entre las fechas indicadas
-                    //     const comida = await DetallePedido.findById(detalle)
-                    //     if(comida.tipoDeArticulo === 'manufacturado'){ //Solo se tomaran en cuenta para el ranking articulos manufacturados
-                    //         let articuloEncontrado = false
-                    //         for(const articulo of rankingComidas){ //Buscamos en el ranking si la comida ya fue agregada
-                    //             if(articulo.comida === comida.articulo){
-                    //                 let index = rankingComidas.findIndex(ranking => ranking.comida === articulo.comida)
-                    //                 rankingComidas[index] = {comida: comida.articulo, cantidadPedida: (rankingComidas[index].cantidadPedida + comida.cantidad)}
-                    //                 articuloEncontrado = true
-                    //                 break
-                    //             }
-                    //         }
-                    //         //Si no fue agregada aún la agregamos
-                    //         if(!articuloEncontrado)
-                    //         rankingComidas = rankingComidas.concat({comida:comida.articulo, cantidadPedida:comida.cantidad})
+                    for (let i = 0; i < factura.detallefacturaid.length; i++) {
+                        //Obtenemos los articulos pedidos en los pedidos que están entre las fechas indicadas
+                        //const comida = await DetallePedido.findById(detalle)
+                        if(factura.detallefacturaid[i].articulomanufacturadoid){ //Solo se tomaran en cuenta para el ranking articulos manufacturados
+                            let comida=factura.detallefacturaid[i].articulomanufacturadoid.denominacion
+                            console.log("comida "+comida)
+                            let articuloEncontrado = false
+                            for(let j=0;j<rankingComidas.length;j++){ //Buscamos en el ranking si la comida ya fue agregada
+                                if(rankingComidas[j].comida === comida){
+                                    rankingComidas[j].cantidad += factura.detallefacturaid[i].cantidad
+                                    articuloEncontrado = true
+                                    break
+                                }
+                            }
+                            //Si no fue agregada aún la agregamos
+                            if(!articuloEncontrado)
+                             {
+                                rankingComidas = rankingComidas.concat({comida:comida, cantidadPedida:factura.detallefacturaid[i].cantidad})
+                                }
                             
-                    //     }
-                    // }
-                    console.log('facturados ',pedido)
+                        }
+                    }
+                    //console.log('facturados ',factura)
                 }
         }
     rankingComidas.sort(((a, b) => b.cantidadPedida - a.cantidadPedida))
+    console.log("rankingComidas", rankingComidas)
     return res.json(rankingComidas)
 }
 
