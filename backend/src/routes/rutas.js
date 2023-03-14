@@ -27,17 +27,19 @@ router.post("/api/auth/signin", controller.signin);
 
 router.post('/crearDomicilio', controllerDlio.createAddress)
 router.get('/usuarioDlios/:id', controllerDlio.getAddressbyuser);
+
 router.post('/crearRubroArticulo', controllerRubroArticulo.createRubroArticulo);
 router.get('/verAncestrosRubroArticulo', controllerRubroArticulo.getAncestorsRubroArticulo);
 router.get('/verDescendentesRubroArticulo', controllerRubroArticulo.getDescendentsRubroArticulo);
 router.post('/actualizarRubroArticulo', controllerRubroArticulo.updateRubroArticulo);
-router.post('/ActualizarRubroGeneral', controllerRubroGeneral.updateRubroGeneral);
-router.get('/rubros', controllerRubroArticulo.getRubros);
 router.post('/agregarSubRubro', controllerRubroArticulo.agregarSubRubro);
 router.get('/rubrosInsumos', controllerRubroArticulo.getRubrosFalseInsumos);
-// router.post('/agregarArticuloRubro', agregarArticuloRubro);  //comentar-descomentar ctrol+k+c  ctrl+k+u
+router.get('/rubros', controllerRubroArticulo.getRubros);
+
+router.post('/ActualizarRubroGeneral', controllerRubroGeneral.updateRubroGeneral);
 router.post('/crearRubroGeneral', controllerRubroGeneral.createRubroGeneral);
 router.get('/rubrosgeneral', controllerRubroGeneral.getRubrosGeneral);
+
 router.post('/crearArticuloManufacturado', controllerArticuloManufacturado.createArticuloManufacturado);
 router.get('/articulosmanufacturados', controllerArticuloManufacturado.getArticulosManufacturados);
 router.get('/articulosmanufacturadosInsumos', controllerArticuloManufacturado.getArticulosManufacturadosInsumos);
@@ -48,7 +50,9 @@ router.get('/getManufacturadoXdenominacion/:id', controllerArticuloManufacturado
 router.get('/getManufacturadoXid/:id', controllerArticuloManufacturado.getManufacturadoXid);
 router.get('/articulosmanufacturadosInsumos', controllerArticuloManufacturado.getArticulosManufacturadosInsumos);
 router.delete('/eliminarArticuloManufacturado/:id', controllerArticuloManufacturado.deleteArticuloManufacturado);
+
 router.delete('/eliminarDetalleArticuloManufacturado/:id', controllerDetalleArticuloManufacturado.deleteDetalleArticuloManufacturado);
+
 router.post('/crearArticuloInsumo', controllerArticuloInsumo.createArticuloInsumo)
 router.get('/ArticuloInsumo/:id', controllerArticuloInsumo.getArticuloInsumo)
 router.get('/ArticuloInsumoxid/:id', controllerArticuloInsumo.getArticuloInsumoxid)
@@ -59,15 +63,19 @@ router.get('/articulosinsumosfalse', controllerArticuloInsumo.getArticulosInsumo
 router.post('/ActualizarInsumo/:id', controllerArticuloInsumo.updateArticuloInsumo)
 router.post('/ActualizarInsumoxid/:id', controllerArticuloInsumo.updateArticuloInsumoxid)
 router.delete('/EliminarInsumo/:id', controllerArticuloInsumo.deleteArticuloInsumo)
+
 router.get('/empleados', controllerUser.getEmpleados)
 router.post('/ActualizarUsuario', controllerUser.updateUser)
+
 router.get('/Roles', controllerRoles.getRoles)
+
 router.post('/crearPedido', controllerPedidos.createPedido)
 router.get('/Pedidos', controllerPedidos.getPedidos)
 router.get('/pedidosxid/:id', controllerPedidos.getPedidosxid) //todos los pedidos de un usuario
 router.get('/pedidoxid/:id', controllerPedidos.Pedidoxid) //un pedido por su id
 router.post('/actualizarPedido/:id', controllerPedidos.actualizarPedido)
 router.get('/pedidoscocinero', controllerPedidos.getPedidosCocinero)
+
 router.post("/checkout", controllerMercaPago.checkout)
 router.post("/registrarPago", controllerMercaPago.savePayment)
 
@@ -77,6 +85,7 @@ router.get('/facturasxid/:id', controllerFacturas.getFacturasxid)
 router.get('/facturaxid/:id', controllerFacturas.Facturaxid)
 router.get('/FacturaXpedidoid/:id', controllerFacturas.FacturaXpedidoid)
 router.post('/actualizarFactura/:id', controllerFacturas.actualizarFactura)
+
 router.get('/manufacturadosVendidos', controllerEstadisticas.manufacturadosVendidos)
 router.get('/pedidosXcliente', controllerEstadisticas.pedidosXcliente)
 module.exports = router

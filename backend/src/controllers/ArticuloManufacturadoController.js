@@ -207,7 +207,7 @@ exports.getManufacturadoXid = async (req, res) => {
         path: "detallearticulomanufacturadoid", // populate blogs
         populate: {
             path: "ArticuloInsumoid", // in blogs, populate comments
-            select: { denominacion: 1, stockActual: 1 }, //elijo solo los campos que quiero traer
+            select: { denominacion: 1, stockActual: 1, precioCompra: 1 }, //elijo solo los campos que quiero traer
         }
     })
     if (!manufacturadoxid)

@@ -1,5 +1,5 @@
 <template>
-    <v-row >
+    <v-row>
         <v-dialog v-model="dialog" temporary max-width="700px">
             <template v-slot:activator="{ on, attrs }">
                 <div v-if="pedidoParam.facturaid">
@@ -45,7 +45,7 @@
                                 </v-text-field>
                             </v-col>
                             <v-col cols="12">
-                                <v-text-field label="totalCosto*" v-model="factura.totalCosto" required>
+                                <v-text-field readonly label="totalCosto*" v-model="factura.totalCosto" required>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="12">
@@ -57,7 +57,7 @@
                     </v-card-text>
                     <v-divider class="mt-2"></v-divider>
                     <v-card-actions>
-                        <v-btn text color="blue darken-1" @click="dialog=false">
+                        <v-btn text color="blue darken-1" @click="dialog = false">
                             Cancel
                         </v-btn>
                         <v-spacer></v-spacer>
@@ -72,7 +72,7 @@
 </template>
 
 <script>
-
+import { calculaCosto } from "@/funciones/CalculaCosto.js"
 export default {
     data() {
         return {
@@ -164,12 +164,12 @@ export default {
         },
         async getFactura(pedidoParam) {
             if (pedidoParam.facturaid) {
-                
+
                 const res = await fetch(
                     `http://localhost:3000/facturaxid/${pedidoParam.facturaid}`
                 );
                 const resJson = await res.json();
-                console.log(resJson);
+                console.log("datosFactura", resJson);
                 this.factura = resJson
             }
             else {
@@ -177,7 +177,7 @@ export default {
                     `http://localhost:3000/pedidoxid/${pedidoParam.pedidoid}`
                 );
                 const resJson = await res.json();
-                console.log(resJson);
+                console.log("datos para crear factura", resJson);
                 this.factura = {
                     fecha: new Date(),
                     montoDescuento: null,
@@ -188,6 +188,9 @@ export default {
                     detallefacturaid: resJson.detallepedidoid,
                 }
                 console.log("this.factura ", this.factura)
+            }
+            if (this.factura.totalCosto == 0 || this.factura.totalCosto == null) {
+                this.factura.totalCosto = await calculaCosto(this.factura.detallefacturaid)
             }
         }
     }

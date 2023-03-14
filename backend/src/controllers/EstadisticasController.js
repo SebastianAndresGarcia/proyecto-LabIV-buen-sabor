@@ -2,8 +2,9 @@
 // Ingresos (recaudaciones) por períodos de tiempo. Diario / Mensual
 // Cantidad de pedidos agrupados por cliente en un determinado periodo de tiempo.
 // Monto de Ganancia en un periodo de tiempo (ventas - costos) 
+
 //const ArticuloManufacturado = require('../models/ArticuloManufacturado');
-const Pedido = require('../models/Pedido')
+
 const Factura = require('../models/Factura')
 const User = require('../models/user.model')
 //const ArticuloInsumo = require('../models/ArticuloInsumo')
@@ -65,7 +66,6 @@ exports.manufacturadosVendidos = async (req, res) =>{
                             
                         }
                     }
-                    //console.log('facturados ',factura)
                 }
         }
     rankingComidas.sort(((a, b) => b.cantidadPedida - a.cantidadPedida))
@@ -93,7 +93,6 @@ exports.pedidosXcliente = async (req, res) =>{
         match: { "estado": "terminado" },
         select: { numero: 1, total: 1, fecha: 1 }
     })
-    //const usuarios = await User.find({  $where: 'this.pedidosid.length>0' })
     console.log("usuarios ", usuarios)
         for(const usuario of usuarios){
             let cantidad=0
@@ -104,8 +103,6 @@ exports.pedidosXcliente = async (req, res) =>{
             datePedido.setHours(0,0,0,0)
             console.log("datePedido "+datePedido)
                 if(datePedido >= dateDesde && datePedido <= dateHasta){
-                        //Obtenemos los articulos pedidos en los pedidos que están entre las fechas indicadas
-                        //const comida = await DetallePedido.findById(detalle)
                     cantidad = cantidad+1
                     if(i==(usuario.pedidosid.length-1))//si terminó de recorrer los pedidos que guarde el cliente con sus pedidos en el ranking
                     rankingCliente=rankingCliente.concat({nombreusuario:usuario.username, usermail: usuario.email, cantidadpedidos:cantidad, pedidos: usuario.pedidosid})       
