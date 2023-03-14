@@ -54,16 +54,16 @@ exports.createPedido = async (req, res) => {
 
 exports.getPedidos = async (req, res) => {
     const pedidos = await Pedido.find().populate({
-        path: "detallepedidoid", // populate blogs
+        path: "detallepedidoid", 
         populate: {
-            path: "articulomanufacturadoid", // in blogs, populate comments
+            path: "articulomanufacturadoid", 
             select: { denominacion: 1, _id: 1, imagen: 1 }, //elijo solo los campos que quiero traer
         }
-    })  //acá hay dos populate con path iguales, xq depende si en la bd va a haber un manufact o un insumo
+        })  //acá hay dos populate con path iguales, xq depende si en la bd va a haber un manufact o un insumo
         .populate({
-            path: "detallepedidoid", // populate blogs
+            path: "detallepedidoid", 
             populate: {
-                path: "articuloinsumoid", // in blogs, populate comments
+                path: "articuloinsumoid", 
                 select: { denominacion: 1, _id: 1 }, //elijo solo los campos que quiero traer
             }
         })

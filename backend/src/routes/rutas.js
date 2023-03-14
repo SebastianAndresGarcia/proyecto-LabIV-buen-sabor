@@ -78,5 +78,5 @@ router.get('/facturaxid/:id', controllerFacturas.Facturaxid)
 router.get('/FacturaXpedidoid/:id', controllerFacturas.FacturaXpedidoid)
 router.post('/actualizarFactura/:id', controllerFacturas.actualizarFactura)
 router.get('/manufacturadosVendidos', controllerEstadisticas.manufacturadosVendidos)
-
+router.get('/pedidosXcliente', controllerEstadisticas.pedidosXcliente)
 module.exports = router

@@ -1,26 +1,16 @@
+// Reportes en excel: Ranking comidas más pedidas en un periodo de tiempo determinado
+// Ingresos (recaudaciones) por períodos de tiempo. Diario / Mensual
+// Cantidad de pedidos agrupados por cliente en un determinado periodo de tiempo.
+// Monto de Ganancia en un periodo de tiempo (ventas - costos) 
 //const ArticuloManufacturado = require('../models/ArticuloManufacturado');
 const Pedido = require('../models/Pedido')
 const Factura = require('../models/Factura')
-//const User = require('../models/User')
+const User = require('../models/user.model')
 //const ArticuloInsumo = require('../models/ArticuloInsumo')
-const formatDate = require('../utils/formatDate')
-
-// exports.manufacturadosVendidos = async (req, res) => {
-// // suponiendo que req.body.fechaBusqueda contiene '2019/03/26'
-// const fechaInicial = req.body.fechaBusqueda;
-// const fechaFinal = '2023/02/17' //fechaInicial.substring(0,8).concat(Number(fechaInicial.substring(8)) + 1);
-
-// const manufacturados = ArticuloManufacturado.find({$and: [{fecha: {$gte: new Date(fechaInicial)}},{fecha: {$lt: new Date(fechaFinal)}}]});
-// res.json(manufacturados)
-// }
 
 
-
-// reportesRouter.get('/rankingComidas/:fechaDesde/:fechaHasta', async(req, res) => 
 exports.manufacturadosVendidos = async (req, res) =>{
     console.log("req.body en estadisticas ", req.body)
-    // const {params} = req
-    // const {fechaDesde, fechaHasta} = params
     const fechaDesde=req.body.fechaDesde
     const fechaHasta=req.body.fechaHasta
     if(!fechaDesde || !fechaHasta){
@@ -83,46 +73,51 @@ exports.manufacturadosVendidos = async (req, res) =>{
     return res.json(rankingComidas)
 }
 
-// reportesRouter.get('/rankingCantPedidos/:fechaDesde/:fechaHasta', async(req, res) => {
-//     const {params} = req
-//     const {fechaDesde, fechaHasta} = params
-//     if(!fechaDesde || !fechaHasta){
-//         return res.status(400).json({error:"Ingrese las dos fechas para crear el ranking."})
-//     }
-//     const dateDesde = new Date(fechaDesde)
-//     //EL INPUT DATE DEL FRONTEND VIENE CON UN DÍA MENOS ASI QUE LO AGREGAMOS
-//     // dateDesde.setTime(dateDesde.getTime() + (1000*60*60*24))
-//     //SE SETEAN TODAS LAS HORAS EN 0 ASI PODEMOS COMPARAR LAS FECHAS SIN PREOCUPARNOS DE LA HORA
-//     dateDesde.setHours(0,0,0,0)
-//     const dateHasta = new Date(fechaHasta)
-//     // dateHasta.setTime(dateHasta.getTime() + (1000*60*60*24))
-//     dateHasta.setHours(0,0,0,0) 
+exports.pedidosXcliente = async (req, res) =>{
+    console.log("req.body en estadisticas ", req.body)
+    const fechaDesde=req.body.fechaDesde
+    const fechaHasta=req.body.fechaHasta
+
+    const dateDesde = new Date(fechaDesde)
+    //EL INPUT DATE DEL FRONTEND VIENE CON UN DÍA MENOS ASI QUE LO AGREGAMOS
+    // dateDesde.setTime(dateDesde.getTime() + (1000*60*60*24))
+    //SE SETEAN TODAS LAS HORAS EN 0 ASI PODEMOS COMPARAR LAS FECHAS SIN PREOCUPARNOS DE LA HORA
+    dateDesde.setHours(0,0,0,0)
+    const dateHasta = new Date(fechaHasta)
+    // dateHasta.setTime(dateHasta.getTime() + (1000*60*60*24))
+    dateHasta.setHours(0,0,0,0)
         
-//     let rankingPedidosPorUsuario = []
-//     const pedidos = await Pedido.find({})
-//         for(const pedido of pedidos){
-//             const fechaFormateada = formatDate(pedido.fecha)
-//             const datePedido = new Date(fechaFormateada || null)
-//             datePedido.setHours(0,0,0,0)
-//                 if(datePedido >= dateDesde && datePedido <= dateHasta){
-//                     const user = await User.findById(pedido.user)
-//                     let userEncontrado = false
-//                     for(const usuario of rankingPedidosPorUsuario){
-//                         if(usuario.email === user.email){
-//                             let index = rankingPedidosPorUsuario.findIndex(ranking => ranking.email === usuario.email)
-//                             rankingPedidosPorUsuario[index] = {email: usuario.email, cantidadPedidos: (rankingPedidosPorUsuario[index].cantidadPedidos + 1)}
-//                             userEncontrado = true
-//                             break
-//                         }
-//                     }
-//                     //Si no fue agregada aún la agregamos
-//                     if(!userEncontrado)
-//                     rankingPedidosPorUsuario = rankingPedidosPorUsuario.concat({email:user.email, cantidadPedidos:1})
-//                 }
-//         }
-//         rankingPedidosPorUsuario.sort(((a, b) => b.cantidadPedidos - a.cantidadPedidos))
-//     return res.json(rankingPedidosPorUsuario)
-// })
+    let rankingCliente = []
+    const usuarios = await User.find({ "pedidosid.0": { "$exists": true } }).populate({
+        path: "pedidosid",
+        match: { "estado": "terminado" },
+        select: { numero: 1, total: 1, fecha: 1 }
+    })
+    //const usuarios = await User.find({  $where: 'this.pedidosid.length>0' })
+    console.log("usuarios ", usuarios)
+        for(const usuario of usuarios){
+            let cantidad=0
+            for (let i = 0; i < usuario.pedidosid.length; i++) {           
+            const fechaFormateada = (usuario.pedidosid[i].fecha).toJSON().substr(0,10)
+            console.log("fechaFormateada ",fechaFormateada) 
+            const datePedido = new Date(fechaFormateada || null)
+            datePedido.setHours(0,0,0,0)
+            console.log("datePedido "+datePedido)
+                if(datePedido >= dateDesde && datePedido <= dateHasta){
+                        //Obtenemos los articulos pedidos en los pedidos que están entre las fechas indicadas
+                        //const comida = await DetallePedido.findById(detalle)
+                    cantidad = cantidad+1
+                    if(i==(usuario.pedidosid.length-1))//si terminó de recorrer los pedidos que guarde el cliente con sus pedidos en el ranking
+                    rankingCliente=rankingCliente.concat({nombreusuario:usuario.username, usermail: usuario.email, cantidadpedidos:cantidad, pedidos: usuario.pedidosid})       
+                   
+                }
+            }
+            
+        }
+    rankingCliente.sort(((a, b) => b.cantidadpedidos - a.cantidadpedidos))
+    console.log("rankingCliente", rankingCliente)
+    return res.json(rankingCliente)
+ }
 
 // //INGRESOS -----------------------------------------------------------------------------------------------
 // reportesRouter.get('/ingresos/:fechaDesde/:fechaHasta', async(req, res) => {
