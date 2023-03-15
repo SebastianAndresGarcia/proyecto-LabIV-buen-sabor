@@ -15,7 +15,7 @@ A CORREGIR/IMPLEMENTAR:
 
 *Impresión de Facturas en PDF para el cliente.
 
-*Habilitar que se pueda comprar bebidas.
+*Corregir en Mi Carrito que actualice al agregar bebidas con botón + , y el control de stock está fallando revisar.
 
 *Reportes en excel: Ranking comidas más pedidas en un periodo de tiempo determinado
 Ingresos (recaudaciones) por períodos de tiempo. Diario / Mensual

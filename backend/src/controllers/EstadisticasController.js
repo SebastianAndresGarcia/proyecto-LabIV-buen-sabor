@@ -63,7 +63,6 @@ exports.manufacturadosVendidos = async (req, res) =>{
                              {
                                 rankingComidas = rankingComidas.concat({comida:comida, cantidadPedida:factura.detallefacturaid[i].cantidad})
                                 }
-                            
                         }
                     }
                 }
@@ -116,7 +115,36 @@ exports.pedidosXcliente = async (req, res) =>{
     return res.json(rankingCliente)
  }
 
-// //INGRESOS -----------------------------------------------------------------------------------------------
+// //GANANCIAS -----------------------------------------------------------------------------------------------
+exports.ganancias = async (req, res) =>{
+    console.log("req.body en estadisticas ", req.body)
+    const fechaDesde=req.body.fechaDesde
+    const fechaHasta=req.body.fechaHasta
+    const dateDesde = new Date(fechaDesde)
+    //EL INPUT DATE DEL FRONTEND VIENE CON UN DÍA MENOS ASI QUE LO AGREGAMOS
+     dateDesde.setTime(dateDesde.getTime() + (1000*60*60*24))
+    //SE SETEAN TODAS LAS HORAS EN 0 ASI PODEMOS COMPARAR LAS FECHAS SIN PREOCUPARNOS DE LA HORA
+    dateDesde.setHours(0,0,0,0)
+    const dateHasta = new Date(fechaHasta)
+    dateHasta.setTime(dateHasta.getTime() + (1000*60*60*24))
+    dateHasta.setHours(0,0,0,0)
+    let ventas=0
+    let costos=0
+    const facturas = await Factura.find({"fecha": {$gte: dateDesde, $lte: dateHasta}}).populate({
+        path: "detallefacturaid", // populate blogs
+        populate: {
+            path: "articulomanufacturadoid", // in blogs, populate comments
+            select: { denominacion: 1, _id: 1, precioCompra: 1, imagen: 1 }, //elijo solo los campos que quiero traer
+        }
+    })
+        for (let i = 0; i < facturas.length; i++) {
+            ventas=ventas+facturas[i].totalVenta
+            costos=costos+facturas[i].totalCosto
+        }
+    const ganancias={'ventas': ventas, 'costos': costos, 'balance': (ventas-costos)}
+    console.log("ganancias", ganancias)
+    return res.json({facturas, ganancias})
+}
 // reportesRouter.get('/ingresos/:fechaDesde/:fechaHasta', async(req, res) => {
 //     const {params} = req
 //     const {fechaDesde, fechaHasta} = params

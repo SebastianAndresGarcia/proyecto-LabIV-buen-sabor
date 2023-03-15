@@ -3,29 +3,27 @@
 
         <v-dialog v-model="dialog" temporary width="60%" height="100%">
             <template v-slot:activator="{ on, attrs }">
-                <v-btn @click="dialog = true" icon  v-bind="attrs" v-on="on">
-                    
+                <v-btn @click="dialog = true" icon v-bind="attrs" v-on="on">
+
                     <v-icon large>mdi-eye</v-icon>
-                    
+
                 </v-btn>
             </template>
 
             <v-card style="overflow: hidden;"> <!--overflow son las barras que aparece para scrollear la vista-->
                 <div style="margin:2%">
                     <v-row><v-card-title> Pedido N° {{ pedidoParam.numero }}</v-card-title></v-row>
-                    <v-row v-for="(item, i) in detalle" :key="i"
-                        style="align-content: center; justify-content: center; ">
+                    <v-row v-for="(item, i) in items" :key="i" style="align-content: center; justify-content: center; ">
                         <v-col cols="2" style="justify-content: center">
-                            <v-row style="justify-content: center"><v-avatar style="justify-content: center" size="80"
-                                    tile>
-                                    <v-img v-if="String(item.articulomanufacturadoid.imagen).indexOf('http') >= 0"
-                                        :src="item.articulomanufacturadoid.imagen"></v-img>
-                                    <v-img v-else :src="`../images/` + item.articulomanufacturadoid.imagen"></v-img>
+                            <v-row style="justify-content: center"><v-avatar style="justify-content: center" size="80" tile>
+                                    <v-img v-if="String(item.imagen).indexOf('http') >= 0"
+                                        :src="item.imagen"></v-img>
+                                    <v-img v-else :src="`../images/` + item.imagen"></v-img>
                                 </v-avatar></v-row>
                         </v-col>
                         <v-col cols="4" style="justify-content: center">
                             <v-row style="justify-content: center"><v-card-title><b> {{
-                                item.articulomanufacturadoid.denominacion
+                                item.denominacion
                             }}</b></v-card-title></v-row>
                         </v-col>
                         <v-col cols="3" style="justify-content: center;">
@@ -69,18 +67,30 @@ export default {
     props: ["pedidoParam"],
     mounted() {
         //this.Pedidoxid(this.pedidoParam)
-        console.log("pedidoParam",this.pedidoParam)
-        if(this.pedidoParam.detallepedidoid)
+        console.log("pedidoParam", this.pedidoParam)
+        if (this.pedidoParam.detallepedidoid) {
             this.detalle = this.pedidoParam.detallepedidoid
-        else
+            this.extraerArticulos(this.detalle)
+        }
+        else {
             this.detalle = this.pedidoParam.detallefacturaid
+            this.extraerArticulos(this.detalle)
+        }
     },
 
     methods: {
-
+        extraerArticulos(detalle){
+            console.log("detalle ",detalle)
+            for (let i = 0; i < detalle.length; i++) {
+            if(detalle[i].articulomanufacturadoid){
+                this.items.push({'imagen':detalle[i].articulomanufacturadoid.imagen,'denominacion':detalle[i].articulomanufacturadoid.denominacion,'subtotal':detalle[i].subtotal, 'cantidad':detalle[i].cantidad})
+            }
+            else{
+                this.items.push({'imagen':detalle[i].articuloinsumoid.imagen,'denominacion':detalle[i].articuloinsumoid.denominacion,'subtotal':detalle[i].subtotal, 'cantidad':detalle[i].cantidad})
+            }
+            console.log("items detallepedido ", this.items)
+        }}
     }
 }
 </script>
-<style>
-
-</style>
+<style></style>
