@@ -89,4 +89,5 @@ router.post('/actualizarFactura/:id', controllerFacturas.actualizarFactura)
 router.get('/manufacturadosVendidos', controllerEstadisticas.manufacturadosVendidos)
 router.get('/pedidosXcliente', controllerEstadisticas.pedidosXcliente)
 router.get('/ganancias', controllerEstadisticas.ganancias)
+router.get('/ganancias', controllerEstadisticas.recaudaciones)
 module.exports = router

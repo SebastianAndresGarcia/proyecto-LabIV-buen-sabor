@@ -3,12 +3,8 @@
 // Cantidad de pedidos agrupados por cliente en un determinado periodo de tiempo.
 // Monto de Ganancia en un periodo de tiempo (ventas - costos) 
 
-//const ArticuloManufacturado = require('../models/ArticuloManufacturado');
-
 const Factura = require('../models/Factura')
 const User = require('../models/user.model')
-//const ArticuloInsumo = require('../models/ArticuloInsumo')
-
 
 exports.manufacturadosVendidos = async (req, res) =>{
     console.log("req.body en estadisticas ", req.body)
@@ -138,108 +134,32 @@ exports.ganancias = async (req, res) =>{
     console.log("ganancias", ganancias)
     return res.json({facturas, ganancias})
 }
-// reportesRouter.get('/ingresos/:fechaDesde/:fechaHasta', async(req, res) => {
-//     const {params} = req
-//     const {fechaDesde, fechaHasta} = params
-//     if(!fechaDesde || !fechaHasta){
-//         return res.status(400).json({error:"Ingrese las dos fechas para crear el ranking."})
-//     }
-//     const dateDesde = new Date(fechaDesde)
-//     //EL INPUT DATE DEL FRONTEND VIENE CON UN DÍA MENOS ASI QUE LO AGREGAMOS
-//     // dateDesde.setTime(dateDesde.getTime() + (1000*60*60*24))
-//     //SE SETEAN TODAS LAS HORAS EN 0 ASI PODEMOS COMPARAR LAS FECHAS SIN PREOCUPARNOS DE LA HORA
-//     dateDesde.setHours(0,0,0,0)
-//     const dateHasta = new Date(fechaHasta)
-//     // dateHasta.setTime(dateHasta.getTime() + (1000*60*60*24))
-//     dateHasta.setHours(0,0,0,0)  
-//     let fechasIngresos = []
-//     const pedidos = await Pedido.find({})
-//         for(const pedido of pedidos){
-//             const fechaFormateada = formatDate(pedido.fecha)
-//             const datePedido = new Date(fechaFormateada || null)
-//             datePedido.setHours(0,0,0,0)
-//                 if(datePedido >= dateDesde && datePedido <= dateHasta){
-//                     let fechaEncontrada = false
-//                     for(const fechaIngreso of fechasIngresos){
-//                     if(fechaIngreso.fecha === datePedido.toLocaleDateString()){
-//                         let index = fechasIngresos.findIndex(date => date.fecha === fechaIngreso.fecha)
-//                         fechasIngresos[index] = {fecha: fechaIngreso.fecha, ingresos: fechasIngresos[index].ingresos + pedido.total}
-//                         fechaEncontrada = true
-//                         break
-//                     }
-//                 }
-//                 //Si no fue agregada aún la agregamos
-//                 if(!fechaEncontrada)
-//                 fechasIngresos = fechasIngresos.concat({fecha:datePedido.toLocaleDateString(), ingresos:pedido.total})
-//                 }
-//             }
-//     return res.json(fechasIngresos)
-// })
 
-// //GANANCIAS-----------------------------------------------------------------------
-// reportesRouter.get('/ganancias/:fechaDesde/:fechaHasta', async(req, res) => {
-//     const {params} = req
-//     const {fechaDesde, fechaHasta} = params
-//     if(!fechaDesde || !fechaHasta){
-//         return res.status(400).json({error:"Ingrese las dos fechas para crear el ranking."})
-//     }
-//     const dateDesde = new Date(fechaDesde)
-//     //EL INPUT DATE DEL FRONTEND VIENE CON UN DÍA MENOS ASI QUE LO AGREGAMOS
-//     // dateDesde.setTime(dateDesde.getTime() + (1000*60*60*24))
-//     //SE SETEAN TODAS LAS HORAS EN 0 ASI PODEMOS COMPARAR LAS FECHAS SIN PREOCUPARNOS DE LA HORA
-//     dateDesde.setHours(0,0,0,0)
-//     const dateHasta = new Date(fechaHasta)
-//     // dateHasta.setTime(dateHasta.getTime() + (1000*60*60*24))
-//     dateHasta.setHours(0,0,0,0)
-    
-//     let fechasGanancias = []
-//     const pedidos = await Pedido.find({})
-//         for(const pedido of pedidos){
-//                 const fechaFormateada = formatDate(pedido.fecha)
-//                 const datePedido = new Date(fechaFormateada || null)
-//                 datePedido.setHours(0,0,0,0)
-                
-//                 if(datePedido >= dateDesde && datePedido <= dateHasta){
-//                     let fechaEncontrada = false
-//                     for(const fechaIngreso of fechasGanancias){
-//                     if(fechaIngreso.fecha === datePedido.toLocaleDateString()){
-//                         let index = fechasGanancias.findIndex(date => date.fecha === fechaIngreso.fecha)
-//                         fechasGanancias[index] = {...fechasGanancias[index], ingresos: fechasGanancias[index].ingresos + pedido.total}
-//                         fechaEncontrada = true
-//                         break
-//                     }
-//                 }
-//                 //Si no fue agregada aún la agregamos
-//                 if(!fechaEncontrada)
-//                 fechasGanancias = fechasGanancias.concat({fecha:datePedido.toLocaleDateString(), ingresos:pedido.total})
-//                 }
-//             }
-            
-//     const insumos = await ArticuloInsumo.find({})
-//         for(const insumo of insumos){
-//             if(insumo.fecha){
-//             const fechaFormateada = formatDate(insumo.fecha)
-//             const dateInsumo = new Date(fechaFormateada || null)
-//                 dateInsumo.setHours(0,0,0,0)
-            
-//             if(dateInsumo >= dateDesde && dateInsumo <= dateHasta){
-//                 let fechaEncontrada = false
-//                 for(const fechaIngreso of fechasGanancias){
-//                 if(fechaIngreso.fecha === dateInsumo.toLocaleDateString()){
-//                     let index = fechasGanancias.findIndex(date => date.fecha === fechaIngreso.fecha)
-                    
-//                     fechasGanancias[index] = {...fechasGanancias[index], gastos: (fechasGanancias[index].gastos || 0) + insumo.precioCompra}
-//                     fechaEncontrada = true
-//                     break
-//                 }
-//             }
-//             //Si no fue agregada aún la agregamos
-//             if(!fechaEncontrada)
-//             fechasGanancias = fechasGanancias.concat({fecha:dateInsumo.toLocaleDateString(), gastos:insumo.precioCompra})
-//             }}
-//         }    
-//             //console.log(fechasGanancias)
-//     return res.json(fechasGanancias)
-// })
-
-// module.exports = reportesRouter
+//Recaudaciones (Diaria/Mensual)
+exports.recaudaciones = async (req, res) =>{
+    console.log("req.body en estadisticas ", req.body)
+    const fechaDesde=req.body.fechaDesde
+    const fechaHasta=req.body.fechaHasta
+    const dateDesde = new Date(fechaDesde)
+    //EL INPUT DATE DEL FRONTEND VIENE CON UN DÍA MENOS ASI QUE LO AGREGAMOS
+    dateDesde.setTime(dateDesde.getTime() + (1000*60*60*24))
+    //SE SETEAN TODAS LAS HORAS EN 0 ASI PODEMOS COMPARAR LAS FECHAS SIN PREOCUPARNOS DE LA HORA
+    dateDesde.setHours(0,0,0,0)
+    const dateHasta = new Date(fechaHasta)
+    dateHasta.setTime(dateHasta.getTime() + (1000*60*60*24))
+    dateHasta.setHours(0,0,0,0)
+    let ventas=0
+    const facturas = await Factura.find({"fecha": {$gte: dateDesde, $lte: dateHasta}}).populate({
+        path: "detallefacturaid", // populate blogs
+        populate: {
+            path: "articulomanufacturadoid", // in blogs, populate comments
+            select: { denominacion: 1, _id: 1, precioCompra: 1, imagen: 1 }, //elijo solo los campos que quiero traer
+        }
+    })
+        for (let i = 0; i < facturas.length; i++) {
+            ventas=ventas+facturas[i].totalVenta
+        }
+    const ingresos={'ventas': ventas}
+    console.log("ingresos", ingresos)
+    return res.json({facturas, ingresos})
+}
