@@ -6,23 +6,23 @@
 const Factura = require('../models/Factura')
 const User = require('../models/user.model')
 
-exports.manufacturadosVendidos = async (req, res) =>{
+exports.manufacturadosVendidos = async (req, res) => {
     console.log("req.body en estadisticas ", req.body)
-    const fechaDesde=req.body.fechaDesde
-    const fechaHasta=req.body.fechaHasta
+    const fechaDesde = req.body.fechaDesde
+    const fechaHasta = req.body.fechaHasta
 
-    const dateDesde = new Date(fechaDesde) 
+    const dateDesde = new Date(fechaDesde)
     //EL INPUT DATE DEL FRONTEND VIENE CON UN DÍA MENOS ASI QUE LO AGREGAMOS
     //dateDesde.setTime(dateDesde.getTime() + (1000*60*60*24))
     //SE SETEAN TODAS LAS HORAS EN 0 ASI PODEMOS COMPARAR LAS FECHAS SIN PREOCUPARNOS DE LA HORA
     //dateDesde.setHours(0,0,0,0)
     const dateHasta = new Date(fechaHasta)
-    dateHasta.setTime(dateHasta.getTime() + (1000*60*60*23)) //hasta las 23hs
-    
+    dateHasta.setTime(dateHasta.getTime() + (1000 * 60 * 60 * 23)) //hasta las 23hs
+
     console.log("dateDesde ", dateDesde)
     console.log("dateHasta ", dateHasta)
     let rankingComidas = []
-    const facturas = await Factura.find({"fecha": {$gte: dateDesde, $lte: dateHasta}}).populate({
+    const facturas = await Factura.find({ "fecha": { $gte: dateDesde, $lte: dateHasta } }).populate({
         path: "detallefacturaid", // populate blogs
         populate: {
             path: "articulomanufacturadoid", // in blogs, populate comments
@@ -30,136 +30,135 @@ exports.manufacturadosVendidos = async (req, res) =>{
         }
     })
     console.log("todas facturas", facturas)
-        for(const factura of facturas){
-            for (let i = 0; i < factura.detallefacturaid.length; i++) {
-                        if(factura.detallefacturaid[i].articulomanufacturadoid){ //Solo se tomaran en cuenta para el ranking articulos manufacturados
-                            let comida=factura.detallefacturaid[i].articulomanufacturadoid.denominacion
-                            console.log("comida "+comida)
-                            let articuloEncontrado = false
-                            for(let j=0;j<rankingComidas.length;j++){ //Buscamos en el ranking si la comida ya fue agregada
-                                if(rankingComidas[j].comida === comida){
-                                    rankingComidas[j].cantidad += factura.detallefacturaid[i].cantidad
-                                    articuloEncontrado = true
-                                    break
-                                }
-                            }
-                            //Si no fue agregada aún la agregamos
-                            if(!articuloEncontrado)
-                             {
-                                rankingComidas = rankingComidas.concat({comida:comida, cantidadPedida:factura.detallefacturaid[i].cantidad})
-                                }
-                        }
+    for (const factura of facturas) {
+        for (let i = 0; i < factura.detallefacturaid.length; i++) {
+            if (factura.detallefacturaid[i].articulomanufacturadoid) { //Solo se tomaran en cuenta para el ranking articulos manufacturados
+                let comida = factura.detallefacturaid[i].articulomanufacturadoid.denominacion
+                console.log("comida " + comida)
+                let articuloEncontrado = false
+                for (let j = 0; j < rankingComidas.length; j++) { //Buscamos en el ranking si la comida ya fue agregada
+                    if (rankingComidas[j].comida === comida) {
+                        rankingComidas[j].cantidad += factura.detallefacturaid[i].cantidad
+                        articuloEncontrado = true
+                        break
+                    }
+                }
+                //Si no fue agregada aún la agregamos
+                if (!articuloEncontrado) {
+                    rankingComidas = rankingComidas.concat({ comida: comida, cantidadPedida: factura.detallefacturaid[i].cantidad })
+                }
             }
-                //}
         }
+        //}
+    }
     rankingComidas.sort(((a, b) => b.cantidadPedida - a.cantidadPedida))
     console.log("rankingComidas", rankingComidas)
     return res.json(rankingComidas)
 }
 
-exports.pedidosXcliente = async (req, res) =>{
+exports.pedidosXcliente = async (req, res) => {
     console.log("req.body en estadisticas ", req.body)
-    const fechaDesde=req.body.fechaDesde
-    const fechaHasta=req.body.fechaHasta
+    const fechaDesde = req.body.fechaDesde
+    const fechaHasta = req.body.fechaHasta
     const dateDesde = new Date(fechaDesde)
     //EL INPUT DATE DEL FRONTEND VIENE CON UN DÍA MENOS ASI QUE LO AGREGAMOS
     // dateDesde.setTime(dateDesde.getTime() + (1000*60*60*24))
     //SE SETEAN TODAS LAS HORAS EN 0 ASI PODEMOS COMPARAR LAS FECHAS SIN PREOCUPARNOS DE LA HORA
     //dateDesde.setHours(0,0,0,0)
     const dateHasta = new Date(fechaHasta)
-    dateHasta.setTime(dateHasta.getTime() + (1000*60*60*23))
+    dateHasta.setTime(dateHasta.getTime() + (1000 * 60 * 60 * 23))
     //dateHasta.setHours(0,0,0,0)
     console.log("dateDesde ", dateDesde)
     console.log("dateHasta ", dateHasta)
     let rankingCliente = []
-    const usuarios = await User.find({ "pedidosid.0": { "$exists": true }}).populate({
+    const usuarios = await User.find({ "pedidosid.0": { "$exists": true } }).populate({
         path: "pedidosid",
         match: { "estado": "terminado" },
         select: { numero: 1, total: 1, fecha: 1 }
     })
-    
+
     console.log("usuarios ", usuarios)
-        for(const usuario of usuarios){
-            if(usuario.pedidosid[0]){
-            let cantidad=0
-            let auxPedidos=[]
-            for (let i = 0; i < usuario.pedidosid.length; i++) {           
-                const fechaFormateada = (usuario.pedidosid[i].fecha).toJSON().substr(0,10)
-                console.log("fechaFormateada ",fechaFormateada) 
+    for (const usuario of usuarios) {
+        if (usuario.pedidosid[0]) {
+            let cantidad = 0
+            let auxPedidos = []
+            for (let i = 0; i < usuario.pedidosid.length; i++) {
+                const fechaFormateada = (usuario.pedidosid[i].fecha).toJSON().substr(0, 10)
+                console.log("fechaFormateada ", fechaFormateada)
                 const datePedido = new Date(fechaFormateada || null)
                 //datePedido.setHours(0,0,0,0)
-                console.log("datePedido "+datePedido)
-                if(datePedido >= dateDesde && datePedido <= dateHasta){
-                    cantidad = cantidad+1
-                    auxPedidos.push(usuario.pedidosid[i])     
-                    }
-                }
-                if(auxPedidos[0])
-                {rankingCliente.push({nombreusuario:usuario.username, usermail: usuario.email, cantidadpedidos:cantidad, pedidos:auxPedidos})
+                console.log("datePedido " + datePedido)
+                if (datePedido >= dateDesde && datePedido <= dateHasta) {
+                    cantidad = cantidad + 1
+                    auxPedidos.push(usuario.pedidosid[i])
                 }
             }
+            if (auxPedidos[0]) {
+                rankingCliente.push({ nombreusuario: usuario.username, usermail: usuario.email, cantidadpedidos: cantidad, pedidos: auxPedidos })
+            }
         }
+    }
     rankingCliente.sort(((a, b) => b.cantidadpedidos - a.cantidadpedidos))
     console.log("rankingCliente", rankingCliente)
     return res.json(rankingCliente)
- }
+}
 
 // //GANANCIAS -----------------------------------------------------------------------------------------------
-exports.ganancias = async (req, res) =>{
+exports.ganancias = async (req, res) => {
     console.log("req.body en estadisticas ", req.body)
-    const fechaDesde=req.body.fechaDesde
-    const fechaHasta=req.body.fechaHasta
+    const fechaDesde = req.body.fechaDesde
+    const fechaHasta = req.body.fechaHasta
     const dateDesde = new Date(fechaDesde)
     //EL INPUT DATE DEL FRONTEND VIENE CON UN DÍA MENOS ASI QUE LO AGREGAMOS
-     dateDesde.setTime(dateDesde.getTime() + (1000*60*60*24))
+    dateDesde.setTime(dateDesde.getTime() + (1000 * 60 * 60 * 24))
     //SE SETEAN TODAS LAS HORAS EN 0 ASI PODEMOS COMPARAR LAS FECHAS SIN PREOCUPARNOS DE LA HORA
-    dateDesde.setHours(0,0,0,0)
+    dateDesde.setHours(0, 0, 0, 0)
     const dateHasta = new Date(fechaHasta)
-    dateHasta.setTime(dateHasta.getTime() + (1000*60*60*24))
-    dateHasta.setHours(0,0,0,0)
-    let ventas=0
-    let costos=0
-    const facturas = await Factura.find({"fecha": {$gte: dateDesde, $lte: dateHasta}}).populate({
+    dateHasta.setTime(dateHasta.getTime() + (1000 * 60 * 60 * 24))
+    dateHasta.setHours(0, 0, 0, 0)
+    let ventas = 0
+    let costos = 0
+    const facturas = await Factura.find({ "fecha": { $gte: dateDesde, $lte: dateHasta } }).populate({
         path: "detallefacturaid", // populate blogs
         populate: {
             path: "articulomanufacturadoid", // in blogs, populate comments
             select: { denominacion: 1, _id: 1, precioCompra: 1, imagen: 1 }, //elijo solo los campos que quiero traer
         }
     })
-        for (let i = 0; i < facturas.length; i++) {
-            ventas=ventas+facturas[i].totalVenta
-            costos=costos+facturas[i].totalCosto
-        }
-    const ganancias={'ventas': ventas, 'costos': costos, 'balance': (ventas-costos)}
+    for (let i = 0; i < facturas.length; i++) {
+        ventas = ventas + facturas[i].totalVenta
+        costos = costos + facturas[i].totalCosto
+    }
+    const ganancias = { 'ventas': ventas, 'costos': costos, 'balance': (ventas - costos) }
     console.log("ganancias", ganancias)
-    return res.json({facturas, ganancias})
+    return res.json({ facturas, ganancias })
 }
 
 //Recaudaciones (Diaria/Mensual)
-exports.recaudaciones = async (req, res) =>{
+exports.recaudaciones = async (req, res) => {
     console.log("req.body en estadisticas ", req.body)
-    const fechaDesde=req.body.fechaDesde
-    const fechaHasta=req.body.fechaHasta
+    const fechaDesde = req.body.fechaDesde
+    const fechaHasta = req.body.fechaHasta
     const dateDesde = new Date(fechaDesde)
     //EL INPUT DATE DEL FRONTEND VIENE CON UN DÍA MENOS ASI QUE LO AGREGAMOS
-    dateDesde.setTime(dateDesde.getTime() + (1000*60*60*24))
+    dateDesde.setTime(dateDesde.getTime() + (1000 * 60 * 60 * 24))
     //SE SETEAN TODAS LAS HORAS EN 0 ASI PODEMOS COMPARAR LAS FECHAS SIN PREOCUPARNOS DE LA HORA
-    dateDesde.setHours(0,0,0,0)
+    dateDesde.setHours(0, 0, 0, 0)
     const dateHasta = new Date(fechaHasta)
-    dateHasta.setTime(dateHasta.getTime() + (1000*60*60*24))
-    dateHasta.setHours(0,0,0,0)
-    let ventas=0
-    const facturas = await Factura.find({"fecha": {$gte: dateDesde, $lte: dateHasta}}).populate({
+    dateHasta.setTime(dateHasta.getTime() + (1000 * 60 * 60 * 24))
+    dateHasta.setHours(0, 0, 0, 0)
+    let ventas = 0
+    const facturas = await Factura.find({ "fecha": { $gte: dateDesde, $lte: dateHasta } }).populate({
         path: "detallefacturaid", // populate blogs
         populate: {
             path: "articulomanufacturadoid", // in blogs, populate comments
             select: { denominacion: 1, _id: 1, precioCompra: 1, imagen: 1 }, //elijo solo los campos que quiero traer
         }
     })
-        for (let i = 0; i < facturas.length; i++) {
-            ventas=ventas+facturas[i].totalVenta
-        }
-    const ingresos={'ventas': ventas}
+    for (let i = 0; i < facturas.length; i++) {
+        ventas = ventas + facturas[i].totalVenta
+    }
+    const ingresos = { 'ventas': ventas }
     console.log("ingresos", ingresos)
-    return res.json({facturas, ingresos})
+    return res.json({ facturas, ingresos })
 }

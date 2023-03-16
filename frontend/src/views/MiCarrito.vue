@@ -8,6 +8,7 @@
         </v-row>
         <v-row v-if="items.length > 0">
             <v-col cols="8">
+                <input class="inputpromohome" v-model="probando" readonly>
                 <v-card outlined v-for="(item, i) in items" :key="i" cols="10" height="150px" width="100%"
                     style="display:inline-block; margin-bottom: 2px; background-color:beige;">
                     <h3 class="text-overline ml-2"><b> {{ item.denominacion }}</b></h3>
@@ -121,6 +122,7 @@ export default {
             conStock: [],
             subtotal: 0,
             radios: "",
+            probando: null,
             pedido: {
                 fecha: new Date(),
                 //numero: 1,
@@ -206,10 +208,11 @@ export default {
             //eventBus.$emit("elimina-itemcarrito", item._id)
         },
         async agregarProducto(item, j, index) {
+            this.probando += 1
             this.cantidad[index] += j
             //this.conStock[index] = controlStock(item)
             this.articulo = await getArticuloActualizado(item._id) //me traigo el manufact/insumo con los stock actualizados
-            this.articulo = await calcularInsumos(item, j)
+            this.articulo = await calcularInsumos(this.articulo, j)
             let contStockauxiliar = this.conStock[index]
             this.conStock[index] = controlStock(this.articulo)
             if (this.cantidad[index] == 0) {
@@ -330,14 +333,7 @@ export default {
                 localStorage.removeItem(this.items[i]._id);
             }
         },
-        async getEstado() {
-            const res = await fetch(
-                `http://localhost:3000/feedback`
-            );
-            const resJson = await res.json();
-            console.log("feedback", resJson);
 
-        }
     }
 }
 </script>

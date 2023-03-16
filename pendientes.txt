@@ -7,15 +7,12 @@ A CORREGIR/IMPLEMENTAR:
 
 *Implementar login con Google.
 
-*Control de stock, listo para el cliente, faltaría validar/rechazar pedido para confirmar/rechazar uso de los insumos.
-
-*Manejo de estado de pedido por cajero/admin, cocinero.
+*Implementar que al cerrar sesión borre los carritos y regrese los insumos, y cuando el admin cancele un pedido, regrese los insumos.
 
 *Validar el horario de atención, lunes a viernes de 12.00 a 22.00, sab. y dom. de 11.00 a 15.00hs.
 
 *Impresión de Facturas en PDF para el cliente.
 
-*Corregir en Mi Carrito que actualice al agregar bebidas con botón + , y el control de stock está fallando revisar.
 
 *Reportes en excel: Ranking comidas más pedidas en un periodo de tiempo determinado
 Ingresos (recaudaciones) por períodos de tiempo. Diario / Mensual
