@@ -7,9 +7,8 @@ const Factura = require('../models/Factura')
 const User = require('../models/user.model')
 
 exports.manufacturadosVendidos = async (req, res) => {
-    console.log("req.body en estadisticas ", req.body)
-    const fechaDesde = req.body.fechaDesde
-    const fechaHasta = req.body.fechaHasta
+    const {params} = req
+    const {fechaDesde, fechaHasta} = params
 
     const dateDesde = new Date(fechaDesde)
     //EL INPUT DATE DEL FRONTEND VIENE CON UN DÍA MENOS ASI QUE LO AGREGAMOS
@@ -57,9 +56,9 @@ exports.manufacturadosVendidos = async (req, res) => {
 }
 
 exports.pedidosXcliente = async (req, res) => {
-    console.log("req.body en estadisticas ", req.body)
-    const fechaDesde = req.body.fechaDesde
-    const fechaHasta = req.body.fechaHasta
+    const {params} = req
+    const {fechaDesde, fechaHasta} = params
+    
     const dateDesde = new Date(fechaDesde)
     //EL INPUT DATE DEL FRONTEND VIENE CON UN DÍA MENOS ASI QUE LO AGREGAMOS
     // dateDesde.setTime(dateDesde.getTime() + (1000*60*60*24))
@@ -105,9 +104,8 @@ exports.pedidosXcliente = async (req, res) => {
 
 // //GANANCIAS -----------------------------------------------------------------------------------------------
 exports.ganancias = async (req, res) => {
-    console.log("req.body en estadisticas ", req.body)
-    const fechaDesde = req.body.fechaDesde
-    const fechaHasta = req.body.fechaHasta
+    const {params} = req
+    const {fechaDesde, fechaHasta} = params
     const dateDesde = new Date(fechaDesde)
     //EL INPUT DATE DEL FRONTEND VIENE CON UN DÍA MENOS ASI QUE LO AGREGAMOS
     dateDesde.setTime(dateDesde.getTime() + (1000 * 60 * 60 * 24))
@@ -136,9 +134,8 @@ exports.ganancias = async (req, res) => {
 
 //Recaudaciones (Diaria/Mensual)
 exports.recaudaciones = async (req, res) => {
-    console.log("req.body en estadisticas ", req.body)
-    const fechaDesde = req.body.fechaDesde
-    const fechaHasta = req.body.fechaHasta
+    const {params} = req
+    const {fechaDesde, fechaHasta} = params
     const dateDesde = new Date(fechaDesde)
     //EL INPUT DATE DEL FRONTEND VIENE CON UN DÍA MENOS ASI QUE LO AGREGAMOS
     dateDesde.setTime(dateDesde.getTime() + (1000 * 60 * 60 * 24))

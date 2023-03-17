@@ -86,8 +86,8 @@ router.get('/facturaxid/:id', controllerFacturas.Facturaxid)
 router.get('/FacturaXpedidoid/:id', controllerFacturas.FacturaXpedidoid)
 router.post('/actualizarFactura/:id', controllerFacturas.actualizarFactura)
 
-router.get('/manufacturadosVendidos', controllerEstadisticas.manufacturadosVendidos)
-router.get('/pedidosXcliente', controllerEstadisticas.pedidosXcliente)
-router.get('/ganancias', controllerEstadisticas.ganancias)
-router.get('/recaudaciones', controllerEstadisticas.recaudaciones)
+router.get('/manufacturadosVendidos/:fechaDesde/:fechaHasta', controllerEstadisticas.manufacturadosVendidos)
+router.get('/pedidosXcliente/:fechaDesde/:fechaHasta', controllerEstadisticas.pedidosXcliente)
+router.get('/ganancias/:fechaDesde/:fechaHasta', controllerEstadisticas.ganancias)
+router.get('/recaudaciones/:fechaDesde/:fechaHasta', controllerEstadisticas.recaudaciones)
 module.exports = router

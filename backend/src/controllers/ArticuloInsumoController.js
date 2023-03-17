@@ -1,3 +1,5 @@
+//https://medium.com/swlh/crud-operations-on-mongodb-tree-data-structure-f5afaeca1550  //recursivas
+
 const ArticuloInsumo = require('../models/ArticuloInsumo');
 const RubroArticulo = require('../models/RubroArticulo')
 
