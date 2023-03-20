@@ -101,14 +101,7 @@ export default {
             miscompras: [],
             respuestaMercaPago: {
                 external_reference: "",
-                status: "",
-                todos: [
-                    { title: 'todo 1', description: 'description 1' },
-                    { title: 'todo 2', description: 'description2' },
-                    { title: 'todo 3', description: 'description 3' },
-                    { title: 'todo 4', description: 'description 4' },
-                    { title: 'todo 5', description: 'description 5' }
-                ]
+                status: ""
             }
         }
     },
@@ -116,11 +109,12 @@ export default {
         "detalle-pedido": detallePedido
     },
     mounted() {
-        this.comprasUsuario((JSON.parse(localStorage.getItem('user'))).id)
+        //this.comprasUsuario((JSON.parse(localStorage.getItem('user'))).id)
         //this.getParamsUrl(document.URL)
     },
     beforeMount() {
         this.getParamsUrl(document.URL)
+        this.comprasUsuario((JSON.parse(localStorage.getItem('user'))).id)
     },
     methods: {
         async comprasUsuario(id) {
@@ -131,7 +125,7 @@ export default {
             console.log(resJson);
             this.miscompras = resJson
         },
-        getParamsUrl(url) {
+        async getParamsUrl(url) {
             console.log(url);
             url = new URL(url)
             //aquí tienes dos opciones
@@ -150,23 +144,24 @@ export default {
                 // if(this.respuestaMercaPago.status=="approved"){
                 //     this.limpiarCarrito()
                 // }
-                this.setPedido(this.respuestaMercaPago.external_reference,
+                await this.setPedido(this.respuestaMercaPago.external_reference,
                     this.respuestaMercaPago.status)
             }
         },
         async setPedido(id, status) {
+            console.log("id "+id+", status: "+status)
             let urlServer = "http://localhost:3000/actualizarPedido/" + id
             let method = "POST";
             const respuesta = await fetch(urlServer, {
                 method: method,
-                body: JSON.stringify({ estado: 'pendiente' }),
+                body: JSON.stringify({ estado: status }),
                 headers: {
                     "Content-type": "application/json",
                 },
                 mode: "cors",
             });
             const resJson = await respuesta.json()
-            console.log("respuesta: ", resJson)
+            console.log("respuestaSetPedido: ", resJson)
             if (respuesta.status === 200) {
                 console.log(respuesta.status)
                 this.registrarPago()
@@ -211,7 +206,7 @@ export default {
                 mode: "cors",
             })
             const resJson = await respuesta.json()
-            console.log("respuesta: ", resJson)
+            console.log("respuestaRegistrarPago: ", resJson)
             if (respuesta.status === 200) {
                 console.log(respuesta.status)
 

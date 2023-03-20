@@ -11,9 +11,9 @@ A CORREGIR/IMPLEMENTAR:
 
 *Validar el horario de atención, lunes a viernes de 12.00 a 22.00, sab. y dom. de 11.00 a 15.00hs.
 
-*Impresión de Facturas en PDF para el cliente.
-
 *Generar los excel de estadísticas.
+
+*Corregir falla en Mis Compras luego de pagar con mercaPago.
 ________________________________________________________________________________________________________________________________________________________________________
 
 ""WARNINGs"":

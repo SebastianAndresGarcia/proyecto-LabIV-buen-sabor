@@ -259,7 +259,7 @@ export default {
                 detallepedido: []
             }
             if (this.pedido.tipoEnvio == "delivery") {
-                this.pedido.total += 500
+                this.pedido.total =this.pedido.total+ 500
             } else {
                 this.pedido.total *= 0.9
             }
