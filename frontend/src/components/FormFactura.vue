@@ -121,6 +121,7 @@ export default {
                     console.log(respuesta.status)
                     this.dialog = false;
                     this.nuevaFactura = true
+                    this.cambiarEstado(this.pedidoParam.pedidoid)
                 } else {
                     this.respuestaError = resJson.message
                     console.log("mensaje del servidor: " + this.respuestaError)
@@ -142,6 +143,7 @@ export default {
                     console.log(respuesta.status)
                     this.dialog = false;
                     this.nuevaFactura = true
+                    this.cambiarEstado(this.pedidoParam.pedidoid)
                 } else {
                     this.respuestaError = resJson.message
                     console.log("mensaje del servidor: " + this.respuestaError)
@@ -191,6 +193,27 @@ export default {
             }
             if (this.factura.totalCosto == 0 || this.factura.totalCosto == null) {
                 this.factura.totalCosto = await calculaCosto(this.factura.detallefacturaid)
+            }
+        },
+        async cambiarEstado(pedido) {
+            
+            let urlServer = "http://localhost:3000/actualizarPedido/" + pedido
+            let method = "POST";
+            const respuesta = await fetch(urlServer, {
+                method: method,
+                body: JSON.stringify({ estado: 'facturado' }),
+                headers: {
+                    "Content-type": "application/json",
+                },
+                mode: "cors",
+            });
+            const resJson = await respuesta.json()
+            console.log("respuesta: ", resJson)
+            if (respuesta.status === 200) {
+                console.log(respuesta.status)
+            } else {
+                this.respuestaError = resJson.message
+                console.log("mensaje del servidor: " + this.respuestaError)
             }
         }
     }

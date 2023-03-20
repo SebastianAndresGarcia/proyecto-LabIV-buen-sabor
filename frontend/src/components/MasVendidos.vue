@@ -1,3 +1,6 @@
+<!-- https://github.com/jecovier/vue-json-excel 
+https://github.com/zheeeng/export-from-json#readme
+-->
 <template>
     <v-container>
         <v-expansion-panel-content>
@@ -39,6 +42,7 @@
                         </v-date-picker>
                     </v-menu>
                 </v-col>
+
             </v-row>
             <v-row align="center" style="justify-content: center;" v-if="fechaDesde && fechaHasta">
                 <v-simple-table class="tabla">
@@ -46,7 +50,7 @@
                         <thead>
                             <tr>
                                 <th class="text-left">
-                                    
+
                                 </th>
                                 <th class="text-left">
                                     <b>Denominación Comida</b>
@@ -60,7 +64,7 @@
                         <tbody>
                             <tr v-for="(item, i) in maspedidos" :key="i" style="padding-top: 5px;">
                                 <td>
-                                    {{ i+1 }}
+                                    {{ i }}
                                 </td>
                                 <td>
                                     {{ item.comida }}
@@ -73,14 +77,19 @@
                     </template>
                 </v-simple-table>
             </v-row>
-
+            <v-row align="center" style="justify-content: center; padding-top: 10px;" v-if="fechaDesde && fechaHasta">
+                <v-btn color="blue darken-1" @click="importarExcel()">
+                    DESCARGAR A EXCEL
+                </v-btn>
+            </v-row>
             <!-- ITEM RANKING -->
         </v-expansion-panel-content>
     </v-container>
 </template>
 <script>
+import exportFromJSON from "export-from-json"
 export default {
-    
+
     data() {
         return {
             menuDesde: false,
@@ -104,6 +113,17 @@ export default {
             console.log("resJson", resJson);
             this.maspedidos = resJson
         },
+        async importarExcel() {
+            let fecha = { 'fechaDesde': this.fechaDesde, 'fechaHasta': this.fechaHasta }
+            let data = this.maspedidos
+            data.unshift(fecha)
+            console.log("data ", data)
+            const fileName = 'masVendidos'
+            const exportType = exportFromJSON.types.xls
+            await exportFromJSON({ data, fileName, exportType })
+            this.maspedidos.shift()
+            
+        }
     }
 }
 </script>

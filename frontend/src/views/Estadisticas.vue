@@ -24,7 +24,7 @@ Monto de Ganancia en un periodo de tiempo (ventas - costos) -->
                 </v-expansion-panel>
 
                 <v-expansion-panel>
-                    <v-expansion-panel-header style="height: 100px; background-color:aqua">
+                    <v-expansion-panel-header style="height: 100px; background-color:greenyellow">
                         <template v-slot:default="{ open }">
                             <v-row no-gutters>
                                 <v-col cols="4">
@@ -50,7 +50,7 @@ Monto de Ganancia en un periodo de tiempo (ventas - costos) -->
                 </v-expansion-panel>
 
                 <v-expansion-panel>
-                    <v-expansion-panel-header style="height: 100px; background-color:aqua">
+                    <v-expansion-panel-header style="height: 100px; background-color:greenyellow">
                         <template v-slot:default="{ open }">
                             <v-row no-gutters>
                                 <v-col cols="4">
@@ -89,7 +89,6 @@ export default {
             maspedidos: null,
             ingresos: null,
             pedidosxcliente: null,
-            gananciasxtiempo: null,
             fecha: null
         }
     },
@@ -98,10 +97,6 @@ export default {
     },
     mounted() {
         this.verificarUsuario(this.currentUser)
-
-        this.recaudaciones("2023-01-17", "2023-03-17")
-        this.pedidosXcliente("2023-01-17", "2023-03-17")
-        this.ganancias("2023-01-17", "2023-03-17")
     },
 
     methods: {
@@ -115,32 +110,6 @@ export default {
                 window.location.href = "/Home"
             }
         },
-        async recaudaciones(fechaDesde, fechaHasta) {
-            const res = await fetch(
-                "http://localhost:3000/recaudaciones/" + fechaDesde + "/" + fechaHasta,
-            );
-            const resJson = await res.json();
-            console.log("recaudaciones", resJson);
-            this.ingresos = resJson
-        },
-        async pedidosXcliente(fechaDesde, fechaHasta) {
-            const res = await fetch(
-                "http://localhost:3000/pedidosXcliente/" + fechaDesde + "/" + fechaHasta,
-            );
-            const resJson = await res.json();
-            console.log("pedidosXcliente", resJson);
-            this.pedidosxcliente = resJson
-        },
-        async ganancias(fechaDesde, fechaHasta) {
-            let method = "GET"
-            const res = await fetch(
-                "http://localhost:3000/ganancias/" + fechaDesde + "/" + fechaHasta,
-            );
-            const resJson = await res.json();
-            console.log("ganancias", resJson);
-            this.gananciasxtiempo = resJson
-        }
-
     },
 
 };

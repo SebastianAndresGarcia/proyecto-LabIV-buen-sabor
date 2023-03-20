@@ -70,7 +70,7 @@
                                     <div  v-if="pedido.estado === 'pendiente'">
                                         <v-btn  small color="success" @click="cambiarEstado(pedido)">Enviar a Cocina</v-btn>
                                     </div>
-                                    <div v-else-if="pedido.estado === 'terminado'">
+                                    <div v-else-if="pedido.estado === 'terminado'||pedido.estado === 'facturado'">
                                         <form-factura  :pedidoParam="{ 'pedidoid': pedido._id, 'facturaid': pedido.facturaid }"></form-factura>
                                     </div>
                                     <div v-else>
@@ -116,6 +116,7 @@ export default {
                 { state: 'Pendiente' },
                 { state: 'En preparación' },
                 { state: 'Terminado' },
+                { state: 'Facturado' },
 
             ],
         };

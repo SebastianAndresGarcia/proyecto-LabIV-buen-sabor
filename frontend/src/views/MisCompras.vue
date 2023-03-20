@@ -1,7 +1,10 @@
+<!-- https://phppot.com/javascript/jspdf-autotable/
+https://www.npmjs.com/package/jspdf 
+-->
 <template>
     <v-container>
         <v-card style="margin-top: 10px; justify:center">
-            <v-card-title>Mis Pedidos</v-card-title>
+            <v-card-title>Mis Compras</v-card-title>
             <v-simple-table class="tabla" v-if="miscompras.length > 0">
                 <template v-slot:default>
                     <thead>
@@ -24,7 +27,7 @@
                             <th class="text-left">
                                 <b>Estado</b>
                             </th>
-                            <th class="text-left">
+                            <th class="text-center">
                                 <b>Ver Factura</b>
                             </th>
                         </tr>
@@ -50,9 +53,32 @@
                             <td>
                                 <b>{{ compra.estado }}</b>
                             </td>
+
                             <td>
-                                <b>En proceso...</b>
+                                <div align="center">
+                                    <div v-if="compra.estado == 'facturado'">
+                                        <v-btn color="success" @click="facturaPDF(compra)">
+                                            DESCARGAR
+                                        </v-btn>
+                                    </div>
+                                    <div v-else-if="compra.estado == 'cancelado'">
+                                        <b>Pedido Cancelado</b>
+                                    </div>
+                                    <div v-else>
+                                        <b>En proceso...</b>
+                                    </div>
+                                </div>
                             </td>
+                            <!-- <div v-else-if="compra.estado == 'cancelado'">
+                                <td>
+                                    Pedido Cancelado
+                                </td>
+                            </div>
+                            <div v-else>
+                                <td>
+                                    <b>En proceso...</b>
+                                </td>
+                            </div> -->
                         </tr>
                     </tbody>
                 </template>
@@ -67,13 +93,22 @@
 <script>
 import detallePedido from '@/components/DetallePedido.vue'
 import { eventBus } from "../main";
+import { jsPDF } from "jspdf"
+import { autoTable } from "jspdf-autotable"
 export default {
     data() {
         return {
             miscompras: [],
             respuestaMercaPago: {
                 external_reference: "",
-                status: ""
+                status: "",
+                todos: [
+                    { title: 'todo 1', description: 'description 1' },
+                    { title: 'todo 2', description: 'description2' },
+                    { title: 'todo 3', description: 'description 3' },
+                    { title: 'todo 4', description: 'description 4' },
+                    { title: 'todo 5', description: 'description 5' }
+                ]
             }
         }
     },
@@ -184,6 +219,58 @@ export default {
                 this.respuestaError = resJson.message
                 console.log("mensaje del servidor: " + this.respuestaError)
             }
+        },
+        async facturaPDF(compra) {
+            var doc = new jsPDF('p', 'pt', 'letter')
+        // generate the above data table
+            var body=[]
+            var foot=[]
+        for (let i = 0; i < compra.detallepedidoid.length; i++) {
+            let comida=null
+            try{
+                comida = compra.detallepedidoid[i].articulomanufacturadoid.denominacion
+            }catch(e){
+                comida = compra.detallepedidoid[i].articuloinsumoid.denominacion
+            }
+            body.push([i+1,comida,compra.detallepedidoid[i].cantidad, (compra.detallepedidoid[i].subtotal/compra.detallepedidoid[i].cantidad), compra.detallepedidoid[i].subtotal])
+        }
+        foot.push([' ', 'Total', '  ', '  ',compra.total])
+        if(compra.tipoEnvio=='delivery'){
+            body.push([' ', 'Costo Delivery', '  ', '  ','500'])
+        }
+        if(compra.tipoEnvio=='local'){
+            body.push([' ', 'Descuento retiro en local', '  ', '  ','-%10'])
+        }
+        // New Header and Footer Data Include the table
+        var y = 10;
+        doc.setLineWidth(2);
+        doc.text("El Buen Sabor",doc.internal.pageSize.getWidth() / 2, 50, { align: 'center'});
+        let fechaFormateada=(new Date(compra.fecha)).toJSON().substr(0, 10)
+        
+        doc.text(fechaFormateada, 10, 20)
+        doc.autoTable({
+            body: body,
+            startY: 70,
+            head:[['No', 'Denominacion', 'Cantidad', 'Precio Unitario', 'Subtotal']],
+            foot:foot,
+            headStyles :{textColor: [255, 255, 255],},
+            footStyles :{
+                textColor: [255, 255, 255], halign: 'right'
+            },
+            
+            theme: 'grid',
+            columnStyles: {
+                0: {halign: 'right', cellWidth: '50',},
+                1: {halign: 'left', cellWidth: '330',},
+                2: {halign: 'right', cellWidth: '50',},
+                3: {halign: 'right', cellWidth: '50',},
+                4: {halign: 'right', cellWidth: '50',}
+            },
+		})
+
+
+        // save the data to this file
+        doc.save('auto_table_header_footer');
         }
     }
 }    
