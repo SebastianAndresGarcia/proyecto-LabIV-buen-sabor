@@ -13,7 +13,6 @@ A CORREGIR/IMPLEMENTAR:
 
 *Generar los excel de estadísticas.
 
-*Corregir falla en Mis Compras luego de pagar con mercaPago.
 ________________________________________________________________________________________________________________________________________________________________________
 
 ""WARNINGs"":
