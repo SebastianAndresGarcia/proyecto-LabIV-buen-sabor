@@ -39,7 +39,7 @@
                                 <th class="text-left">
                                     <b>Estado</b>
                                 </th>
-                                <th class="text-left">
+                                <th class="text-center">
                                     <h2><b>Acciones</b></h2>
                                 </th>
                             </tr>
@@ -68,10 +68,11 @@
                                 </td>
                                 <td >
                                     <div  v-if="pedido.estado === 'pendiente'">
-                                        <v-btn  small color="success" @click="cambiarEstado(pedido)">Enviar a Cocina</v-btn>
+                                    <v-row style="justify-content: center;"> <v-btn style="margin-right: 2px;" small color="success" @click="cambiarEstado(pedido)">Enviar a Cocina</v-btn>
+                                      <v-btn  small color="red" @click="cancelarPedido(pedido)">Cancelar Pedido</v-btn> </v-row> 
                                     </div>
                                     <div v-else-if="pedido.estado === 'terminado'||pedido.estado === 'facturado'">
-                                        <form-factura  :pedidoParam="{ 'pedidoid': pedido._id, 'facturaid': pedido.facturaid }"></form-factura>
+                                        <form-factura style="justify-content: center;"  :pedidoParam="{ 'pedidoid': pedido._id, 'facturaid': pedido.facturaid }"></form-factura>
                                     </div>
                                     <div v-else>
                                         <b>Esperando a la cocina...</b>
@@ -161,6 +162,28 @@ export default {
                 this.respuestaError = resJson.message
                 console.log("mensaje del servidor: " + this.respuestaError)
             }
+        },
+        async cancelarPedido(pedido) {
+            // pedido.estado = 'elaboracion'
+            // let urlServer = "http://localhost:3000/actualizarPedido/" + pedido._id
+            // let method = "POST";
+            // const respuesta = await fetch(urlServer, {
+            //     method: method,
+            //     body: JSON.stringify({ estado: 'elaboracion' }),
+            //     headers: {
+            //         "Content-type": "application/json",
+            //     },
+            //     mode: "cors",
+            // });
+            // const resJson = await respuesta.json()
+            // console.log("respuesta: ", resJson)
+            // if (respuesta.status === 200) {
+            //     console.log(respuesta.status)
+                
+            // } else {
+            //     this.respuestaError = resJson.message
+            //     console.log("mensaje del servidor: " + this.respuestaError)
+            // }
         }
     }
 };

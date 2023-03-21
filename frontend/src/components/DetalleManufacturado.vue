@@ -1,5 +1,4 @@
 <template>
-
     <v-dialog v-model="dialog" persistent max-width="700px">
 
         <template v-slot:activator="{ on, attrs }"></template>
@@ -68,11 +67,10 @@
         </v-card>
         <v-dialog v-model="alert" max-width="400px">
             <v-alert color="red" prominent type="warning">
-                Inicie sesión para llenar su carrito<v-btn text @click="alert = false">X</v-btn>
+                Inicie sesión para cargar su carrito<v-btn text @click="alert = false">X</v-btn>
             </v-alert>
         </v-dialog>
     </v-dialog>
-
 </template>
 <script>
 import { eventBus } from "../main";
@@ -148,7 +146,7 @@ export default {
                 //this.cambioCarrito=false
             }
             await this.getLocalStorage(this.manufacturado._id) //está línea actualiza la vista gral del componente padre cuando se elimina desde el carrito
-            
+
         },
         async getLocalStorage(id) {
             if (localStorage.getItem(id)) {
@@ -170,7 +168,7 @@ export default {
                 this.$emit('limpiarObjeto', { actualizarCarrousel: true })
             }
             else {
-              //  this.getLocalStorage(this.manufacturado._id)
+                //  this.getLocalStorage(this.manufacturado._id)
             }
         });
     }

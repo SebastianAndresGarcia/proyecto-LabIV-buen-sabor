@@ -1,22 +1,23 @@
 <template>
     <div style="margin-top:40px; margin-left: 50px; margin-bottom: 40px; ">
         <v-dialog v-model="alert" max-width="400px"><v-alert color="red" prominent type="warning">Inicie sesión para
-                llenar su
+                cargar su
                 carrito<v-btn text @click="alert = false">X</v-btn></v-alert></v-dialog>
-        <div style="margin:20px; display:inline-flex;" v-for="(manufacturado, index) in manufacturadosData"
-            :key="index">
+        <div style="margin:20px; display:inline-flex;" v-for="(manufacturado, index) in manufacturadosData" :key="index">
             <manufacturado-item :manufacturadoParam="manufacturado" @abrirAlert="handleMessage"></manufacturado-item>
         </div>
     </div>
 </template>
 <script >
 import tarjetamanufacturado from "@/components/TarjetaManufacturado.vue";
+import AuthService from "@/service/auth.service.js"
 export default {
     name: "manufacturados",
     components: {
         "manufacturado-item": tarjetamanufacturado
     },
     mounted() {
+        this.currentUser = AuthService.getCurrentUser()
         const id = this.$route.params.id //del rubro general
         console.log("idrubrogeneral " + this.$route.params.id)
         this.getmanufacturados(id)
@@ -45,7 +46,7 @@ export default {
                 //console.log(resJson);
                 this.manufacturadosData = resJson;
             }
-            if(this.manufacturadosData.length==0){
+            if (this.manufacturadosData.length == 0) {
                 const res = await fetch(
                     `http://localhost:3000/insumosXrubro/${id}`
                 )
@@ -56,7 +57,7 @@ export default {
             //console.log("this.manufacturadosData", this.manufacturadosData)
         },
         handleMessage(value) {
-            if (value >= 0) {
+            if (value >= 0 && this.currentUser) {
                 console.log("catchemit rubroId " + this.$route.params.id)
                 this.getmanufacturados(this.$route.params.id)
             }

@@ -1,7 +1,6 @@
 <!--https://codingbeautydev.com/blog/vuetify-app-bar/
 https://es.acervolima.com/comunicacion-entre-componentes-usando-emit-y-props-en-vue-js/
 https://kinsta.com/es/blog/vue-js/
-
 https://materialdesignicons.com/  ÍCONOS
 -->
 <template>
@@ -70,7 +69,8 @@ https://materialdesignicons.com/  ÍCONOS
                 <v-list-item><v-list-item-title><v-btn block text href="http://localhost:8080/abmpedidos">BANDEJA
                       PEDIDOS</v-btn></v-list-item-title>
                 </v-list-item>
-                <v-list-item><v-list-item-title><v-btn block text href="http://localhost:8080/abmfacturas">ABM FACTURAS</v-btn></v-list-item-title>
+                <v-list-item><v-list-item-title><v-btn block text href="http://localhost:8080/abmfacturas">ABM
+                      FACTURAS</v-btn></v-list-item-title>
                 </v-list-item>
                 <v-list-item><v-list-item-title><v-btn block text href="http://localhost:8080/pedidoscocinero">BANDEJA
                       COCINA</v-btn></v-list-item-title>
@@ -81,7 +81,7 @@ https://materialdesignicons.com/  ÍCONOS
               </v-list>
             </v-menu>
           </v-tab>
-          
+
         </v-tabs>
       </template>
     </v-app-bar>
@@ -129,6 +129,7 @@ import register from "@/components/Register.vue";
 import login from "@/components/Login.vue";
 import carrito from "@/components/Carrito.vue"
 import AuthService from "@/service/auth.service.js"
+import { borrarCarrito } from "@/funciones/BorrarCarrito.js"
 export default {
   name: "App",
   data() {
@@ -178,6 +179,7 @@ export default {
       this.rubros.push({ 'denominacion': "Ver todo", '_id': 0 })
     },
     async cerrarSesion() {
+      borrarCarrito()
       AuthService.logout()
       this.showAdminBoard = false
       this.currentUser = undefined

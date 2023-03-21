@@ -20,7 +20,7 @@
 
               <p><v-icon>mdi-phone</v-icon> 261xxxxxxx</p>
               <p><v-icon>mdi-home</v-icon>Aristides Villanueva 424 - Mendoza</p>
-              <p><v-icon>mdi-mail</v-icon> mail@mail.com</p>
+              <p><v-icon>mdi-mail</v-icon> sebagxeneize@mail.com</p>
             </v-card-subtitle>
           </v-col>
           <v-col>
@@ -30,7 +30,7 @@
       </v-card-text>
       <v-divider></v-divider>
       {{ new Date().getFullYear() }}
-      <p>Desarrollador XXXXX XXXXXX</p>
+      <p>Desarrollador Sebastián García</p>
       <v-divider></v-divider>
     </v-card>
   </v-footer>
