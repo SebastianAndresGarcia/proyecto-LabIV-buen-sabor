@@ -102,7 +102,7 @@ exports.getArticulosInsumosFalse = async (req, res) => {
         ({ "esInsumo": false }).populate(
             { path: "RubroArticuloid" }
         )
-    console.log(resultado)
+    //console.log(resultado)
     return res.json(resultado)
     // const resultado=[]
     //     const rubros = await RubroArticulo.find
@@ -124,7 +124,7 @@ exports.getArticulosInsumosFalsexRubro = async (req, res) => {
         ({ "RubroArticuloid": req.params.id }).populate(
             { path: "RubroArticuloid" }
         )
-    console.log(resultado)
+    //console.log(resultado)
     return res.json(resultado)
 
 }

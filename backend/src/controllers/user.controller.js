@@ -17,3 +17,7 @@ exports.updateUser = async (req, res) =>{
   const updatedUser = await User.findByIdAndUpdate(req.body._id, req.body)
   return res.json(updatedUser)
 } 
+
+exports.userBoard = (req, res) => {
+  res.status(200).send("User Content.");
+}

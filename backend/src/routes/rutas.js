@@ -12,7 +12,7 @@ const controllerPedidos = require('../controllers/PedidosController')
 const controllerMercaPago = require('../controllerMPago/MercadoPagoController')
 const controllerFacturas = require ('../controllers/FacturaController')
 const controllerEstadisticas = require ('../controllers/EstadisticasController')
-const { verifySignUp } = require("../middlewares");
+const { verifySignUp, authJwt } = require("../middlewares");
 const controller = require("../controllers/auth.controller");
 
 router.post(
@@ -24,7 +24,7 @@ router.post(
     controller.signup
 );
 router.post("/api/auth/signin", controller.signin);
-
+router.get("/api/test/user", [authJwt.verifyToken], controllerUser.userBoard);
 router.post('/crearDomicilio', controllerDlio.createAddress)
 router.get('/usuarioDlios/:id', controllerDlio.getAddressbyuser);
 

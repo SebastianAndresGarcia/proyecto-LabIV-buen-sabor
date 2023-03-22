@@ -3,7 +3,7 @@ const config = require("../config/auth.config.js");
 const db = require("../models");
 const User = db.user;
 const Role = db.role;
-
+const date = new Date();
 verifyToken = (req, res, next) => {
   let token = req.headers["x-access-token"];
 
@@ -13,7 +13,15 @@ verifyToken = (req, res, next) => {
 
   jwt.verify(token, config.secret, (err, decoded) => {
     if (err) {
+      console.log(`${date.getHours()}:${date.getMinutes()}
+      :${date.getSeconds()}`);
+      console.log(err);
       return res.status(401).send({ message: "Unauthorized!" });
+    }
+    else {
+      console.log(`${date.getHours()}:${date.getMinutes()}
+                                     :${date.getSeconds()}`);
+      console.log("Token verifified successfully");
     }
     req.userId = decoded.id;
     next();

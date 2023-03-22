@@ -67,7 +67,7 @@ exports.getArticulosManufacturadosInsumos = async (req, res) => {
     populate({
         path: "RubroArticuloid"
     })
-    console.log(insumos)
+    //console.log(insumos)
     insumos.forEach(element => {
         manufacturados.push(element)
     });
@@ -89,7 +89,7 @@ exports.getArticulosManufacturadosInsumos = async (req, res) => {
     populate({
         path: "RubroArticuloid"
     })
-    console.log(insumos)
+    //console.log(insumos)
     insumos.forEach(element => {
         manufacturados.push(element)
     });
