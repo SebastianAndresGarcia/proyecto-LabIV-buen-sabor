@@ -95,14 +95,16 @@
 
                     <v-card-text>
                         <v-row v-if="subtotal > 0 && radios" style="justify-content: center; margin: 5%;" dense>
-                            <v-btn rounded @click="registrarPedido()" color="success">Ir a pagar</v-btn>
+                            <v-btn rounded :disabled=isDisabled @click="registrarPedido()" color="success">Ir a
+                                pagar</v-btn>
                         </v-row>
                     </v-card-text>
                 </v-card>
             </v-col>
         </v-row>
         <div align="center" v-else>
-            <h1>Redirect to menu....</h1>
+            <h1>Carrito vacío. Redirect to menu....</h1>
+            <v-progress-circular indeterminate color="green" model-value="20" :size="85"></v-progress-circular>
         </div>
     </v-container>
 </template>
@@ -139,6 +141,7 @@ export default {
                 }]
 
             },
+            isDisabled: false,
             conStock: true
         };
     },
@@ -166,13 +169,6 @@ export default {
                 console.log("resJson-getManufacturadoxid", resJson);
                 this.items.push(resJson);
             }
-            // console.log("id " + id + " cant " + cant)
-            // const res = await fetch(
-            //     `http://localhost:3000/getManufacturadoXid/${id}`
-            // )
-            // const resJson = await res.json();
-            // console.log(resJson);
-            // this.items.push(resJson);
             this.conStock.push(controlStock(this.items[this.items.length - 1]))
             this.carritoLength = this.items.length
             this.cantidad.push(cant)
@@ -197,6 +193,9 @@ export default {
             });
             if (carrovacio) {
                 this.carritoLength = 0
+                setTimeout(() => {
+                    window.location.href = "/ManufacXrubro/0"
+                }, 3000);
             }
         },
         async eliminar(item, cantidad) {
@@ -205,6 +204,11 @@ export default {
             }
             window.localStorage.removeItem(item._id)
             this.getLocalStorage()
+            if (this.items.length == 0) {
+                setTimeout(() => {
+                    window.location.href = "/ManufacXrubro/0"
+                }, 3000);
+            }
             //eventBus.$emit("elimina-itemcarrito", item._id)
         },
         async agregarProducto(item, j, index) {
@@ -225,19 +229,11 @@ export default {
                     this.getLocalStorage()
                 }
                 eventBus.$emit("elimina-itemcarrito", '0')
-
             }
-            // if (this.cantidad[index] == 0) {
-            //     this.eliminar(item, 0)
-            // } else {
-
-            //     localStorage.setItem(item._id, JSON.stringify({ 'cantidad': this.cantidad[index] }))
-            // }
-            // this.getLocalStorage()
+            this.calculaSubtotal()
         },
         cerrar() {
             this.cerrarCarro = true
-            // this.$emit('carritoLength', { close: this.cerrarCarro })
         },
         async calculaSubtotal() {
             this.subtotal = 0
@@ -245,8 +241,10 @@ export default {
                 if (this.items[i].descuento > 0) { this.subtotal += (this.items[i].precioVenta - (this.items[i].precioVenta * this.items[i].descuento) / 100) * this.cantidad[i] }
                 else { this.subtotal += this.items[i].precioVenta * this.cantidad[i] }
             }
+            console.log("subtotal " + this.subtotal)
         },
         async registrarPedido() {
+            this.isDisabled = true
             this.pedido = {
                 fecha: new Date(),
                 //numero: 1,
@@ -259,7 +257,7 @@ export default {
                 detallepedido: []
             }
             if (this.pedido.tipoEnvio == "delivery") {
-                this.pedido.total =this.pedido.total+ 500
+                this.pedido.total = this.pedido.total + 500
             } else {
                 this.pedido.total *= 0.9
             }

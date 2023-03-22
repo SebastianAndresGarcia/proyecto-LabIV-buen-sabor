@@ -67,18 +67,18 @@ https://www.npmjs.com/package/jspdf
                                     <div v-else>
                                         <b>En proceso...</b>
                                     </div>
-                                </div>
-                            </td>
-                            <!-- <div v-else-if="compra.estado == 'cancelado'">
+                            </div>
+                        </td>
+                        <!-- <div v-else-if="compra.estado == 'cancelado'">
                                 <td>
                                     Pedido Cancelado
                                 </td>
                             </div>
                             <div v-else>
                                 <td>
-                                    <b>En proceso...</b>
-                                </td>
-                            </div> -->
+                                        <b>En proceso...</b>
+                                    </td>
+                                </div> -->
                         </tr>
                     </tbody>
                 </template>
@@ -108,13 +108,14 @@ export default {
     components: {
         "detalle-pedido": detallePedido
     },
+
     mounted() {
         //this.comprasUsuario((JSON.parse(localStorage.getItem('user'))).id)
         //this.getParamsUrl(document.URL)
     },
     beforeMount() {
         this.getParamsUrl(document.URL)
-        this.comprasUsuario((JSON.parse(localStorage.getItem('user'))).id)
+
     },
     methods: {
         async comprasUsuario(id) {
@@ -146,15 +147,17 @@ export default {
                 // }
                 await this.setPedido(this.respuestaMercaPago.external_reference,
                     this.respuestaMercaPago.status)
+            } else {
+                this.comprasUsuario((JSON.parse(localStorage.getItem('user'))).id)
             }
         },
         async setPedido(id, status) {
-            console.log("id "+id+", status: "+status)
+            console.log("id " + id + ", status: " + status)
             let urlServer = "http://localhost:3000/actualizarPedido/" + id
             let method = "POST";
             const respuesta = await fetch(urlServer, {
                 method: method,
-                body: JSON.stringify({ estado: status }),
+                body: JSON.stringify({ estado: 'pendiente' }), //estado pendiente esperando que lo envíen a la cocina
                 headers: {
                     "Content-type": "application/json",
                 },
@@ -214,58 +217,59 @@ export default {
                 this.respuestaError = resJson.message
                 console.log("mensaje del servidor: " + this.respuestaError)
             }
+            this.comprasUsuario((JSON.parse(localStorage.getItem('user'))).id)
         },
         async facturaPDF(compra) {
             var doc = new jsPDF('p', 'pt', 'letter')
-        // generate the above data table
-            var body=[]
-            var foot=[]
-        for (let i = 0; i < compra.detallepedidoid.length; i++) {
-            let comida=null
-            try{
-                comida = compra.detallepedidoid[i].articulomanufacturadoid.denominacion
-            }catch(e){
-                comida = compra.detallepedidoid[i].articuloinsumoid.denominacion
+            // generate the above data table
+            var body = []
+            var foot = []
+            for (let i = 0; i < compra.detallepedidoid.length; i++) {
+                let comida = null
+                try {
+                    comida = compra.detallepedidoid[i].articulomanufacturadoid.denominacion
+                } catch (e) {
+                    comida = compra.detallepedidoid[i].articuloinsumoid.denominacion
+                }
+                body.push([i + 1, comida, compra.detallepedidoid[i].cantidad, (compra.detallepedidoid[i].subtotal / compra.detallepedidoid[i].cantidad), compra.detallepedidoid[i].subtotal])
             }
-            body.push([i+1,comida,compra.detallepedidoid[i].cantidad, (compra.detallepedidoid[i].subtotal/compra.detallepedidoid[i].cantidad), compra.detallepedidoid[i].subtotal])
-        }
-        foot.push([' ', 'Total', '  ', '  ',compra.total])
-        if(compra.tipoEnvio=='delivery'){
-            body.push([' ', 'Costo Delivery', '  ', '  ','500'])
-        }
-        if(compra.tipoEnvio=='local'){
-            body.push([' ', 'Descuento retiro en local', '  ', '  ','-%10'])
-        }
-        // New Header and Footer Data Include the table
-        var y = 10;
-        doc.setLineWidth(2);
-        doc.text("El Buen Sabor",doc.internal.pageSize.getWidth() / 2, 50, { align: 'center'});
-        let fechaFormateada=(new Date(compra.fecha)).toJSON().substr(0, 10)
-        
-        doc.text(fechaFormateada, 10, 20)
-        doc.autoTable({
-            body: body,
-            startY: 70,
-            head:[['No', 'Denominacion', 'Cantidad', 'Precio Unitario', 'Subtotal']],
-            foot:foot,
-            headStyles :{textColor: [255, 255, 255],},
-            footStyles :{
-                textColor: [255, 255, 255], halign: 'right'
-            },
-            
-            theme: 'grid',
-            columnStyles: {
-                0: {halign: 'right', cellWidth: '50',},
-                1: {halign: 'left', cellWidth: '330',},
-                2: {halign: 'right', cellWidth: '50',},
-                3: {halign: 'right', cellWidth: '50',},
-                4: {halign: 'right', cellWidth: '50',}
-            },
-		})
+            foot.push([' ', 'Total', '  ', '  ', compra.total])
+            if (compra.tipoEnvio == 'delivery') {
+                body.push([' ', 'Costo Delivery', '  ', '  ', '500'])
+            }
+            if (compra.tipoEnvio == 'local') {
+                body.push([' ', 'Descuento retiro en local', '  ', '  ', '-%10'])
+            }
+            // New Header and Footer Data Include the table
+            var y = 10;
+            doc.setLineWidth(2);
+            doc.text("El Buen Sabor", doc.internal.pageSize.getWidth() / 2, 50, { align: 'center' });
+            let fechaFormateada = (new Date(compra.fecha)).toJSON().substr(0, 10)
+
+            doc.text(fechaFormateada, 10, 20)
+            doc.autoTable({
+                body: body,
+                startY: 70,
+                head: [['No', 'Denominacion', 'Cantidad', 'Precio Unitario', 'Subtotal']],
+                foot: foot,
+                headStyles: { textColor: [255, 255, 255], },
+                footStyles: {
+                    textColor: [255, 255, 255], halign: 'right'
+                },
+
+                theme: 'grid',
+                columnStyles: {
+                    0: { halign: 'right', cellWidth: '50', },
+                    1: { halign: 'left', cellWidth: '330', },
+                    2: { halign: 'right', cellWidth: '50', },
+                    3: { halign: 'right', cellWidth: '50', },
+                    4: { halign: 'right', cellWidth: '50', }
+                },
+            })
 
 
-        // save the data to this file
-        doc.save('auto_table_header_footer');
+            // save the data to this file
+            doc.save('auto_table_header_footer');
         }
     }
 }    
