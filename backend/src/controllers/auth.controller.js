@@ -98,7 +98,7 @@ exports.signin = (req, res) => {
         });
       }
 
-      var token = jwt.sign({ _id: user._id }, config.secret, {
+      var token = jwt.sign({ id: user._id }, config.secret, {
         expiresIn: 60 // 24 hours = (86400)
       });
 
@@ -108,12 +108,12 @@ exports.signin = (req, res) => {
         authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
       }
       res.status(200).send({
-        _id: user._id,
+        id: user._id,
         username: user.username,
         email: user.email,
         roles: authorities,
         accessToken: token,
-        message: "User logged on sucessfuly!"
+        message: user.username+" logged on sucessfuly!"
       });
     });
 };

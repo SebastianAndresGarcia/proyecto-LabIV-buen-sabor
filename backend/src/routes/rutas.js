@@ -14,7 +14,7 @@ const controllerFacturas = require ('../controllers/FacturaController')
 const controllerEstadisticas = require ('../controllers/EstadisticasController')
 const { verifySignUp, authJwt } = require("../middlewares");
 const controller = require("../controllers/auth.controller");
-
+const controllerGoogleLogin = require('../controllers/googleLoginController')
 router.post(
     "/api/auth/signup",
     [
@@ -90,4 +90,6 @@ router.get('/manufacturadosVendidos/:fechaDesde/:fechaHasta', controllerEstadist
 router.get('/pedidosXcliente/:fechaDesde/:fechaHasta', controllerEstadisticas.pedidosXcliente)
 router.get('/ganancias/:fechaDesde/:fechaHasta', controllerEstadisticas.ganancias)
 router.get('/recaudaciones/:fechaDesde/:fechaHasta', controllerEstadisticas.recaudaciones)
+
+router.post('/googlelogin', controllerGoogleLogin.googleLogin)
 module.exports = router
