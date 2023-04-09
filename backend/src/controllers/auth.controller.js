@@ -44,7 +44,6 @@ exports.signup = (req, res) => {
               res.status(500).send({ message: err });
               return;
             }
-
             res.send({ message: "User was registered successfully!" });
           });
         }
@@ -55,14 +54,12 @@ exports.signup = (req, res) => {
           res.status(500).send({ message: err });
           return;
         }
-
         user.roles = [role._id];
         user.save(err => {
           if (err) {
             res.status(500).send({ message: err });
             return;
           }
-
           res.send({ message: "User was registered successfully!",
         user });
         });
@@ -97,9 +94,13 @@ exports.signin = (req, res) => {
           message: "Invalid Password!"
         });
       }
-
+      var expire = 86400
+      //console.log("user.roles", user.roles)
+      if(user.roles[0].name=='user'){
+        expire=60
+      }
       var token = jwt.sign({ id: user._id }, config.secret, {
-        expiresIn: 60 // 24 hours = (86400)
+        expiresIn: expire // 24 hours = (86400)
       });
 
       var authorities = [];
@@ -113,7 +114,8 @@ exports.signin = (req, res) => {
         email: user.email,
         roles: authorities,
         accessToken: token,
-        message: user.username+" logged on sucessfuly!"
+        message: user.username+" logged on sucessfuly!",
+        expiresIn: "Token seconds remaining "+ expire 
       });
     });
 };

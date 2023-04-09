@@ -59,17 +59,16 @@
           <v-divider class="mt-2"></v-divider>
 
           <v-card-actions>
-
-            <v-btn color="red" @click="dialog = false">
-              Salir
-            </v-btn>
-            <v-spacer></v-spacer>
-
-            <v-btn color="success" type="submit">
-              Guardar
-            </v-btn>
-    
+            <v-row justify="center" style="margin: 10px">                     
+                <v-btn color="success" type="submit" style="margin: 5px">
+                  Crear Cuenta
+                </v-btn>
+                <v-btn color="red" @click="dialog = false" style="margin: 5px">
+                  Salir
+                </v-btn>
+            </v-row>
           </v-card-actions>
+
           <v-card-text>
             <v-row style="justify-content: center; margin-bottom: 10px;">
               <h3>o</h3>

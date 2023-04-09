@@ -25,34 +25,38 @@ export default {
             console.log('result logOut', result);
         },
         async login() {
-            const googleUser = await this.$gAuth.signIn();
-            console.log("googleUser", googleUser);
-            console.log("getId", googleUser.getId());
-            console.log("getBaseProfile", googleUser.getBasicProfile());
-            console.log("getAuthResponse", googleUser.getAuthResponse());
-            console.log(
-                "getAuthResponse",
-                this.$gAuth.GoogleAuth.currentUser.get().getAuthResponse()
-            );
-            this.isLogin = this.$gAuth.isAuthorized;
-            // document.getElementById('name').innerText = "Signed in: " +
-            //   googleUser.getBasicProfile().getName();
-            AuthService.googlelogin(googleUser).then(
-                () => {
-                    //navigate("/Home");
-                    window.location.href = "/Home"
-                },
-                (error) => {
-                    const resMessage =
-                        (error.response &&
-                            error.response.data &&
-                            error.response.data.message) ||
-                        error.message ||
-                        error.toString();
+            try {
+                const googleUser = await this.$gAuth.signIn();
+                console.log("googleUser", googleUser);
+                console.log("getId", googleUser.getId());
+                console.log("getBaseProfile", googleUser.getBasicProfile());
+                console.log("getAuthResponse", googleUser.getAuthResponse());
+                console.log(
+                    "getAuthResponse",
+                    this.$gAuth.GoogleAuth.currentUser.get().getAuthResponse()
+                );
+                this.isLogin = this.$gAuth.isAuthorized;
+                // document.getElementById('name').innerText = "Signed in: " +
+                //   googleUser.getBasicProfile().getName();
+                AuthService.googlelogin(googleUser).then(
+                    () => {
+                        //navigate("/Home");
+                        window.location.href = "/Home"
+                    },
+                    (error) => {
+                        const resMessage =
+                            (error.response &&
+                                error.response.data &&
+                                error.response.data.message) ||
+                            error.message ||
+                            error.toString();
 
-                    this.respuestaError = (resMessage);
-                }
-            );
+                        this.respuestaError = (resMessage);
+                    }
+                );
+            } catch (e) {
+                console.log(e)
+            }
         }
     }
 };
