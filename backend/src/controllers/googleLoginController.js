@@ -44,7 +44,6 @@ exports.googleLogin = async (req, res) => {
                     accessToken: token,
                     message: user.username+" logged on sucessfuly!"
                   });
-                
             });
         } else {
             // Si el usuario existe, crea un token de acceso para el usuario

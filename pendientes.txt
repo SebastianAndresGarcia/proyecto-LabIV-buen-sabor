@@ -5,13 +5,13 @@ A CORREGIR/IMPLEMENTAR:
 
 *El "sobre nosotros" no redirije bien, se queda en el tope de la página.
 
-*Implementar login con Google.
-
 *Implementar que cuando el admin cancele un pedido, regrese los insumos.
 
 *Validar el horario de atención, lunes a viernes de 12.00 a 22.00, sab. y dom. de 11.00 a 15.00hs.
 
 *Generar los excel de estadísticas.
+
+*añadir validación de token en las rutas del backend.
 
 ________________________________________________________________________________________________________________________________________________________________________
 

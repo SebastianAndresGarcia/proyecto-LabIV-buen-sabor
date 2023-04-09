@@ -15,6 +15,7 @@ const controllerEstadisticas = require ('../controllers/EstadisticasController')
 const { verifySignUp, authJwt } = require("../middlewares");
 const controller = require("../controllers/auth.controller");
 const controllerGoogleLogin = require('../controllers/googleLoginController')
+
 router.post(
     "/api/auth/signup",
     [
@@ -24,11 +25,13 @@ router.post(
     controller.signup
 );
 router.post("/api/auth/signin", controller.signin);
+router.post('/googlelogin', controllerGoogleLogin.googleLogin)
+
 router.get("/api/test/user", [authJwt.verifyToken], controllerUser.userBoard);
 router.post('/crearDomicilio', controllerDlio.createAddress)
 router.get('/usuarioDlios/:id', controllerDlio.getAddressbyuser);
 
-router.post('/crearRubroArticulo', controllerRubroArticulo.createRubroArticulo);
+router.post('/crearRubroArticulo',[authJwt.verifyToken], controllerRubroArticulo.createRubroArticulo);
 router.get('/verAncestrosRubroArticulo', controllerRubroArticulo.getAncestorsRubroArticulo);
 router.get('/verDescendentesRubroArticulo', controllerRubroArticulo.getDescendentsRubroArticulo);
 router.post('/actualizarRubroArticulo', controllerRubroArticulo.updateRubroArticulo);
@@ -43,7 +46,7 @@ router.get('/rubrosgeneral', controllerRubroGeneral.getRubrosGeneral);
 router.post('/crearArticuloManufacturado', controllerArticuloManufacturado.createArticuloManufacturado);
 router.get('/articulosmanufacturados', controllerArticuloManufacturado.getArticulosManufacturados);
 router.get('/articulosmanufacturadosInsumos', controllerArticuloManufacturado.getArticulosManufacturadosInsumos);
-router.get('/getPromociones', controllerArticuloManufacturado.getPromociones);
+router.get('/getPromociones',/*public content*/ controllerArticuloManufacturado.getPromociones);
 router.get('/articulosmanufacturadosxrubro/:id', controllerArticuloManufacturado.getArticulosManufacturadosxrubro);
 router.post('/actualizarArticuloManufacturado/:id', controllerArticuloManufacturado.updateArticuloManufacturado);
 router.get('/getManufacturadoXdenominacion/:id', controllerArticuloManufacturado.getManufacturadoXdenominacion);
@@ -70,8 +73,8 @@ router.post('/ActualizarUsuario', controllerUser.updateUser)
 router.get('/Roles', controllerRoles.getRoles)
 
 router.post('/crearPedido', controllerPedidos.createPedido)
-router.get('/Pedidos', controllerPedidos.getPedidos)
-router.get('/pedidosxid/:id', controllerPedidos.getPedidosxid) //todos los pedidos de un usuario
+router.get('/Pedidos',[authJwt.verifyToken], controllerPedidos.getPedidos)
+router.get('/pedidosxid/:id',[authJwt.verifyToken], controllerPedidos.getPedidosxid) //todos los pedidos de un usuario
 router.get('/pedidoxid/:id', controllerPedidos.Pedidoxid) //un pedido por su id
 router.post('/actualizarPedido/:id', controllerPedidos.actualizarPedido)
 router.get('/pedidoscocinero', controllerPedidos.getPedidosCocinero)
@@ -91,5 +94,4 @@ router.get('/pedidosXcliente/:fechaDesde/:fechaHasta', controllerEstadisticas.pe
 router.get('/ganancias/:fechaDesde/:fechaHasta', controllerEstadisticas.ganancias)
 router.get('/recaudaciones/:fechaDesde/:fechaHasta', controllerEstadisticas.recaudaciones)
 
-router.post('/googlelogin', controllerGoogleLogin.googleLogin)
 module.exports = router

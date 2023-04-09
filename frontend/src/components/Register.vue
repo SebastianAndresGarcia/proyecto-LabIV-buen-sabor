@@ -60,15 +60,22 @@
 
           <v-card-actions>
 
-            <v-btn text color="blue darken-1" @click="dialog = false">
-              Cancel
+            <v-btn color="red" @click="dialog = false">
+              Salir
             </v-btn>
             <v-spacer></v-spacer>
 
-            <v-btn text color="blue darken-1" type="submit">
+            <v-btn color="success" type="submit">
               Guardar
             </v-btn>
+    
           </v-card-actions>
+          <v-card-text>
+            <v-row style="justify-content: center; margin-bottom: 10px;">
+              <h3>o</h3>
+            </v-row>
+            <google-btn />
+          </v-card-text>
         </form>
 
       </v-card>
@@ -76,6 +83,7 @@
   </v-row>
 </template>
 <script>
+import googleBtn from '@/components/GoogleBtn.vue'
 export default {
   name: "register-item",
 
@@ -98,7 +106,9 @@ export default {
       },
     };
   },
-
+  components: {
+    'google-btn': googleBtn
+  },
   methods: {
     async registrar() {
 

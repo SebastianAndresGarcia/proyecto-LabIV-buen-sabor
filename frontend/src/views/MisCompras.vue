@@ -76,9 +76,9 @@ https://www.npmjs.com/package/jspdf
                             </div>
                             <div v-else>
                                 <td>
-                                        <b>En proceso...</b>
-                                    </td>
-                                </div> -->
+                                            <b>En proceso...</b>
+                                        </td>
+                                    </div> -->
                         </tr>
                     </tbody>
                 </template>
@@ -92,38 +92,51 @@ https://www.npmjs.com/package/jspdf
 </template>
 <script>
 import detallePedido from '@/components/DetallePedido.vue'
+import AuthService from "@/service/auth.service.js"
 import { eventBus } from "../main";
 import { jsPDF } from "jspdf"
 import { autoTable } from "jspdf-autotable"
+import { borrarCarrito } from "@/funciones/BorrarCarrito.js"
 export default {
     data() {
         return {
             miscompras: [],
             respuestaMercaPago: {
                 external_reference: "",
-                status: ""
+                status: "",
+                currentUser: undefined
             }
         }
     },
     components: {
         "detalle-pedido": detallePedido
     },
-
     mounted() {
         //this.comprasUsuario((JSON.parse(localStorage.getItem('user'))).id)
         //this.getParamsUrl(document.URL)
     },
     beforeMount() {
+        this.currentUser = AuthService.getCurrentUser()
         this.getParamsUrl(document.URL)
-
     },
     methods: {
         async comprasUsuario(id) {
             const res = await fetch(
-                `http://localhost:3000/pedidosxid/${id}/`
+                `http://localhost:3000/pedidosxid/${id}/`,
+                {
+                    headers: {
+                        'x-access-token': this.currentUser.accessToken
+                    },
+                    mode: "cors"
+                }
             );
             const resJson = await res.json();
             console.log(resJson);
+            if (res.status == 401) { //quiere decir que expiró el token o no está logueado
+                borrarCarrito() // ver cómo borrar el carrito antes que expire el token
+                AuthService.logout()
+                window.location.href = "/Home"
+            }
             this.miscompras = resJson
         },
         async getParamsUrl(url) {
