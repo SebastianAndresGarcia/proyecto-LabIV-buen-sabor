@@ -300,7 +300,7 @@ export default {
         async getInsumos() {
             console.log()
             const res = await fetch(
-                "http://localhost:3000/articulosinsumos"
+                "http://localhost:3000/articulosinsumos/true"
             );
             const resJson = await res.json();
             // console.log("insumosData", resJson);

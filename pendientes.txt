@@ -1,7 +1,7 @@
 03/02/23
 
 A CORREGIR/IMPLEMENTAR:
-*Renovada vistas de Manufacturados e insumos, corregir la vista recursiva, y al crear un Rubro no actualiza el formulario para Crear Insumo/Manufact
+*Vista recursiva funcionando. Falta agregar funciones para editar el árbol de rubros
 
 *El "sobre nosotros" no redirije bien, se queda en el tope de la página.
 
@@ -11,7 +11,7 @@ A CORREGIR/IMPLEMENTAR:
 
 *Generar los excel de estadísticas.
 
-*añadir validación de token en las rutas del backend.
+*agregar dlio al elegir envío a domicilio.
 
 ________________________________________________________________________________________________________________________________________________________________________
 

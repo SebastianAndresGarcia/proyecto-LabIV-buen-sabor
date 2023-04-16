@@ -12,7 +12,7 @@ https://materialdesignicons.com/  ÍCONOS
       <v-toolbar-title>EL BUEN SABOR</v-toolbar-title>
       <v-spacer></v-spacer>
 
-      <div v-if="!pathname.includes('/micarrito')" style="margin: 10px;">
+      <div v-if="!pathname.includes('/micarrito')" style="margin: 10px;"> <!-- si navega en la vista del carrito, no lo muestra en la navbar -->
         <Carrito-item></Carrito-item>
       </div>
       <div v-else style="justify-content: center; margin: 10px;">
@@ -65,6 +65,9 @@ https://materialdesignicons.com/  ÍCONOS
                       MANUFACTURADOS</v-btn></v-list-item-title></v-list-item>
                 <v-list-item><v-list-item-title><v-btn block text href="http://localhost:8080/abminsumos">ABM
                       INSUMOS</v-btn></v-list-item-title>
+                </v-list-item>
+                <v-list-item><v-list-item-title><v-btn block text href="http://localhost:8080/AbmArticulosInsumos">ABM
+                      ARTICULOS VENTA DIRECTA</v-btn></v-list-item-title>
                 </v-list-item>
                 <v-list-item><v-list-item-title><v-btn block text href="http://localhost:8080/abmpedidos">BANDEJA
                       PEDIDOS</v-btn></v-list-item-title>
@@ -137,7 +140,6 @@ export default {
       showAdminBoard: false,
       currentUser: undefined,
       user: undefined,
-
       activado: false,
       drawer: false,
       group: null,

@@ -1,3 +1,5 @@
+import { AuthService } from '../service/auth.service'
+import { borrarCarrito } from './BorrarCarrito'
 //control stock
 function controlStock(insumos) { //no le puedo poner async porque me quedaba la promesa pendiente en donde yo invocaba la fcion
     //console.log("en controlStock", insumos)
@@ -31,6 +33,7 @@ function controlStock(insumos) { //no le puedo poner async porque me quedaba la 
 //const calcularInsumos = async (detalle, j) => {
 async function calcularInsumos(detalle, j) {
     console.log("detalle calcularInsumos..", detalle)
+    const user = JSON.parse(localStorage.getItem('user'));
     if (detalle.detallearticulomanufacturadoid[0]) {
         for (let i = 0; i < detalle.detallearticulomanufacturadoid.length; i++) {
             let stock = detalle.detallearticulomanufacturadoid[i].ArticuloInsumoid.stockActual - (detalle.detallearticulomanufacturadoid[i].cantidad * j)
@@ -42,10 +45,16 @@ async function calcularInsumos(detalle, j) {
                 body: JSON.stringify({ 'stockActual': stock }),
                 headers: {
                     "Content-type": "application/json",
+                    'x-access-token': user.accessToken
                 },
                 mode: "cors",
             });
             stock = 0
+            console.log('respuesta', respuesta)
+            if (respuesta.status == 403) {
+                borrarCarrito()
+                AuthService.logout()
+            }
             const resJson = await respuesta.json()
             console.log("resJson calcularInsumos", resJson)
         }
@@ -66,9 +75,15 @@ async function calcularInsumos(detalle, j) {
             body: JSON.stringify({ 'stockActual': stock }),
             headers: {
                 "Content-type": "application/json",
+                'x-access-token': user.accessToken
             },
             mode: "cors",
         });
+        console.log('respuesta', respuesta)
+        if (respuesta.status == 401) {
+             borrarCarrito()
+            //no ejecuta esta fción acá, habría que devolver algo para que cierre sesión y redirija AuthService.logout()
+        }
         const resJson = await respuesta.json()
         console.log("resJson calcularInsumos(2)", resJson)
 

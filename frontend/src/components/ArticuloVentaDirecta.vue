@@ -1,9 +1,9 @@
 <template>
-    <v-card v-if="insumoParam.insumoSeleccionado" style="margin-top: 10px; justify:center">
+    <v-card v-if="insumoParam.rubroSeleccionado" style="margin-top: 10px; justify:center">
         <v-card-title>
             Articulos Insumos
             <v-spacer></v-spacer>
-            <Form-Insumo :idrubroarticulo="insumoParam.insumoSeleccionado" @nuevoInsumo="handleMessage">
+            <Form-Insumo :idrubroarticulo="insumoParam.rubroSeleccionado" @nuevoInsumo="handleMessage">
             </Form-Insumo>
         </v-card-title>
         <v-simple-table class="tabla"> <!--v-if="!insumosData==null"-->
@@ -123,17 +123,18 @@ export default {
     beforeUpdate() {
         console.log("asdasdasdasdasdsa")
             //console.log("insumoParam", this.insumoParam)
-        if(this.insumoParam.insumoSeleccionado)
-            this.getInsumosXrubro(this.insumoParam.insumoSeleccionado)
+        if(this.insumoParam.rubroSeleccionado)
+            this.getInsumosXrubro(this.insumoParam.rubroSeleccionado)
     },
     props: ["insumoParam"],
     mounted() {
-        console.log("insumoParam", this.insumoParam)
-        this.getInsumosXrubro(this.insumoParam.insumoSeleccionado)
+        console.log("Articulo venta directa insumoParam", this.insumoParam)
+        this.getInsumosXrubro(this.insumoParam.rubroSeleccionado)
     },
 
     methods: {
         async getInsumosXrubro(parametro) {
+            console.log("buscará art. con rubro nro ", parametro)
             //console.log("parametroGetInsumos " + parametro+" length "+parametro.length)
             if (parametro.length == 0) {
                 const res = await fetch(
@@ -155,7 +156,7 @@ export default {
         handleMessage(value) {
             this.nuevoArt = value
             if (this.nuevoArt) {
-                this.getInsumosXrubro(this.insumoParam.insumoSeleccionado)
+                this.getInsumosXrubro(this.insumoParam.rubroSeleccionado)
                 this.nuevoArt = false
             }
         },
@@ -173,7 +174,7 @@ export default {
             console.log("respuesta: ", resJson)
             if (res.status === 200) {
                 console.log(res.status)
-                this.getInsumosXrubro(this.insumoParam.insumoSeleccionado)
+                this.getInsumosXrubro(this.insumoParam.rubroSeleccionado)
             }
         },
     }

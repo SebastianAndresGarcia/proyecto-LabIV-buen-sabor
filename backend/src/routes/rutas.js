@@ -31,13 +31,16 @@ router.get("/api/test/user", [authJwt.verifyToken], controllerUser.userBoard);
 router.post('/crearDomicilio', [authJwt.verifyToken],controllerDlio.createAddress)
 router.get('/usuarioDlios/:id',[authJwt.verifyToken], controllerDlio.getAddressbyuser);
 
-router.post('/crearRubroArticulo',[authJwt.verifyToken], controllerRubroArticulo.createRubroArticulo);
-router.get('/verAncestrosRubroArticulo',[authJwt.verifyToken], controllerRubroArticulo.getAncestorsRubroArticulo);
-router.get('/verDescendentesRubroArticulo',[authJwt.verifyToken], controllerRubroArticulo.getDescendentsRubroArticulo);
+router.post('/createRubroArticuloPadre', controllerRubroArticulo.createRubroArticuloPadre);
+router.post('/addChildArticuloPadre', controllerRubroArticulo.addChildArticuloPadre);
+router.get('/obtenerArbolDeArticuloPadre/:id', controllerRubroArticulo.obtenerArbolDeArticuloPadre);
+
+
 router.post('/actualizarRubroArticulo',[authJwt.verifyToken], controllerRubroArticulo.updateRubroArticulo);
-router.post('/agregarSubRubro',[authJwt.verifyToken], controllerRubroArticulo.agregarSubRubro);
+
 router.get('/rubrosInsumos', controllerRubroArticulo.getRubrosFalseInsumos);
-router.get('/rubros',[authJwt.verifyToken], controllerRubroArticulo.getRubros);
+router.get('/rubrosdeinsumos',[authJwt.verifyToken], controllerRubroArticulo.getRubros);
+router.get('/rubrosnoinsumos',[authJwt.verifyToken], controllerRubroArticulo.getRubrosNoInsumos);
 
 router.post('/ActualizarRubroGeneral',[authJwt.verifyToken], controllerRubroGeneral.updateRubroGeneral);
 router.post('/crearRubroGeneral',[authJwt.verifyToken], controllerRubroGeneral.createRubroGeneral);
@@ -51,20 +54,18 @@ router.get('/articulosmanufacturadosxrubro/:id', controllerArticuloManufacturado
 router.post('/actualizarArticuloManufacturado/:id',[authJwt.verifyToken], controllerArticuloManufacturado.updateArticuloManufacturado);
 router.get('/getManufacturadoXdenominacion/:id', controllerArticuloManufacturado.getManufacturadoXdenominacion);
 router.get('/getManufacturadoXid/:id', controllerArticuloManufacturado.getManufacturadoXid);
-router.get('/articulosmanufacturadosInsumos', controllerArticuloManufacturado.getArticulosManufacturadosInsumos);
 router.delete('/eliminarArticuloManufacturado/:id',[authJwt.verifyToken], controllerArticuloManufacturado.deleteArticuloManufacturado);
 
 router.delete('/eliminarDetalleArticuloManufacturado/:id',[authJwt.verifyToken], controllerDetalleArticuloManufacturado.deleteDetalleArticuloManufacturado);
 
 router.post('/crearArticuloInsumo',[authJwt.verifyToken], controllerArticuloInsumo.createArticuloInsumo)
-router.get('/ArticuloInsumo/:id', controllerArticuloInsumo.getArticuloInsumo)
-router.get('/ArticuloInsumoxid/:id', controllerArticuloInsumo.getArticuloInsumoxid)
-router.get('/ArticulosInsumos', controllerArticuloInsumo.getArticulosInsumos)
+router.get('/ArticuloInsumo/:id', controllerArticuloInsumo.getArticuloInsumo)       //por denominación
+router.get('/ArticuloInsumoxid/:id', controllerArticuloInsumo.getArticuloInsumoxid) //por id
+router.get('/ArticulosInsumos/:esInsumo', controllerArticuloInsumo.getArticulosInsumos)
 router.get('/articulosinsumosXrubro/:id', controllerArticuloInsumo.getArticulosInsumosxrubro)
 router.get('/insumosXrubro/:id', controllerArticuloInsumo.getArticulosInsumosFalsexRubro)
-router.get('/articulosinsumosfalse', controllerArticuloInsumo.getArticulosInsumosFalse)
-router.post('/ActualizarInsumo/:id', [authJwt.verifyToken], controllerArticuloInsumo.updateArticuloInsumo)
-router.post('/ActualizarInsumoxid/:id',[authJwt.verifyToken], controllerArticuloInsumo.updateArticuloInsumoxid)
+router.post('/ActualizarInsumo/:id', [authJwt.verifyToken], controllerArticuloInsumo.updateArticuloInsumo)     // por denominacion
+router.post('/ActualizarInsumoxid/:id',[authJwt.verifyToken], controllerArticuloInsumo.updateArticuloInsumoxid)//por id
 router.delete('/EliminarInsumo/:id',[authJwt.verifyToken], controllerArticuloInsumo.deleteArticuloInsumo)
 
 router.get('/empleados',[authJwt.verifyToken], controllerUser.getEmpleados)

@@ -93,7 +93,7 @@
     </v-row>
 </template>
 <script>
-
+import AuthService from "@/service/auth.service.js"
 export default {
 
     data() {
@@ -136,8 +136,11 @@ export default {
         console.log("idrubroarticulo props ", this.idrubroarticulo)
         console.log("idinsumo props " + this.idinsumo)
         this.insumo.RubroArticuloid = this.idrubroarticulo
-        this.getRubrosArticulos()
+        this.getRubrosArticulos()    
         //this.getManufacturadoXdenominacion(this.idrubrogral[1]) 
+    },
+    beforeMount(){
+        this.currentUser=AuthService.getCurrentUser()
     },
     methods: {
 
@@ -167,8 +170,9 @@ export default {
                     body: JSON.stringify(this.insumo),
                     headers: {
                         "Content-type": "application/json",
+                        'x-access-token': this.currentUser.accessToken
                     },
-                    mode: "cors",
+                    mode: "cors"
                 });
                 const resJson = await respuesta.json()
                 console.log("respuesta: ", resJson)
@@ -188,6 +192,7 @@ export default {
                     body: JSON.stringify(this.insumo),
                     headers: {
                         "Content-type": "application/json",
+                        'x-access-token': this.currentUser.accessToken
                     },
                     mode: "cors",
                 });
@@ -218,7 +223,13 @@ export default {
 
         async getInsumoXdenominacion(id) {
             const res = await fetch(
-                'http://localhost:3000/ArticuloInsumo/' + id
+                'http://localhost:3000/ArticuloInsumo/' + id,
+                {
+                    headers: {
+                        "Content-type": "application/json",
+                        'x-access-token': this.currentUser.accessToken
+                    },
+                }
             )
             const resJson = await res.json()
             this.insumo = resJson
@@ -228,7 +239,13 @@ export default {
         },
         async getRubrosArticulos() {
             const res = await fetch(
-                "http://localhost:3000/rubros"
+                "http://localhost:3000/rubrosdeinsumos",
+                {
+                    headers: {
+                        "Content-type": "application/json",
+                        'x-access-token': this.currentUser.accessToken
+                    },
+                }
             );
             const resJson = await res.json();
 

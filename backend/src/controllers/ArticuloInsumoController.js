@@ -3,6 +3,7 @@
 const ArticuloInsumo = require('../models/ArticuloInsumo');
 const RubroArticulo = require('../models/RubroArticulo')
 
+
 exports.createArticuloInsumo = async (req, res) => {
     const ArticuloFound = await ArticuloInsumo.findOne({ denominacion: req.body.denominacion })
     if (ArticuloFound)
@@ -30,19 +31,20 @@ exports.deleteArticuloInsumo = async (req, res) => {
 
 exports.updateArticuloInsumo = async (req, res) => {
     console.log("req.body update ", req.body)
-        const articulo = await ArticuloInsumo.findOneAndUpdate({ denominacion: req.params.id }, req.body)
-        console.log("insumo actualizado stock", articulo)
-        res.json(articulo)
+    const articulo = await ArticuloInsumo.findOneAndUpdate({ denominacion: req.params.id }, req.body)
+    console.log("insumo actualizado stock", articulo)
+    res.json(articulo)
 }
 
 exports.updateArticuloInsumoxid = async (req, res) => {
     console.log("req.body update ", req.body)
-        const articulo = await ArticuloInsumo.findOneAndUpdate({ _id: req.params.id }, req.body)
-        console.log("insumo actualizado stock", articulo)
-        res.json(articulo)
+    const articulo = await ArticuloInsumo.findOneAndUpdate({ _id: req.params.id }, req.body)
+    console.log("insumo actualizado stock", articulo)
+    res.json(articulo)
 }
 exports.getArticulosInsumos = async (req, res) => { //trae todos los articulosinsumos
-    const insumos = await ArticuloInsumo.find()
+
+    const insumos = await ArticuloInsumo.find({ "esInsumo": req.params.esInsumo })
     if (!insumos)
         return res.status(204).json();
     console.log(insumos);
@@ -67,36 +69,95 @@ exports.getArticuloInsumoxid = async (req, res) => { //trae un articulo
     return res.json(insumo)
 }
 exports.getArticulosInsumosxrubro = async (req, res) => {
-    console.log("req.params.id" + req.params.id)
-    const busqueda = req.params.id;
-    var array = [] = busqueda.split(",")
-    console.log(array)
-    console.log("array.length " + array.length)
-    const rubrosinsumos = await RubroArticulo.find({ $or: [{ "ancestors._id": { $in: array } }, { "_id": { $in: array } }], $where: 'this.articuloinsumoid.length>0' }, { articuloinsumoid: 1 }).populate({ path: "articuloinsumoid" })
-    console.log("rubro", rubrosinsumos.length)
-    // if (rubrosinsumos.length == 0)
-    // //const rubrosinsumos = await RubroArticulo.find({"ancestors._id": req.params.id, "articuloinsumoid": {$exists:true}}).populate({path: "articuloinsumoid"})
-    // {
-    //     const rubrosinsumos = await RubroArticulo.find({ "_id":   {$in:array} , "articuloinsumoid.0": { $exists: true } }).populate({ path: "articuloinsumoid" })
-    //     console.log("rubrosinsumos1", rubrosinsumos.length)
-    //     try {
-    //         return res.json(rubrosinsumos[0].articuloinsumoid)
-    //     } catch (e) {
-    //         console.log(e)
-    //         return res.json(null)
-    //     }
-    // }
-    // else {
-    // const rubrosinsumos = await RubroArticulo.find({"ancestors._id": req.params.id, $where:'this.articuloinsumoid.length>0'},{articuloinsumoid:1}).populate({path: "articuloinsumoid"})
-    console.log("rubrosinsumos2", rubrosinsumos)
-    const articulos = []
-    for (let i = 0; i < rubrosinsumos.length; i++) {
-        for (let j = 0; j < rubrosinsumos[i].articuloinsumoid.length; j++) {
-            articulos.push(rubrosinsumos[i].articuloinsumoid[j]);
+    const articuloIds = req.params.id.split(',');
+
+    let articuloinsumoid = [];
+  
+     obtenerArticuloinsumoidRecursivo(articuloIds, async function(err, resultado) {
+      if (err) {
+        // manejar el error
+        res.status(500).send(err);
+        return;
+      }
+      const articulos= await ArticuloInsumo.find({_id:resultado})
+      res.json(articulos);
+    });
+  
+    function obtenerArticuloinsumoidRecursivo(ids, callback) {
+      if (ids.length === 0) {
+        callback(null, articuloinsumoid);
+        return;
+      }
+  
+      const articuloId = ids.shift();
+  
+      RubroArticulo.findById(articuloId, function(err, articulo) {
+        if (err) {
+          // manejar el error
+          callback(err, null);
+          return;
         }
+  
+        const articuloinsumoidHijo = articulo.articuloinsumoid;
+        articuloinsumoid = articuloinsumoid.concat(articuloinsumoidHijo);
+  
+        obtenerArticuloinsumoidRecursivo(articulo.hijos.map(hijo => hijo._id).concat(ids), callback);
+      });
     }
-    return res.json(articulos)
+
+    // try {
+    //     console.log("req.params.id" + req.params.id)
+    //     const busqueda = req.params.id;
+    //     var array = [] = busqueda.split(",")
+    //     console.log(array)
+    //     console.log("array.length " + array.length)
+    //     const rubrosinsumos = await RubroArticulo.find({ $or: [{ "ancestors._id": { $in: array } }, { "_id": { $in: array } }], $where: 'this.articuloinsumoid.length>0' }, { articuloinsumoid: 1 }).populate({ path: "articuloinsumoid" })
+    //     console.log("rubro", rubrosinsumos.length)
+    //     // if (rubrosinsumos.length == 0)
+    //     // //const rubrosinsumos = await RubroArticulo.find({"ancestors._id": req.params.id, "articuloinsumoid": {$exists:true}}).populate({path: "articuloinsumoid"})
+    //     // {
+    //     //     const rubrosinsumos = await RubroArticulo.find({ "_id":   {$in:array} , "articuloinsumoid.0": { $exists: true } }).populate({ path: "articuloinsumoid" })
+    //     //     console.log("rubrosinsumos1", rubrosinsumos.length)
+    //     //     try {
+    //     //         return res.json(rubrosinsumos[0].articuloinsumoid)
+    //     //     } catch (e) {
+    //     //         console.log(e)
+    //     //         return res.json(null)
+    //     //     }
+    //     // }
+    //     // else {
+    //     // const rubrosinsumos = await RubroArticulo.find({"ancestors._id": req.params.id, $where:'this.articuloinsumoid.length>0'},{articuloinsumoid:1}).populate({path: "articuloinsumoid"})
+    //     console.log("rubrosinsumos2", rubrosinsumos)
+    //     const articulos = []
+    //     for (let i = 0; i < rubrosinsumos.length; i++) {
+    //         for (let j = 0; j < rubrosinsumos[i].articuloinsumoid.length; j++) {
+    //             articulos.push(rubrosinsumos[i].articuloinsumoid[j]);
+    //         }
+    //     }
+    //     return res.json(articulos)
+    // } catch (e) {
+    //     return res.json(e)
+    // }
+
+    // let articulos=[]
+    // try {
+    //     const padre = await Articulo.findById(req.params.id)
+    //     .populate("hijos")
+    //     .populate("articuloinsumoid")
+    //     articulos.push(padre.articuloinsumoid)
+    //     const arbolCompleto = await obtenerArbolCompleto(padre, articulos);
+    //     res.status(200).json([arbolCompleto]);
+    // } catch (error) {
+    //     res.status(500).json({ mensaje: error.message });
+    // }
+    // // const usuarios = await User.find({ "pedidosid.0": { "$exists": true } }).populate({
+    // //     path: "pedidosid",
+    // //     match: { "estado": "terminado" },
+    // //     select: { numero: 1, total: 1, fecha: 1 }
+    // // })
 }
+
+
 exports.getArticulosInsumosFalse = async (req, res) => {
     const resultado = await ArticuloInsumo.find
         ({ "esInsumo": false }).populate(

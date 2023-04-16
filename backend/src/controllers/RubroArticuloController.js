@@ -1,9 +1,58 @@
 //import { RequestHandler, Request, Response } from "express";
-
 const RubroArticulo = require("../models/RubroArticulo");
+
+exports.createRubroArticuloPadre = async (req, res) => {
+    const ArticuloFound = await RubroArticulo.findOne({ denominacion: req.body.denominacion })
+    if (ArticuloFound)
+        return res.status(301).json({ message: 'The article already exists' })
+    const articulo = new RubroArticulo(req.body)
+    console.log(articulo)
+    try {
+        const savedArticulo = await articulo.save()
+        res.json(savedArticulo)
+    } catch (error) {
+        console.log(error)
+    }
+}
+exports.addChildArticuloPadre = async (req, res) => {
+
+    var hijo = new RubroArticulo(req.body)
+    hijo.padre = req.body.padreid
+    console.log(hijo)
+    try {
+        // Agregar el hijo a la lista de hijos del padre
+        //padre.hijos.push(hijo);
+        // Guardar los cambios en la base de datos
+        await hijo.save();
+        const padreUpdated = await RubroArticulo.findByIdAndUpdate(hijo.padre, { $addToSet: { "hijos": hijo._id } })
+        res.json(hijo)
+    } catch (error) {
+        console.log(error)
+    }
+}
+async function obtenerArbolCompleto(padre) {
+    if (padre.hijos.length > 0) {
+        padre = await RubroArticulo.populate(padre, { path: "hijos" });
+        for (let i = 0; i < padre.hijos.length; i++) {
+            padre.hijos[i] = await obtenerArbolCompleto(padre.hijos[i]);
+        }
+    }
+    return padre;
+}
+
+exports.obtenerArbolDeArticuloPadre = async (req, res) => {
+    try {
+        const padre = await RubroArticulo.findById(req.params.id).populate("hijos");
+        const arbolCompleto = await obtenerArbolCompleto(padre);
+        res.status(200).json([arbolCompleto]);
+    } catch (error) {
+        res.status(500).json({ mensaje: error.message });
+    }
+};
 
 
 exports.createRubroArticulo = async (req, res) => {
+    console.log(req.body)
     /*const rubroFound = await Rubro.findOne({ "denominacionRubroPadre": req.body.denominacionRubroPadre })
     if (rubroFound)
         return res.status(301).json({ message: 'The rubro already exists' }) 
@@ -13,7 +62,7 @@ exports.createRubroArticulo = async (req, res) => {
     res.json(savedRubro)*/
     let parent = req.body.parent ? req.body.parent : null;
     console.log("parent" + parent)
-    const rubro = new RubroArticulo({ denominacion: req.body.denominacion, parent })
+    const rubro = new RubroArticulo({ denominacion: req.body.denominacion, parent, esInsumo: req.body.esInsumo })
 
     try {
         console.log("rubro", rubro)
@@ -44,7 +93,7 @@ const buildAncestors = async (id, parent_id) => {
 
 exports.getAncestorsRubroArticulo = async (req, res) => {
     try {
-        const result = await RubroArticulo.find({ denominacion: req.body.denominacion })
+        const result = await RubroArticulo.find({ denominacion: req.params.id })
             .select({
                 "_id": false,
                 "denominacion": true,
@@ -58,9 +107,9 @@ exports.getAncestorsRubroArticulo = async (req, res) => {
 }
 exports.getDescendentsRubroArticulo = async (req, res) => {
     try {
-        const result = await RubroArticulo.find({ "ancestors._id": req.body._id })
+        const result = await RubroArticulo.find({ "ancestors._id": req.params.id })
 
-            .select({ "_id": false, "denominacion": true, "parent": true })
+            .select({ "_id": false, "denominacion": true, "parent": true, "ancestors": true })
             .exec();
 
         res.status(201).send({ "status": "success", "result": result });
@@ -102,7 +151,7 @@ exports.agregarArticuloRubro = async (req, res) => {
         let userData = { denominacionRubroHijo: req.body.denominacionRubroHijo }
         let dataToBeUpdated = { articulos: {"denominacionArticulo":req.body.denominacionArticulo , "rubropadreid": req.body.rubropadreid} }
         const rubroUpdated = await Rubro.updateOne({ "rubrohijo.denominacion": userData.denominacionRubroHijo }, { $push: { "rubrohijo.$": dataToBeUpdated } })
-
+ 
         res.json(rubroUpdated)
     } else {
         return res.status(301).json({ message: 'Rubroid no encontrado' })
@@ -110,35 +159,28 @@ exports.agregarArticuloRubro = async (req, res) => {
 } */
 
 exports.getRubros = async (req, res) => {
-    const rubros = await RubroArticulo.find({ "parent": null })
+    const rubros = await RubroArticulo.find({ "parent": null, "esInsumo": true })
+    console.log(rubros)
+    return res.json(rubros)
+}
+exports.getRubrosNoInsumos = async (req, res) => {
+    const rubros = await RubroArticulo.find({ "parent": null, "esInsumo": false })
     console.log(rubros)
     return res.json(rubros)
 }
 
 exports.getRubrosFalseInsumos = async (req, res) => {
 
-    // const rubrosinsumos = await RubroArticulo.find({ $where: 'this.articuloinsumoid.length>0' }, { denominacion: 1, ancestors: 1 })
-    //     .populate({ path: "articuloinsumoid", match: { esInsumo: false } })
-    // console.log("rubro", rubrosinsumos.length)
-    // console.log("rubrosinsumos2", rubrosinsumos)
-    // const articulos = []
-    // for (let i = 0; i < rubrosinsumos.length; i++) {
-    //     if (rubrosinsumos[i].articuloinsumoid.length > 0)
-    //         articulos.push(rubrosinsumos[i])
-    // }
-    // console.log(articulos)
-    // return res.json(articulos)
-
-    const resultado=[]
+    const resultado = []
     const rubros = await RubroArticulo.find
-    ({}).where('articuloinsumoid').ne([]) 
-    .populate({
-        path: "articuloinsumoid",
-        match: { "esInsumo": false },
-        select: { denominacion: 1, RubroArticuloid: 1 }
-    })
+        ({}).where('articuloinsumoid').ne([])
+        .populate({
+            path: "articuloinsumoid",
+            match: { "esInsumo": false },
+            select: { denominacion: 1, RubroArticuloid: 1 }
+        })
     for (let i = 0; i < rubros.length; i++) {
-        if(rubros[i].articuloinsumoid.length>0)
+        if (rubros[i].articuloinsumoid.length > 0)
             resultado.push(rubros[i])
     }
     console.log(resultado)

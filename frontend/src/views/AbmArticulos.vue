@@ -144,7 +144,7 @@ export default {
         },
         async getRubrosArticulos() {
             const res = await fetch(
-                "http://localhost:3000/rubros"
+                "http://localhost:3000/rubrosnoinsumos"
             );
             const resJson = await res.json();
 

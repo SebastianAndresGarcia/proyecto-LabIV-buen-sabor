@@ -19,7 +19,7 @@
                 <v-card-text>
                     <v-divider class="mt-2"></v-divider>
                     <!-- <p>{{ insumoSeleccionado }}</p>  -->
-                    <articuloinsumo-item :insumoParam="insumoSeleccionado"></articuloinsumo-item>
+                    <articuloinsumo-item :insumoParam="{'insumoSeleccionado': insumoSeleccionado,'esInsumo': true}"></articuloinsumo-item>
                 </v-card-text>
             </v-col>
         </v-row>
@@ -41,11 +41,8 @@ export default {
     },
     data() {
         return {
-            rubros: [],
-            rubroSeleccionado: [],
             insumos: [],
             insumoSeleccionado: [],
-            rubrocreado: false,
             currentUser: undefined
         }
     },
@@ -54,25 +51,18 @@ export default {
     },
     mounted() {
         this.verificarUsuario(this.currentUser)
-        this.getRubrosGeneral(),
         this.getRubrosArticulos()
     },
 
     methods: {
-        async getRubrosGeneral() {
-            const res = await fetch(
-                "http://localhost:3000/rubrosgeneral"
-            );
-            const resJson = await res.json();
-
-            this.rubros = resJson;
-            console.log("RUBROS ", this.rubros);
-            console.log("RUBROS tamaño", this.rubros.length);
-
-        },
         async getRubrosArticulos() {
             const res = await fetch(
-                "http://localhost:3000/rubros"
+                "http://localhost:3000/rubrosdeinsumos",
+                {
+                    headers: {
+                        'x-access-token': this.currentUser.accessToken
+                    }
+                }
             );
             const resJson = await res.json();
 
@@ -81,7 +71,7 @@ export default {
             console.log("tamaño", this.insumos.length);
 
         },
-       
+
         handleMessage3(value) {
             console.log("entró handleMessage3" + value)
             this.nuevoArt = value
