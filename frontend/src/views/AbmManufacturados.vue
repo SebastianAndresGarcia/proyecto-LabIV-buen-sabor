@@ -56,8 +56,12 @@ export default {
             const res = await fetch(
                 "http://localhost:3000/rubrosgeneral"
             );
+            if (res.status == 401) { //quiere decir que expiró el token o no está logueado
+                borrarCarrito() // ver cómo borrar el carrito antes que expire el token
+                AuthService.logout()
+                window.location.href = "/Home"
+            }
             const resJson = await res.json();
-
             this.rubros = resJson;
             console.log("RUBROS ", this.rubros);
             console.log("RUBROS tamaño", this.rubros.length);

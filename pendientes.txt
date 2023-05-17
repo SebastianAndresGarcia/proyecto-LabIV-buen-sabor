@@ -1,7 +1,6 @@
 03/02/23
 
 A CORREGIR/IMPLEMENTAR:
-*Vista recursiva funcionando. Falta agregar funciones para editar el árbol de rubros
 
 *El "sobre nosotros" no redirije bien, se queda en el tope de la página.
 
@@ -12,6 +11,8 @@ A CORREGIR/IMPLEMENTAR:
 *Generar los excel de estadísticas.
 
 *agregar dlio al elegir envío a domicilio.
+
+*implementar websockets para actualizar las bandeja de pedidos de cliente, cocinero, admin.
 
 ________________________________________________________________________________________________________________________________________________________________________
 

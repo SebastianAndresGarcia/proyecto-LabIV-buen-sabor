@@ -32,15 +32,17 @@ router.post('/crearDomicilio', [authJwt.verifyToken],controllerDlio.createAddres
 router.get('/usuarioDlios/:id',[authJwt.verifyToken], controllerDlio.getAddressbyuser);
 
 router.post('/createRubroArticuloPadre', controllerRubroArticulo.createRubroArticuloPadre);
+//router.get('/getRubrosPadres', controllerRubroArticulo.getRubrosPadres);
 router.post('/addChildArticuloPadre', controllerRubroArticulo.addChildArticuloPadre);
 router.get('/obtenerArbolDeArticuloPadre/:id', controllerRubroArticulo.obtenerArbolDeArticuloPadre);
+router.get('/getRubroArticulo/:id', controllerRubroArticulo.getRubroArticulo);
 
-
-router.post('/actualizarRubroArticulo',[authJwt.verifyToken], controllerRubroArticulo.updateRubroArticulo);
+router.post('/actualizarRubroArticulo/:id',[authJwt.verifyToken], controllerRubroArticulo.updateRubroArticulo);
 
 router.get('/rubrosInsumos', controllerRubroArticulo.getRubrosFalseInsumos);
 router.get('/rubrosdeinsumos',[authJwt.verifyToken], controllerRubroArticulo.getRubros);
 router.get('/rubrosnoinsumos',[authJwt.verifyToken], controllerRubroArticulo.getRubrosNoInsumos);
+router.get('/getRubrosSubrubros',[authJwt.verifyToken], controllerRubroArticulo.getRubrosSubrubros);
 
 router.post('/ActualizarRubroGeneral',[authJwt.verifyToken], controllerRubroGeneral.updateRubroGeneral);
 router.post('/crearRubroGeneral',[authJwt.verifyToken], controllerRubroGeneral.createRubroGeneral);

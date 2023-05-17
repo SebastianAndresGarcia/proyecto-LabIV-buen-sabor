@@ -125,9 +125,10 @@ export default {
                 `http://localhost:3000/pedidosxid/${id}/`,
                 {
                     headers: {
+                        "Content-type": "application/json",
                         'x-access-token': this.currentUser.accessToken
                     },
-                    mode: "cors"
+                    mode: "cors",
                 }
             );
             const resJson = await res.json();
@@ -172,9 +173,10 @@ export default {
                 method: method,
                 body: JSON.stringify({ estado: 'pendiente' }), //estado pendiente esperando que lo envíen a la cocina
                 headers: {
-                    "Content-type": "application/json",
-                },
-                mode: "cors",
+                        "Content-type": "application/json",
+                        'x-access-token': this.currentUser.accessToken
+                    },
+                    mode: "cors",
             });
             const resJson = await respuesta.json()
             console.log("respuestaSetPedido: ", resJson)
@@ -217,9 +219,10 @@ export default {
                     pedidoid: this.respuestaMercaPago.external_reference
                 }),
                 headers: {
-                    "Content-type": "application/json",
-                },
-                mode: "cors",
+                        "Content-type": "application/json",
+                        'x-access-token': this.currentUser.accessToken
+                    },
+                    mode: "cors",
             })
             const resJson = await respuesta.json()
             console.log("respuestaRegistrarPago: ", resJson)
@@ -279,7 +282,6 @@ export default {
                     4: { halign: 'right', cellWidth: '50', }
                 },
             })
-
 
             // save the data to this file
             doc.save('auto_table_header_footer');

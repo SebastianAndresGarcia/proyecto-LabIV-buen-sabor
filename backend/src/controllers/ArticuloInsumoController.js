@@ -157,7 +157,6 @@ exports.getArticulosInsumosxrubro = async (req, res) => {
     // // })
 }
 
-
 exports.getArticulosInsumosFalse = async (req, res) => {
     const resultado = await ArticuloInsumo.find
         ({ "esInsumo": false }).populate(
@@ -165,20 +164,6 @@ exports.getArticulosInsumosFalse = async (req, res) => {
         )
     //console.log(resultado)
     return res.json(resultado)
-    // const resultado=[]
-    //     const rubros = await RubroArticulo.find
-    //     ({}).where('articuloinsumoid').ne([]) 
-    //     .populate({
-    //         path: "articuloinsumoid",
-    //         match: { "esInsumo": false },
-    //         select: { denominacion: 1, RubroArticuloid: 1 }
-    //     })
-    //     for (let i = 0; i < rubros.length; i++) {
-    //         if(rubros[i].articuloinsumoid.length>0)
-    //             resultado.push(rubros[i].articuloinsumoid)
-    //     }
-    //     console.log(resultado)
-    //     return res.json(resultado)
 }
 exports.getArticulosInsumosFalsexRubro = async (req, res) => {
     const resultado = await ArticuloInsumo.find

@@ -1,23 +1,26 @@
 <template>
-  <div>
+  
     <!-- <div>{{ rubroSeleccionado }}</div> -->
     <div>
       <ul style="list-style: none">
         <li v-for="rubro in subrubros" :key="rubro._id">
-          <v-checkbox
+          <v-row><v-checkbox
             :label="rubro.denominacion"
             v-model="rubroSeleccionado"
             :value="rubro._id"
           ></v-checkbox>
-
+          <Editar-Rubro v-if="rubro._id" :rubroParam="rubro"></Editar-Rubro>
+        </v-row>
           <div v-if="rubro.hijos">
             <ul style="list-style: none">
               <li v-for="subrubro in rubro.hijos" :key="subrubro._id">
-                <v-checkbox
+               <v-row><v-checkbox
                   :label="subrubro.denominacion"
                   v-model="rubroSeleccionado"
                   :value="subrubro._id"
                 ></v-checkbox>
+                <Editar-Rubro v-if="subrubro._id" :rubroParam="subrubro" ></Editar-Rubro>
+              </v-row> 
                 <!-- @change="marcarHijos(subrubro, $event)" esta linea se agrega adentro del checkbox -->
                 <sub-rubros
                   v-if="subrubro.hijos"
@@ -30,12 +33,12 @@
         </li>
       </ul>
     </div>
-  </div>
+  
 </template>
   
 <script>
 import Subrubros from "./Subrubros.vue";
-
+import EditarRubro from "@/components/EditarRubro.vue";
 export default {
   name: "sub-rubros",
   data() {
@@ -45,6 +48,7 @@ export default {
   },
   components: {
     "sub-rubros": Subrubros,
+    "Editar-Rubro": EditarRubro
   },
   props: {
     subrubros: Array,

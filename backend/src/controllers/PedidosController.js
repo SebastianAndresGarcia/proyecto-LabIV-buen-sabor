@@ -4,6 +4,7 @@ const DetallePedido = require('../models/DetallePedido');
 const ArticuloInsumo = require('../models/ArticuloInsumo');
 const ArticuloManufacturado = require('../models/ArticuloManufacturado')
 
+
 exports.createPedido = async (req, res) => {
     const ultimoPedido = await Pedido.find().limit(1).sort({ $natural: -1 })
     let num = 0
@@ -71,10 +72,11 @@ exports.getPedidos = async (req, res) => {
             path: "mercadopagodatosid",
             select: { estado: 1 }
         })
-    if (!pedidos)
-        return res.status(204).json();
-    //console.log(pedidos);
-    return res.json(pedidos)
+            
+        if (!pedidos)
+            return res.status(204).json();
+        //console.log(pedidos);
+        return res.json(pedidos)
 }
 
 exports.getPedidosxid = async (req, res) => {

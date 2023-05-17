@@ -10,7 +10,7 @@
           <span class="text-h5">Crear Rubro</span>
         </v-card-title>
 
-        <form @submit.prevent="crearRubro">
+        <form @submit.prevent="crearRubro"> <!--RubroGeneral-->
           <v-card-text>
             <v-container>
               <v-row>

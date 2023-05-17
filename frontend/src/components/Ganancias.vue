@@ -106,6 +106,10 @@ export default {
             const res = await fetch(
                 "http://localhost:3000/ganancias/" + fechaDesde + "/" + fechaHasta,
             );
+            if (res.status == 401) { //quiere decir que expiró el token o no está logueado
+                AuthService.logout()
+                window.location.href = "/Home"
+            }
             const resJson = await res.json();
             this.gananciasxtiempo = resJson.ganancias
             console.log("ganancias", this.gananciasxtiempo);

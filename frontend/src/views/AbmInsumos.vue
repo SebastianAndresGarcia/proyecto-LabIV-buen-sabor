@@ -64,8 +64,12 @@ export default {
                     }
                 }
             );
+            if (res.status == 401) { //quiere decir que expiró el token o no está logueado
+                borrarCarrito() // ver cómo borrar el carrito antes que expire el token
+                AuthService.logout()
+                window.location.href = "/Home"
+            }
             const resJson = await res.json();
-
             this.insumos = resJson;
             console.log("InsumosArticulos ", this.insumos);
             console.log("tamaño", this.insumos.length);

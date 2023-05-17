@@ -20,7 +20,9 @@
 
           <div v-if="arbol.length > 0">
             <sub-rubros
-              :subrubros="arbol"
+              v-for="item in arbol"
+              :key="item._id"
+              :subrubros="item"
               @changeRubroSeleccionado="handleRubroSelecc"
             />
           </div>
@@ -43,17 +45,16 @@
 </template>
 <script >
 import articuloventadirecta from "@/components/ArticuloInsumo.vue";
-import CrearRubro from "@/components/CrearRubro.vue";
 import CrearInsumo from "@/components/CrearInsumo.vue";
 import Subrubros from "@/components/Subrubros.vue";
 import AuthService from "@/service/auth.service.js";
+import { eventBus } from "../main";
 
 export default {
   name: "abm-articulos",
   components: {
     "sub-rubros": Subrubros,
     "articulo-item": articuloventadirecta,
-    "Crear-Rubro": CrearRubro,
     "Crear-RubroInsumo": CrearInsumo,
   },
   data() {
@@ -69,7 +70,6 @@ export default {
     this.currentUser = AuthService.getCurrentUser();
     this.verificarUsuario(this.currentUser);
     this.getRubrosArticulos();
-    this.obtenerArbolDeArticuloPadre(" ");
   },
   mounted() {},
 
@@ -80,18 +80,24 @@ export default {
           "x-access-token": this.currentUser.accessToken,
         },
       });
+      if (res.status == 401) {
+        //quiere decir que expiró el token o no está logueado
+        AuthService.logout();
+        window.location.href = "/Home";
+      }
       const resJson = await res.json();
 
       this.rubros = resJson;
       console.log("RubrosArticulos ", this.rubros);
       console.log("tamaño", this.rubros.length);
-      if (this.rubros.length > 0)
-        this.verDescendentesRubroArticulo(this.rubros);
+      if (this.rubros.length > 0) this.obtenerArbolDeArticuloPadre(this.rubros);
     },
-    async verDescendentesRubroArticulo(rubrosParam) {
+
+    async obtenerArbolDeArticuloPadre(rubrosParam) {
       for (let i = 0; i < rubrosParam.length; i++) {
         const res = await fetch(
-          `http://localhost:3000/verDescendentesRubroArticulo/${rubrosParam[i]._id}`,
+          "http://localhost:3000/obtenerArbolDeArticuloPadre/" +
+            rubrosParam[i]._id,
           {
             headers: {
               "x-access-token": this.currentUser.accessToken,
@@ -99,30 +105,14 @@ export default {
           }
         );
         const resJson = await res.json();
-        this.descendientes.push(resJson.result);
+        this.arbol.push(resJson);
+        console.log("obtenerArbolDeArticuloPadre ", this.arbol);
       }
-
-      console.log("verDescendentesRubroArticulo ", this.descendientes);
-    },
-    async obtenerArbolDeArticuloPadre(rubrosParam) {
-      const res = await fetch(
-        "http://localhost:3000/obtenerArbolDeArticuloPadre/643b000fc7b55337581e58a5",
-        {
-          headers: {
-            "x-access-token": this.currentUser.accessToken,
-          },
-        }
-      );
-      const resJson = await res.json();
-      this.arbol = resJson;
-
-      console.log("obtenerArbolDeArticuloPadre ", this.arbol);
     },
     async handleRubroSelecc(value) {
       console.log("value", value);
       this.rubroSeleccionado = value.value;
       console.log("value recibido de Subrubros", this.rubroSeleccionado);
-
     },
     async verificarUsuario(currentUser) {
       if (currentUser) {
@@ -141,6 +131,16 @@ export default {
         this.nuevoIns = false;
       }
     },
+  },
+  created() {
+    eventBus.$on("actualiza-arbol", async (data) => {
+      if (data == true) {
+        //revisar bien si sirve este if, si no borrar
+        console.log("entró");
+        this.arbol = [];
+        this.getRubrosArticulos();
+      }
+    });
   },
 };
 </script>

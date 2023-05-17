@@ -114,6 +114,10 @@ export default {
             const res = await fetch(
                 "http://localhost:3000/pedidosXcliente/" + fechaDesde + "/" + fechaHasta,
             );
+            if (res.status == 401) { //quiere decir que expiró el token o no está logueado
+                AuthService.logout()
+                window.location.href = "/Home"
+            }
             const resJson = await res.json();
             console.log("pedidosXcliente", resJson);
             this.pedidosxcliente = resJson

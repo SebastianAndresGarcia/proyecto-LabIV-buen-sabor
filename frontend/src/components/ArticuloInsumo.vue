@@ -3,7 +3,8 @@
         <v-card-title>
             Articulos Insumos
             <v-spacer></v-spacer>
-            <Form-Insumo :idrubroarticulo="insumoParam.insumoSeleccionado" @nuevoInsumo="handleMessage">
+            <!-- <Form-Insumo :idrubroarticulo="insumoParam.insumoSeleccionado" @nuevoInsumo="handleMessage"> -->
+                <Form-Insumo :articuloParam="{'idrubroarticulo':insumoParam.insumoSeleccionado, 'esInsumo': insumoParam.esInsumo}" @nuevoInsumo="handleMessage">
             </Form-Insumo>
         </v-card-title>
         <v-simple-table class="tabla"> <!--v-if="!insumosData==null"-->
@@ -74,7 +75,8 @@
                         </td>
 
                         <td>
-                            <Form-Insumo :idinsumo="insumo.denominacion" @nuevoInsumo="handleMessage">
+                            <!-- <Form-Insumo :idinsumo="insumo.denominacion" @nuevoInsumo="handleMessage"> -->
+                                <Form-Insumo :articuloParam="{'idinsumo':insumo.denominacion, 'esInsumo': insumoParam.esInsumo}" @nuevoInsumo="handleMessage">
                             </Form-Insumo>
                         </td>
                         <td>

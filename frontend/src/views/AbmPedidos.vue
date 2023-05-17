@@ -1,207 +1,250 @@
 <template>
-    <v-container v-if='currentUser.roles.includes("ROLE_ADMIN")'>
-        <v-card style="margin-top: 10px; justify:center">
-            <v-row style="justify-content: center"><v-card-title>
-                    <h2><b>Pedidos</b></h2>
-                </v-card-title>
-            </v-row>
-            <div v-if="pedidosData.length > 0">
-                <v-row align="center">
-                    <v-col cols="2">
-                        <v-subheader>
-                            Ver
-                        </v-subheader>
-                    </v-col>
+  <v-container v-if="currentUser.roles.includes('ROLE_ADMIN')">
+    <v-card style="margin-top: 10px; justify: center">
+      <v-row style="justify-content: center"
+        ><v-card-title>
+          <h2><b>Pedidos</b></h2>
+        </v-card-title>
+      </v-row>
+      <div v-if="pedidosData.length > 0">
+        <v-row align="center">
+          <v-col cols="2">
+            <v-subheader> Ver </v-subheader>
+          </v-col>
 
-                    <v-col cols="10">
-                        <v-select v-model="select" :items="items" item-text="state" item-value="state"></v-select>
-                    </v-col>
-                </v-row>
-                <v-simple-table class="tabla">
-                    <template v-slot:default>
-                        <thead>
-                            <tr>
-                                <th class="text-left">
-                                    <b>Fecha</b>
-                                </th>
-                                <th class="text-left">
-                                    <b>Pedido N°</b>
-                                </th>
-                                <th class="text-left">
-                                    <b>Pago</b>
-                                </th>
-                                <th class="text-left">
-                                    <b>horaEstimadaFin</b>
-                                </th>
-                                <th class="text-left">
-                                    <b>Ver Detalles</b>
-                                </th>
-                                <th class="text-left">
-                                    <b>Estado</b>
-                                </th>
-                                <th class="text-center">
-                                    <h2><b>Acciones</b></h2>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(pedido, index) in pedidosData" :key="index" style="padding-top: 5px;">
-
-                                <td>
-                                    {{ pedido.fecha }}
-                                </td>
-                                <td>
-                                    {{ pedido.numero }}
-                                </td>
-                                <td>
-                                    {{ pedido.mercadopagodatosid.estado }}
-                                </td>
-                                <td>
-                                    {{ pedido.horaEstimadaFin }}
-                                </td>
-                                <td>
-                                    <detalle-pedido :pedidoParam="pedido"></detalle-pedido>
-                                </td>
-                                <td>
-                                    {{ pedido.estado }}
-                                    <!--pendiente, elaboracion, terminado, entregado (local o delivery), facturado -->
-                                </td>
-                                <td >
-                                    <div  v-if="pedido.estado === 'pendiente'">
-                                    <v-row style="justify-content: center;"> <v-btn style="margin-right: 2px;" small color="success" @click="cambiarEstado(pedido)">Enviar a Cocina</v-btn>
-                                      <v-btn  small color="red" @click="cancelarPedido(pedido)">Cancelar Pedido</v-btn> </v-row> 
-                                    </div>
-                                    <div v-else-if="pedido.estado === 'terminado'||pedido.estado === 'facturado'">
-                                        <form-factura style="justify-content: center;"  :pedidoParam="{ 'pedidoid': pedido._id, 'facturaid': pedido.facturaid }"></form-factura>
-                                    </div>
-                                    <div v-else>
-                                        <b>Esperando a la cocina...</b>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </template>
-                </v-simple-table>
-            </div>
-            <div v-else><v-card-subtitle><b>No tienes Pedidos aún</b></v-card-subtitle></div>
-        </v-card>
-    </v-container>
+          <v-col cols="10">
+            <v-select
+              v-model="select"
+              :items="items"
+              item-text="state"
+              item-value="state"
+            ></v-select>
+          </v-col>
+        </v-row>
+        <v-simple-table class="tabla">
+          <template v-slot:default>
+            <thead>
+              <tr>
+                <th class="text-left">
+                  <b>Fecha</b>
+                </th>
+                <th class="text-left">
+                  <b>Pedido N°</b>
+                </th>
+                <th class="text-left">
+                  <b>Pago</b>
+                </th>
+                <th class="text-left">
+                  <b>horaEstimadaFin</b>
+                </th>
+                <th class="text-left">
+                  <b>Ver Detalles</b>
+                </th>
+                <th class="text-left">
+                  <b>Estado</b>
+                </th>
+                <th class="text-center">
+                  <h2><b>Acciones</b></h2>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(pedido, index) in pedidosData"
+                :key="index"
+                style="padding-top: 5px"
+              >
+                <td>
+                  {{ pedido.fecha }}
+                </td>
+                <td>
+                  {{ pedido.numero }}
+                </td>
+                <td>
+                  {{ pedido.mercadopagodatosid.estado }}
+                </td>
+                <td>
+                  {{ pedido.horaEstimadaFin }}
+                </td>
+                <td>
+                  <detalle-pedido :pedidoParam="pedido"></detalle-pedido>
+                </td>
+                <td>
+                  {{ pedido.estado }}
+                  <!--pendiente, elaboracion, terminado, entregado (local o delivery), facturado -->
+                </td>
+                <td>
+                  <div v-if="pedido.estado === 'pendiente'">
+                    <v-row style="justify-content: center">
+                      <v-btn
+                        style="margin-right: 2px"
+                        small
+                        color="success"
+                        @click="cambiarEstado(pedido)"
+                        >Enviar a Cocina</v-btn
+                      >
+                      <v-btn small color="red" @click="cancelarPedido(pedido)"
+                        >Cancelar Pedido</v-btn
+                      >
+                    </v-row>
+                  </div>
+                  <div
+                    v-else-if="
+                      pedido.estado === 'terminado' ||
+                      pedido.estado === 'facturado'
+                    "
+                  >
+                    <form-factura
+                      style="justify-content: center"
+                      :pedidoParam="{
+                        pedidoid: pedido._id,
+                        facturaid: pedido.facturaid,
+                      }"
+                    ></form-factura>
+                  </div>
+                  <div v-else>
+                    <b>Esperando a la cocina...</b>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
+      </div>
+      <div v-else>
+        <v-card-subtitle><b>No tienes Pedidos aún</b></v-card-subtitle>
+      </div>
+    </v-card>
+  </v-container>
 </template>
 <script>
-
-import AuthService from "@/service/auth.service.js"
-import detallepedido from "@/components/DetallePedido.vue"
-import formfactura from "@/components/FormFactura.vue"
-
+import AuthService from "@/service/auth.service.js";
+import detallepedido from "@/components/DetallePedido.vue";
+import formfactura from "@/components/FormFactura.vue";
+// import io from "socket.io-client";
+// const socket = io("http://localhost:3000/pedidos");
 
 export default {
-
-    components: {
-        "detalle-pedido": detallepedido,
-        "form-factura": formfactura
-    },
-    beforeMount() {
-        this.currentUser = AuthService.getCurrentUser()
-    },
-    mounted() {
-        this.verificarUsuario(this.currentUser)
-        this.getPedidos()
-    },
-    data() {
-        return {
-            currentUser: undefined,
-            pedidosData: [],
-            select: 'Pendiente',
-            items: [
-                { state: 'Ver Todo' },
-                { state: 'Pendiente' },
-                { state: 'En preparación' },
-                { state: 'Terminado' },
-                { state: 'Facturado' },
-
-            ],
-        };
-    },
-    methods: {
-        async getPedidos() {
-            const res = await fetch(
-                "http://localhost:3000/pedidos"
-            );
-            const resJson = await res.json();
-            console.log("resJson", resJson);
-            this.pedidosData = resJson;
-            setTimeout(() => this.getPedidos(), 10000) //milisegundos, va repitiendo la llamada cada 10 seg
+  components: {
+    "detalle-pedido": detallepedido,
+    "form-factura": formfactura,
+  },
+  beforeMount() {
+    this.currentUser = AuthService.getCurrentUser();
+  },
+  mounted() {
+    this.verificarUsuario(this.currentUser);
+    this.getPedidos();
+  },
+  data() {
+    return {
+      currentUser: undefined,
+      pedidosData: [],
+      select: "Pendiente",
+      items: [
+        { state: "Ver Todo" },
+        { state: "Pendiente" },
+        { state: "En preparación" },
+        { state: "Terminado" },
+        { state: "Facturado" },
+      ],
+    };
+  },
+  //   created() {
+  //     // Escucha el evento 'pedidoEntrante'
+  //     socket.on("pedidoEntrante", (pedido) => {
+  //         console.log("entró a created")
+  //       this.pedidosData.push(pedido); // Agrega el nuevo pedido a la lista
+  //     });
+  //   },
+  methods: {
+    async getPedidos() {
+      const res = await fetch("http://localhost:3000/pedidos", {
+        headers: {
+          "Content-type": "application/json",
+          "x-access-token": this.currentUser.accessToken,
         },
-        async verificarUsuario(currentUser) {
-            if (currentUser) {
-                if (!currentUser.roles.includes("ROLE_ADMIN")) {
-                    window.location.href = "/Home"
-                }
-            } else {
-                window.location.href = "/Home"
-            }
-        },
-        async cambiarEstado(pedido) {
-            pedido.estado = 'elaboracion'
-            let urlServer = "http://localhost:3000/actualizarPedido/" + pedido._id
-            let method = "POST";
-            const respuesta = await fetch(urlServer, {
-                method: method,
-                body: JSON.stringify({ estado: 'elaboracion' }),
-                headers: {
-                    "Content-type": "application/json",
-                },
-                mode: "cors",
-            });
-            const resJson = await respuesta.json()
-            console.log("respuesta: ", resJson)
-            if (respuesta.status === 200) {
-                console.log(respuesta.status)
-                
-            } else {
-                this.respuestaError = resJson.message
-                console.log("mensaje del servidor: " + this.respuestaError)
-            }
-        },
-        async cancelarPedido(pedido) {
-            // pedido.estado = 'elaboracion'
-            // let urlServer = "http://localhost:3000/actualizarPedido/" + pedido._id
-            // let method = "POST";
-            // const respuesta = await fetch(urlServer, {
-            //     method: method,
-            //     body: JSON.stringify({ estado: 'elaboracion' }),
-            //     headers: {
-            //         "Content-type": "application/json",
-            //     },
-            //     mode: "cors",
-            // });
-            // const resJson = await respuesta.json()
-            // console.log("respuesta: ", resJson)
-            // if (respuesta.status === 200) {
-            //     console.log(respuesta.status)
-                
-            // } else {
-            //     this.respuestaError = resJson.message
-            //     console.log("mensaje del servidor: " + this.respuestaError)
-            // }
+        mode: "cors",
+      });
+      if (res.status == 401) {
+        //quiere decir que expiró el token o no está logueado
+        AuthService.logout();
+        window.location.href = "/Home";
+      }
+      const resJson = await res.json();
+      console.log("resJson", resJson);
+      this.pedidosData = resJson;
+      //setTimeout(() => this.getPedidos(), 10000) //milisegundos, va repitiendo la llamada cada 10 seg
+    },
+    async verificarUsuario(currentUser) {
+      if (currentUser) {
+        if (!currentUser.roles.includes("ROLE_ADMIN")) {
+          window.location.href = "/Home";
         }
-    }
+      } else {
+        window.location.href = "/Home";
+      }
+    },
+    async cambiarEstado(pedido) {
+      pedido.estado = "elaboracion";
+      let urlServer = "http://localhost:3000/actualizarPedido/" + pedido._id;
+      let method = "POST";
+      const respuesta = await fetch(urlServer, {
+        method: method,
+        body: JSON.stringify({ estado: "elaboracion" }),
+        headers: {
+          "Content-type": "application/json",
+          "x-access-token": this.currentUser.accessToken,
+        },
+        mode: "cors",
+      });
+      const resJson = await respuesta.json();
+      console.log("respuesta: ", resJson);
+      if (respuesta.status === 200) {
+        console.log(respuesta.status);
+      } else {
+        this.respuestaError = resJson.message;
+        console.log("mensaje del servidor: " + this.respuestaError);
+      }
+    },
+    async cancelarPedido(pedido) {
+      // pedido.estado = 'elaboracion'
+      // let urlServer = "http://localhost:3000/actualizarPedido/" + pedido._id
+      // let method = "POST";
+      // const respuesta = await fetch(urlServer, {
+      //     method: method,
+      //     body: JSON.stringify({ estado: 'elaboracion' }),
+      //     headers: {
+      //         "Content-type": "application/json",
+      //     },
+      //     mode: "cors",
+      // });
+      // const resJson = await respuesta.json()
+      // console.log("respuesta: ", resJson)
+      // if (respuesta.status === 200) {
+      //     console.log(respuesta.status)
+      // } else {
+      //     this.respuestaError = resJson.message
+      //     console.log("mensaje del servidor: " + this.respuestaError)
+      // }
+    },
+  },
 };
 </script>
 <style scoped>
 .row {
-    text-align: justify;
-    align-items: center;
-    /**verticalmente */
-    display: flex;
-    margin-left: 0 auto;
-    padding-left: 15%;
-    padding-right: 15%;
+  text-align: justify;
+  align-items: center;
+  /**verticalmente */
+  display: flex;
+  margin-left: 0 auto;
+  padding-left: 15%;
+  padding-right: 15%;
 }
 
 .col {
-    justify-content: center;
-    text-align: justify;
-    margin-left: auto;
+  justify-content: center;
+  text-align: justify;
+  margin-left: auto;
 }
 </style>

@@ -17,13 +17,14 @@ exports.createRubroArticuloPadre = async (req, res) => {
 exports.addChildArticuloPadre = async (req, res) => {
 
     var hijo = new RubroArticulo(req.body)
-    hijo.padre = req.body.padreid
-    console.log(hijo)
+    hijo.padre = req.body.padre
+    console.log("req hijo", hijo)
     try {
         // Agregar el hijo a la lista de hijos del padre
         //padre.hijos.push(hijo);
         // Guardar los cambios en la base de datos
         await hijo.save();
+        //const padreUpdated = await RubroArticulo.findAndUpdate({_id:hijo.padre}, { $addToSet: { "hijos": hijo._id } })
         const padreUpdated = await RubroArticulo.findByIdAndUpdate(hijo.padre, { $addToSet: { "hijos": hijo._id } })
         res.json(hijo)
     } catch (error) {
@@ -50,6 +51,15 @@ exports.obtenerArbolDeArticuloPadre = async (req, res) => {
     }
 };
 
+exports.getRubroArticulo = async (req, res) => { //trae un articulo
+
+    const rubro = await RubroArticulo.findOne({ _id: req.params._id })
+    if (!rubro)
+        return res.status(204).json();
+    console.log(rubro);
+    return res.json(rubro)
+
+}
 
 exports.createRubroArticulo = async (req, res) => {
     console.log(req.body)
@@ -159,14 +169,22 @@ exports.agregarArticuloRubro = async (req, res) => {
 } */
 
 exports.getRubros = async (req, res) => {
-    const rubros = await RubroArticulo.find({ "parent": null, "esInsumo": true })
+    const rubros = await RubroArticulo.find({ "padre": null, "esInsumo": true })
     console.log(rubros)
     return res.json(rubros)
 }
-exports.getRubrosNoInsumos = async (req, res) => {
-    const rubros = await RubroArticulo.find({ "parent": null, "esInsumo": false })
+exports.getRubrosNoInsumos = async (req, res) => { //trae los rubros padres
+    const rubros = await RubroArticulo.find({ "padre": null, "esInsumo": false })
     console.log(rubros)
     return res.json(rubros)
+}
+exports.getRubrosSubrubros = async (req, res) => { 
+    const rubros = await RubroArticulo.find({ "esInsumo": false })
+    if (!rubros)
+        return res.status(204).json();
+    console.log(rubros);
+    return res.json(rubros)
+
 }
 
 exports.getRubrosFalseInsumos = async (req, res) => {
@@ -188,7 +206,16 @@ exports.getRubrosFalseInsumos = async (req, res) => {
 }
 
 exports.updateRubroArticulo = async (req, res) => {
-    const rubroUpdated = await RubroArticulo.findByIdAndUpdate(req.body._id, { $addToSet: { "articuloinsumoid": req.body.articuloinsumoid } })
+    if(req.body.articuloinsumoid)
+        rubroUpdated = await RubroArticulo.findByIdAndUpdate({ _id: req.params.id }, { $addToSet: { "articuloinsumoid": req.body.articuloinsumoid } })
+    else
+        rubroUpdated = await RubroArticulo.findByIdAndUpdate({ _id: req.params.id },{ padre: req.body.padre , denominacion: req.body.denominacion})
+        if(req.body.padre!=req.body.padreAnterior){ //si el rubro cambió de padre, se lo borro como hijo al padre anterior
+            if(req.body.padreAnterior!=null)
+                padreAnteriorUpdated = await RubroArticulo.findByIdAndUpdate({ _id: req.body.padreAnterior }, { $pull: { "hijos": rubroUpdated._id } })
+        }
+        if(req.body.padre){ //si viene con un padre nuevo se lo agrego 
+            padreUpdated = await RubroArticulo.findByIdAndUpdate({ _id: req.body.padre }, { $addToSet: { "hijos": rubroUpdated._id } })}
     console.log(rubroUpdated)
     res.json(rubroUpdated)
 }

@@ -2,13 +2,13 @@
     <v-row justify="center">
         <v-dialog v-model="dialog" persistent max-width="600px">
             <template v-slot:activator="{ on, attrs }">
-                <div v-if="(idinsumo == null)">
+                <div v-if="(articuloParam.idinsumo == null)">
                     <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
                         Crear Insumo
                     </v-btn>
                 </div>
                 <div v-else>
-                    <v-btn icon v-bind="attrs" v-on="on" @click="getInsumoXdenominacion(idinsumo)">
+                    <v-btn icon v-bind="attrs" v-on="on" @click="getInsumoXdenominacion(articuloParam.idinsumo)">
                         <v-icon>mdi-pencil</v-icon>
                     </v-btn>
                 </div>
@@ -55,7 +55,7 @@
                                 <v-text-field label="unidadMedida" v-model="insumo.unidadMedida" required>
                                 </v-text-field>
                             </v-col>
-                            <v-col v-if="idrubroarticulo">
+                            <v-col v-if="articuloParam.idrubroarticulo">
                                 <v-select label="Seleccione un Rubro" outlined v-model="insumo.RubroArticuloid"
                                     :items="rubros" item-value="_id" item-text="denominacion">
                                     <template v-slot:prepend-item>
@@ -123,19 +123,20 @@ export default {
 
         };
     },
-    props: { idrubroarticulo: Array, idinsumo: String },
-    //props: ["manufacturadoid"],
+    //props: { idrubroarticulo: Array, idinsumo: String, esInsumo: Boolean },
+    props: ["articuloParam"],
     beforeUpdate() {
         //console.log("datos select ", this.insumoSeleccionado)
         //this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
-        console.log("idrubroarticulo beforeUpdate ", this.idrubroarticulo)
-        console.log("idinsumo beforeUpdate ", this.idinsumo)
+        // console.log("idrubroarticulo beforeUpdate ", this.idrubroarticulo)
+        // console.log("idinsumo beforeUpdate ", this.idinsumo)
 
     },
     mounted() {
-        console.log("idrubroarticulo props ", this.idrubroarticulo)
-        console.log("idinsumo props " + this.idinsumo)
-        this.insumo.RubroArticuloid = this.idrubroarticulo
+        console.log("articuloParam ", this.articuloParam)
+        //console.log("idinsumo props " + this.idinsumo)
+        // this.insumo.RubroArticuloid = this.idrubroarticulo
+        this.insumo.RubroArticuloid = this.articuloParam.idrubroarticulo
         this.getRubrosArticulos()    
         //this.getManufacturadoXdenominacion(this.idrubrogral[1]) 
     },
@@ -185,7 +186,7 @@ export default {
                     console.log("mensaje del servidor: " + this.respuestaError)
                 }
             } else {
-                let urlServer = "http://localhost:3000/ActualizarInsumo/" + this.idinsumo;
+                let urlServer = "http://localhost:3000/ActualizarInsumo/" + this.articuloParam.idinsumo;
                 let method = "POST";
                 const respuesta = await fetch(urlServer, {
                     method: method,
@@ -235,11 +236,16 @@ export default {
             this.insumo = resJson
             console.log("resJson ", resJson)
 
-
         },
         async getRubrosArticulos() {
+            let url=''
+            if(this.articuloParam.esInsumo==true){
+                url="http://localhost:3000/rubrosdeinsumos"
+            }else{
+                url="http://localhost:3000/getRubrosSubrubros"
+            }
             const res = await fetch(
-                "http://localhost:3000/rubrosdeinsumos",
+                url,
                 {
                     headers: {
                         "Content-type": "application/json",
@@ -250,7 +256,7 @@ export default {
             const resJson = await res.json();
 
             this.rubros = resJson;
-            console.log("InsumosArticulos ", this.rubros);
+            console.log("Rubros insumos ", this.rubros);
 
 
         },

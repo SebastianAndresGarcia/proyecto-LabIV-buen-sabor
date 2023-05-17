@@ -72,10 +72,12 @@
 </template>
 
 <script>
+import AuthService from "@/service/auth.service.js"
 import { calculaCosto } from "@/funciones/CalculaCosto.js"
 export default {
     data() {
         return {
+            currentUser: undefined,
             dialog: false,
             factura: {
                 fecha: new Date(),
@@ -96,6 +98,9 @@ export default {
         console.log("this.pedidoParam", this.pedidoParam)
         this.getFactura(this.pedidoParam)
     },
+    beforeMount() {
+        this.currentUser = AuthService.getCurrentUser()
+    },
     props: ["pedidoParam"],
     methods: {
         async crearFactura() { //también cumple la función de actualizar según el props activo
@@ -112,6 +117,7 @@ export default {
                     body: JSON.stringify(this.factura),
                     headers: {
                         "Content-type": "application/json",
+                        'x-access-token': this.currentUser.accessToken
                     },
                     mode: "cors",
                 });
@@ -134,6 +140,7 @@ export default {
                     body: JSON.stringify(this.factura),
                     headers: {
                         "Content-type": "application/json",
+                        'x-access-token': this.currentUser.accessToken
                     },
                     mode: "cors",
                 });
@@ -168,7 +175,13 @@ export default {
             if (pedidoParam.facturaid) {
 
                 const res = await fetch(
-                    `http://localhost:3000/facturaxid/${pedidoParam.facturaid}`
+                    `http://localhost:3000/facturaxid/${pedidoParam.facturaid}`,
+                    {
+                        headers: {
+                        "Content-type": "application/json",
+                        'x-access-token': this.currentUser.accessToken
+                    },
+                    }
                 );
                 const resJson = await res.json();
                 console.log("datosFactura", resJson);
@@ -176,7 +189,13 @@ export default {
             }
             else {
                 const res = await fetch(
-                    `http://localhost:3000/pedidoxid/${pedidoParam.pedidoid}`
+                    `http://localhost:3000/pedidoxid/${pedidoParam.pedidoid}`,
+                    {
+                        headers: {
+                        "Content-type": "application/json",
+                        'x-access-token': this.currentUser.accessToken
+                    },
+                    }
                 );
                 const resJson = await res.json();
                 console.log("datos para crear factura", resJson);
@@ -203,8 +222,9 @@ export default {
                 method: method,
                 body: JSON.stringify({ estado: 'facturado' }),
                 headers: {
-                    "Content-type": "application/json",
-                },
+                        "Content-type": "application/json",
+                        'x-access-token': this.currentUser.accessToken
+                    },
                 mode: "cors",
             });
             const resJson = await respuesta.json()

@@ -90,7 +90,7 @@ export default {
         return;
       }
 
-      let urlServer = "http://localhost:3000/crearRubroArticulo";
+      let urlServer = "http://localhost:3000/createRubroArticuloPadre";
       let method = "POST";
 
       const respuesta = await fetch(urlServer, {

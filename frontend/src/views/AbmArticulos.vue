@@ -1,4 +1,4 @@
-<template>
+<template> <!--NO SE USA, ES LA ANTERIOR VISTA-->
     <v-card v-if='currentUser.roles.includes("ROLE_ADMIN")' elevation="4">
         <v-card-title>GESTION DE ARTICULOS</v-card-title>
 
