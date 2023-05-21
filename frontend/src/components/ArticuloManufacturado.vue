@@ -39,7 +39,7 @@
                         <td>
                             {{ manufacturado.denominacion }}
                         </td>
-                        <td>
+                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">
                             {{ manufacturado.imagen }}
                         </td>
                         <td>

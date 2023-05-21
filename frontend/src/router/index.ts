@@ -1,59 +1,10 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
- 
-  {
-    path: '/PedidosCocinero',
-    name: 'PedidosCocinero',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/PedidosCocinero.vue')
-  },
-  {
-    path: '/AbmInsumos',
-    name: 'AbmInsumos',
-     // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */'../views/AbmInsumos.vue')
-  },
-  {
-    path: '/AbmArticulosInsumos',
-    name: 'AbmArticulosInsumos',
-     // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */'../views/AbmArticulosInsumos.vue')
-  },
-  {
-    path: '/estadisticas',
-    name: 'estadisticas',
-     // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */'../views/Estadisticas.vue')
-  },
-  {
-    path: '/AbmManufacturados',
-    name: 'AbmManufacturados',
-     // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */'../views/AbmManufacturados.vue')
-  },
-  {
-    path: '/AbmArticulos',
-    name: 'AbmArticulos',
-     // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */'../views/AbmArticulos.vue')
-  },
+
   {
     path: '/ManufacXrubro/:id',
     name: 'ManufacXrubro',
@@ -62,14 +13,7 @@ const routes: Array<RouteConfig> = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */'../views/ManufacXrubro.vue')
   },
-  {
-    path: '/AbmEmpleados',
-    name: 'AbmEmpleados',
-     // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */'../views/AbmEmpleados.vue')
-  },
+
   {
     path: '/MiCarrito',
     name: 'MiCarrito',
@@ -78,14 +22,7 @@ const routes: Array<RouteConfig> = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */'../views/MiCarrito.vue')
   },
-  {
-    path: '/AbmPedidos',
-    name: 'AbmPedidos',
-     // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */'../views/AbmPedidos.vue')
-  },
+ 
   {
     path: '/MisCompras',
     name: 'MisCompras',
@@ -94,13 +31,14 @@ const routes: Array<RouteConfig> = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */'../views/MisCompras.vue')
   },
+  
   {
-    path: '/AbmFacturas',
-    name: 'AbmFacturas',
+    path: '/Administrador',
+    name: 'Administrador',
      // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */'../views/AbmFacturas.vue')
+    component: () => import(/* webpackChunkName: "about" */'../views/Administrador.vue')
   },
   {
     path: '/*',   //tiene que quedar en último lugar, sino no me toma las rutas siguientes

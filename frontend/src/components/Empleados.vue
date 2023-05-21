@@ -1,6 +1,6 @@
 <template>
   <v-card
-    v-if="currentUser.roles.includes('ROLE_ADMIN')"
+    
     style="margin-top: 15px"
   >
     <v-card-title>
