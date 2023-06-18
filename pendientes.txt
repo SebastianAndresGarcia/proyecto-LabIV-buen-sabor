@@ -8,11 +8,11 @@ A CORREGIR/IMPLEMENTAR:
 
 *Validar el horario de atención, lunes a viernes de 12.00 a 22.00, sab. y dom. de 11.00 a 15.00hs.
 
-*Generar los excel de estadísticas.
+*Generar los excel de RECAUDACIONES, GANANCIAS EN PERIODO DE TIEMPO. Corregir el código, hay cosas repetidas entre los componentes de estadísticas, se pueden acortar y eliminar lineas innecesarias.
 
 *agregar dlio al elegir envío a domicilio.
 
-*implementar websockets para actualizar las bandeja de pedidos de cliente, cocinero, admin.
+*implementar websockets para actualizar las bandeja de pedidos de cliente, cocinero, admin. Descartado Websockets,	 Va a quedar con setInterval o setTimeOut
 
 ________________________________________________________________________________________________________________________________________________________________________
 

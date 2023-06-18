@@ -121,8 +121,6 @@
 import AuthService from "@/service/auth.service.js";
 import detallepedido from "@/components/DetallePedido.vue";
 import formfactura from "@/components/FormFactura.vue";
-// import io from "socket.io-client";
-// const socket = io("http://localhost:3000/pedidos");
 
 export default {
   components: {
@@ -150,13 +148,7 @@ export default {
       ],
     };
   },
-  //   created() {
-  //     // Escucha el evento 'pedidoEntrante'
-  //     socket.on("pedidoEntrante", (pedido) => {
-  //         console.log("entró a created")
-  //       this.pedidosData.push(pedido); // Agrega el nuevo pedido a la lista
-  //     });
-  //   },
+
   methods: {
     async getPedidos() {
       const res = await fetch("http://localhost:3000/pedidos", {

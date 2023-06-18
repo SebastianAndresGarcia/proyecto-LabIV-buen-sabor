@@ -67,7 +67,7 @@ export default {
     props: ["pedidoParam"],
     mounted() {
         //this.Pedidoxid(this.pedidoParam)
-        console.log("pedidoParam", this.pedidoParam)
+       // console.log("pedidoParam", this.pedidoParam)
         if (this.pedidoParam.detallepedidoid) {
             this.detalle = this.pedidoParam.detallepedidoid
             this.extraerArticulos(this.detalle)
@@ -80,7 +80,7 @@ export default {
 
     methods: {
         extraerArticulos(detalle){
-            console.log("detalle ",detalle)
+            //console.log("detalle ",detalle)
             for (let i = 0; i < detalle.length; i++) {
             if(detalle[i].articulomanufacturadoid){
                 this.items.push({'imagen':detalle[i].articulomanufacturadoid.imagen,'denominacion':detalle[i].articulomanufacturadoid.denominacion,'subtotal':detalle[i].subtotal, 'cantidad':detalle[i].cantidad})
@@ -88,7 +88,7 @@ export default {
             else{
                 this.items.push({'imagen':detalle[i].articuloinsumoid.imagen,'denominacion':detalle[i].articuloinsumoid.denominacion,'subtotal':detalle[i].subtotal, 'cantidad':detalle[i].cantidad})
             }
-            console.log("items detallepedido ", this.items)
+           // console.log("items detallepedido ", this.items)
         }}
     }
 }

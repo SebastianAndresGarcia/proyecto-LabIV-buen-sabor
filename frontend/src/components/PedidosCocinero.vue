@@ -72,8 +72,6 @@
 <script>
 import AuthService from "@/service/auth.service.js";
 import detallepedido from "@/components/DetallePedido.vue";
-// import io from "socket.io-client";
-// const socket = io("http://localhost:3000/pedidoscocinero");
 
 export default {
   components: {
@@ -92,12 +90,7 @@ export default {
       pedidosData: [],
     };
   },
-  //   created() {
-  //     // Escucha el evento 'pedidoEntrante'
-  //     socket.on("pedidoEntrante", (pedido) => {
-  //       this.pedidosData.push(pedido); // Agrega el nuevo pedido a la lista
-  //     });
-  //   },
+
   methods: {
     async getPedidos() {
       console.log("entró a getPedidos en Cocina");

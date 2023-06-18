@@ -124,10 +124,10 @@ https://materialdesignicons.com/  ÍCONOS
             >
           </v-row>
           <v-list-item style="margin-bottom: 10%">
-            <login-item></login-item>
+            <login-item @cerrarDrawer="handle"></login-item>
           </v-list-item>
           <v-list-item>
-            <register-item></register-item>
+            <register-item @cerrarDrawer="handle"></register-item>
           </v-list-item>
         </v-list-item-group>
       </v-list>
@@ -232,6 +232,10 @@ export default {
     closeMenu() {
       this.$refs.menu.deactivate();
     },
+    handle(value){
+      if(value)
+      {this.drawer=false}
+    }
   },
 };
 </script>

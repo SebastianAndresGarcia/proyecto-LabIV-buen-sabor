@@ -134,9 +134,11 @@ https://github.com/zheeeng/export-from-json#readme
 </template>
 <script>
 import exportFromJSON from "export-from-json";
+import AuthService from "@/service/auth.service.js";
 export default {
   data() {
     return {
+      currentUser: undefined,
       menuDesde: false,
       menuHasta: false,
       fechaDesde: null,
@@ -144,6 +146,10 @@ export default {
       maspedidos: null,
     };
   },
+  beforeMount() {
+    this.currentUser = AuthService.getCurrentUser();
+  },
+ 
   beforeUpdate() {
     if (this.fechaDesde && this.fechaHasta) {
       this.manufacturadosVendidos(this.fechaDesde, this.fechaHasta);
@@ -155,7 +161,14 @@ export default {
         "http://localhost:3000/manufacturadosVendidos/" +
           fechaDesde +
           "/" +
-          fechaHasta
+          fechaHasta,
+        {
+          headers: {
+            "Content-type": "application/json",
+            "x-access-token": this.currentUser.accessToken,
+          },
+          mode: "cors",
+        }
       );
       if (res.status == 401) {
         //quiere decir que expiró el token o no está logueado

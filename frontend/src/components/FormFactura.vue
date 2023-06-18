@@ -95,7 +95,7 @@ export default {
 
     },
     mounted() {
-        console.log("this.pedidoParam", this.pedidoParam)
+        // console.log("this.pedidoParam", this.pedidoParam)
         this.getFactura(this.pedidoParam)
     },
     beforeMount() {
@@ -107,7 +107,7 @@ export default {
             this.factura.pedidoid = this.pedidoParam.pedidoid
 
             this.nuevaFactura = false
-            console.log("entró");
+            // console.log("entró");
             // console.log(this.factura);
             if (this.pedidoParam.facturaid) {
                 let urlServer = "http://localhost:3000/actualizarFactura/" + this.pedidoParam.facturaid;
@@ -122,7 +122,7 @@ export default {
                     mode: "cors",
                 });
                 const resJson = await respuesta.json()
-                console.log("respuesta: ", resJson)
+                // console.log("respuesta: ", resJson)
                 if (respuesta.status === 200) {
                     console.log(respuesta.status)
                     this.dialog = false;
@@ -130,7 +130,7 @@ export default {
                     this.cambiarEstado(this.pedidoParam.pedidoid)
                 } else {
                     this.respuestaError = resJson.message
-                    console.log("mensaje del servidor: " + this.respuestaError)
+                    // console.log("mensaje del servidor: " + this.respuestaError)
                 }
             } else {
                 let urlServer = "http://localhost:3000/crearFactura";
@@ -184,7 +184,7 @@ export default {
                     }
                 );
                 const resJson = await res.json();
-                console.log("datosFactura", resJson);
+                // console.log("datosFactura", resJson);
                 this.factura = resJson
             }
             else {
@@ -198,7 +198,7 @@ export default {
                     }
                 );
                 const resJson = await res.json();
-                console.log("datos para crear factura", resJson);
+                // console.log("datos para crear factura", resJson);
                 this.factura = {
                     fecha: new Date(),
                     montoDescuento: null,
@@ -208,7 +208,7 @@ export default {
                     totalCosto: resJson.totalCosto,
                     detallefacturaid: resJson.detallepedidoid,
                 }
-                console.log("this.factura ", this.factura)
+                // console.log("this.factura ", this.factura)
             }
             if (this.factura.totalCosto == 0 || this.factura.totalCosto == null) {
                 this.factura.totalCosto = await calculaCosto(this.factura.detallefacturaid)
@@ -228,7 +228,7 @@ export default {
                 mode: "cors",
             });
             const resJson = await respuesta.json()
-            console.log("respuesta: ", resJson)
+            // console.log("respuesta: ", resJson)
             if (respuesta.status === 200) {
                 console.log(respuesta.status)
             } else {

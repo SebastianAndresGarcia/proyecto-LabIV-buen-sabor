@@ -2,7 +2,7 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" persistent max-width="600px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn block text v-bind="attrs" v-on="on"> <v-icon>mdi-account</v-icon>Registrarse </v-btn>
+        <v-btn block text v-bind="attrs" v-on="on" @click="abrirDialog()"> <v-icon>mdi-account</v-icon>Registrarse </v-btn>
       </template>
       <v-card ref="form">
         <v-card-title>
@@ -126,6 +126,10 @@ export default {
       });
       this.dialog = false;
     },
+    async abrirDialog(){
+      this.$emit("cerrarDrawer", true);
+      this.dialog=true
+    }
   }
 };
 </script>

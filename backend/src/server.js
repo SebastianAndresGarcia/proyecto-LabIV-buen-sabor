@@ -2,9 +2,10 @@ require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
 const routes = require('./routes/rutas')
-const dbConfig = require("./config/db.config");
+const dbConfig = require("./config/db.config")
 
 const app = express();
+
 
 var corsOptions = {
   origin: "http://localhost:8080",
@@ -31,6 +32,7 @@ db.mongoose
   .then(() => {
     console.log("Successfully connect to MongoDB.");
     initial();
+    
   })
   .catch(err => {
     console.error("Connection error", err);
@@ -47,9 +49,11 @@ app.use(routes);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
+
 
 function initial() {
   Role.estimatedDocumentCount((err, count) => {

@@ -12,12 +12,21 @@
 import carousel from "@/components/Carousel.vue";
 import footer from "@/components/Footer.vue";
 import Register from "@/components/Register.vue";
+
 export default {
   name: "ho-me",
   components: {
     "carousel-item": carousel,
     "foo-ter": footer, //si no le pongo el guión en el medio no funciona
     "register-item": Register,
-  }
+  },
+  data() {
+    return {
+      socket: null,
+      respuestaEvento: null,
+    };
+  },
+  mounted() {
+  },
 };
 </script>

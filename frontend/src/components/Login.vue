@@ -2,7 +2,7 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" temporary max-width="600px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn block text v-bind="attrs" v-on="on"
+        <v-btn block text v-bind="attrs" v-on="on" @click="abrirDialog"
           ><v-icon>mdi-account</v-icon> Iniciar sesión
         </v-btn>
       </template>
@@ -124,7 +124,17 @@ export default {
         }
       );
     },
+    async abrirDialog(){
+      this.$emit("cerrarDrawer", true);
+      this.dialog=true
+    }
   },
+  // watch: {
+  //   dialog: function () {
+  //     console.log("entró")
+  //     this.$emit("cerrarDrawer", this.dialog);
+  //   },
+  // },
 };
 </script>
 
