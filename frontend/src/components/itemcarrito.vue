@@ -7,7 +7,7 @@
         </v-card-title>
         <v-container>
             <v-row dense>
-                <input class="inputpromohome" v-model="probando" readonly>
+                <input class="inputpromohome" v-model="probando" readonly hidden>
                 <v-col v-for="(item, i) in items" :key="i" cols="12">
                     <v-card :color="'white'">
                         <div style="color: black;" class="d-flex flex-no-wrap justify-space-between">
@@ -123,7 +123,7 @@ export default {
                 // Castearlo o convertirlo depende de ti
                 //console.log("Tengo un valor: ",JSON.parse(valor));
                 try {
-                    if (((JSON.parse(localStorage.getItem(clave))).cantidad)) {
+                    if (((JSON.parse(localStorage.getItem(clave))).cantidad)) { //para evitar que entre 'user', veo si tiene 'cantidad'
                         console.log("En esa clave el valor es:", Number((JSON.parse(localStorage.getItem(clave))).cantidad))
                         this.getmanufacturados(clave, Number((JSON.parse(localStorage.getItem(clave))).cantidad))
                         carrovacio = false

@@ -26,121 +26,55 @@
           <v-card-text>
             <v-row>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="Nombre*"
-                  v-model="empleado.nombre"
-                  required
-                >
+                <v-text-field label="Nombre*" v-model="empleado.nombre" required>
                 </v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="Apellido*"
-                  type="text"
-                  v-model="empleado.apellido"
-                  hint="example of helper text only on focus"
-                  required
-                ></v-text-field>
+                <v-text-field label="Apellido*" type="text" v-model="empleado.apellido"
+                  hint="example of helper text only on focus" required></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field
-                  type="text"
-                  label="Username*"
-                  v-model="empleado.username"
-                  required
-                >
+                <v-text-field type="text" label="Username*" v-model="empleado.username" required>
                 </v-text-field>
               </v-col>
               <v-col class="d-flex" cols="12" sm="6">
-                <v-select
-                  :items="items"
-                  label="Rol"
-                  item-value="_id"
-                  item-text="name"
-                  v-model="empleado.roles._id"
-                ></v-select>
+                <v-select :items="items" label="Rol" item-value="_id" item-text="name"
+                  v-model="empleado.roles._id"></v-select>
               </v-col>
               <v-col cols="12">
-                <v-text-field
-                  label="email*"
-                  type="mail"
-                  v-model="empleado.email"
-                  required
-                >
+                <v-text-field label="email*" type="mail" v-model="empleado.email" required>
                 </v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field
-                  label="Contraseña*"
-                  v-model="empleado.password"
-                  type="password"
-                  required
-                >
+                <v-text-field label="Contraseña*" v-model="empleado.password" type="password" required>
                 </v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field
-                  label="Confirmar Contraseña*"
-                  v-model="empleado.password"
-                  type="password"
-                  required
-                >
+                <v-text-field label="Confirmar Contraseña*" v-model="empleado.password" type="password" required>
                 </v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field
-                  label="Teléfono*"
-                  v-model="empleado.telefono"
-                  type="Number"
-                  required
-                >
+                <v-text-field label="Teléfono*" v-model="empleado.telefono" type="Number" required>
                 </v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field
-                  label="Borrado*"
-                  v-model="empleado.borrado"
-                  required
-                >
+                <v-text-field label="Borrado*" v-model="empleado.borrado" required>
                 </v-text-field>
               </v-col>
               <v-col cols="12" sm="12">
-                <v-menu
-                  ref="menu"
-                  v-model="menu"
-                  :close-on-content-click="false"
-                  :return-value.sync="fechaNacimiento"
-                  transition="scale-transition"
-                  offset-y
-                  min-width="auto"
-                >
+                <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="fechaNacimiento"
+                  transition="scale-transition" offset-y min-width="auto">
                   <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      v-model="empleado.fechaNacimiento"
-                      label="Fecha de Nacimiento"
-                      prepend-icon="mdi-calendar"
-                      readonly
-                      v-bind="attrs"
-                      v-on="on"
-                      :rules="[(v) => !!v || 'Obligatorio']"
-                      required
-                    ></v-text-field>
+                    <v-text-field v-model="empleado.fechaNacimiento" label="Fecha de Nacimiento"
+                      prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" :rules="[(v) => !!v || 'Obligatorio']"
+                      required></v-text-field>
                   </template>
-                  <v-date-picker
-                    v-model="empleado.fechaNacimiento"
-                    no-title
-                    scrollable
-                    required
-                  >
+                  <v-date-picker v-model="empleado.fechaNacimiento" no-title scrollable required>
                     <v-spacer></v-spacer>
                     <v-btn text color="primary" @click="menu = false">
                       Salir
                     </v-btn>
-                    <v-btn
-                      text
-                      color="primary"
-                      @click="$refs.menu.save(fechaNacimiento)"
-                    >
+                    <v-btn text color="primary" @click="$refs.menu.save(fechaNacimiento)">
                       OK
                     </v-btn>
                   </v-date-picker>

@@ -12,7 +12,7 @@ const Address = mongoose.model(
     required: true
   },
   numero: {
-    type: Number,
+    type: String,
     required: true
   },
   localidad: {

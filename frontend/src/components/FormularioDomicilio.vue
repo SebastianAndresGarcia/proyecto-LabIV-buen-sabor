@@ -2,44 +2,49 @@
   <v-container>
     <form @submit.prevent="crearDomicilio">
       <!--RubroGeneral-->
-      <v-card-text>
-        <v-container>
+      <v-card>
+        <v-card-subtitle><b>Datos Nuevo Domicilio</b></v-card-subtitle>
+        <v-card-text>
+
           <v-col cols="12">
             <v-row>
-              <v-text-field label="calle" v-model="domicilio.calle" required>
-              </v-text-field>
+              <v-col cols="12" sm="10" md="10"> 
+                <v-text-field label="calle" v-model="domicilio.calle" required>
+                </v-text-field>
+              </v-col>
+              <v-col cols="12" sm="2" md="2">
+                <v-text-field label="numero" v-model="domicilio.numero" required>
+                </v-text-field>
+              </v-col>
             </v-row>
             <v-row>
-              <v-text-field label="Barrio" v-model="domicilio.barrio" required>
-              </v-text-field>
+              <v-col><v-text-field label="Barrio" v-model="domicilio.barrio" required>
+              </v-text-field></v-col>
             </v-row>
             <v-row>
-              <v-text-field label="numero" v-model="domicilio.numero" required>
-              </v-text-field>
-            </v-row>
-            <v-row>
-              <v-text-field label="localidad" v-model="domicilio.localidad" required>
-              </v-text-field>
+              <v-col><v-text-field label="localidad" v-model="domicilio.localidad" required>
+              </v-text-field></v-col>
             </v-row>
           </v-col>
-        </v-container>
-      </v-card-text>
-      <v-col cols="12">
-        <h4 style="color: red; text-align: center">{{ respuestaError }}</h4>
-      </v-col>
-      <v-divider class="mt-2"></v-divider>
 
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-container>
-          <v-row justify="center" style="margin-bottom: 20px">
+        </v-card-text>
+        <v-col cols="12">
+          <h4 style="color: red; text-align: center">{{ respuestaError }}</h4>
+        </v-col>
+        <v-divider class="mt-2"></v-divider>
+
+        <v-card-actions>
+
+
+          <v-row justify="center" style="margin-bottom: 2px">
             <v-btn color="blue darken-1" text type="submit"> Guardar </v-btn>
             <v-btn color="blue darken-1" text @click="cerrar()">
               Salir
             </v-btn>
           </v-row>
-        </v-container>
-      </v-card-actions>
+
+        </v-card-actions>
+      </v-card>
     </form>
   </v-container>
 </template>
@@ -47,17 +52,17 @@
 export default {
   data() {
     return {
-      domicilio: {calle:'',barrio:'',numero:'',localidad:'', userid:''},
+      domicilio: { calle: '', barrio: '', numero: '', localidad: '', userid: '' },
       userId: "",
       respuestaError: ''
     };
   },
-  mounted(){
+  mounted() {
     this.domicilio.userid = JSON.parse(localStorage.getItem("user")).id;
   },
-  methods:{
+  methods: {
     async crearDomicilio() {
- 
+
       let urlServer = "http://localhost:3000/crearDomicilio";
       let method = "POST";
 
@@ -78,12 +83,12 @@ export default {
 
         this.respuestaError = resJson
         console.log("mensaje del servidor: " + this.respuestaError)
-      }      
+      }
     },
-    async cerrar(){
-        this.$emit('nuevoDomicilio', false)
+    async cerrar() {
+      this.$emit('nuevoDomicilio', false)
     }
   },
-  
+
 };
 </script>

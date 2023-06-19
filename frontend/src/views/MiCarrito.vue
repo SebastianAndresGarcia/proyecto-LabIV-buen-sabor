@@ -8,7 +8,7 @@
         </v-row>
         <v-row v-if="items.length > 0">
             <v-col cols="8">
-                <input class="inputpromohome" v-model="probando" readonly />
+                <input class="inputpromohome" v-model="probando" readonly hidden />
                 <v-card outlined v-for="(item, i) in items" :key="i" cols="10" height="150px" width="100%" style="
             display: inline-block;
             margin-bottom: 2px;
@@ -89,12 +89,14 @@
                             <v-radio label="Delivery" value="delivery"></v-radio>
                         </v-radio-group>
                         <div v-if="radios == 'delivery'">
-                            <domicilioPedido @domicilioElegido="handleDlio"></domicilioPedido>
+
                             <v-row class="my-4 text-subtitle-1"><v-col cols="5"><b>Costo de Envío</b></v-col>
                                 <v-col style="text-align: right" cols="5"><b>$ 500</b></v-col></v-row>
                             <v-row class="my-4 text-subtitle-1">
                                 <v-col cols="5"><b>Total</b></v-col>
-                                <v-col style="text-align: right" cols="5"><b>$ {{ subtotal + 500 }}</b></v-col></v-row>
+                                <v-col style="text-align: right" cols="5"><b>$ {{ subtotal + 500 }}</b></v-col>
+                            </v-row>
+                            <domicilioPedido @domicilioElegido="handleDlio"></domicilioPedido>
                         </div>
                         <div v-if="radios == 'local'">
                             <v-row class="my-4 text-subtitle-1">
@@ -133,7 +135,7 @@ import {
 export default {
     data() {
         return {
-            
+
             estadoCompra: { dialog: false, estadoCompra: false },
             cerrarCarro: false,
             items: [],
@@ -170,14 +172,14 @@ export default {
     mounted() {
         this.getLocalStorage();
     },
-    beforeUpdate(){
-        (this.radios=='local')?this.pedido.domicilioid='':''
+    beforeUpdate() {
+        (this.radios == 'local') ? this.pedido.domicilioid = '' : ''
     },
     methods: {
         async handleDlio(value) {
-            if(value){
-                this.pedido.domicilioid=value
-                
+            if (value) {
+                this.pedido.domicilioid = value
+
             }
         },
         async getmanufacturados(id, cant) {

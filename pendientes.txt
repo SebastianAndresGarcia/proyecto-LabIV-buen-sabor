@@ -4,14 +4,12 @@ A CORREGIR/IMPLEMENTAR:
 
 *El "sobre nosotros" no redirije bien, se queda en el tope de la página.
 
-*Implementar que cuando el admin cancele un pedido, regrese los insumos.
-
 *Validar el horario de atención, lunes a viernes de 12.00 a 22.00, sab. y dom. de 11.00 a 15.00hs.
 
 *Generar los excel de RECAUDACIONES, GANANCIAS EN PERIODO DE TIEMPO. 
 
+*asignar horaEstimadaFin a los pedidos en cocina
 
-*implementar websockets para actualizar las bandeja de pedidos de cliente, cocinero, admin. Descartado Websockets, va a quedar con setInterval o setTimeOut
 Finalizada la carga del pedido el sistema le informara al cliente cuanto es el tiempo estimado para el retiro o entrega de su pedido, este tiempo surgirá de la siguiente formula:
 Σ Sumatoria del tiempo estimado de los artículos manufacturados solicitados por el cliente en el pedido actual
 +

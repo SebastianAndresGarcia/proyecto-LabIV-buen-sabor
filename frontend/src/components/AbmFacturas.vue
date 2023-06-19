@@ -47,7 +47,7 @@
               style="padding-top: 5px"
             >
               <td>
-                {{ factura.fecha }}
+                {{ getFechaFormateada(factura.fecha) }}
               </td>
               <td>
                 {{ factura.numero }}
@@ -83,6 +83,7 @@
 <script>
 import AuthService from "@/service/auth.service.js";
 import detallepedido from "@/components/DetallePedido.vue";
+import {horaFormateada} from "@/funciones/horaFormateada.js";
 export default {
   components: {
     "detalle-pedido": detallepedido,
@@ -101,6 +102,9 @@ export default {
     };
   },
   methods: {
+    getFechaFormateada(fecha){
+      return horaFormateada(fecha)
+    },
     async getFacturas() {
       const res = await fetch("http://localhost:3000/facturas", {
         headers: {

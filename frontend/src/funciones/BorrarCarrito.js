@@ -31,4 +31,13 @@ async function getmanufacturados(id, cant) {
     return true
 }
 
-export { borrarCarrito, getmanufacturados };
+async function borrarPedido(detallepedido){
+    detallepedido.forEach(async item => {
+        ('articulomanufacturadoid' in item)?await getmanufacturados(item.articulomanufacturadoid._id,item.cantidad)
+        :await getmanufacturados(item.articuloinsumoid._id,item.cantidad)
+    });
+
+    return true
+}
+
+export { borrarCarrito, getmanufacturados, borrarPedido };

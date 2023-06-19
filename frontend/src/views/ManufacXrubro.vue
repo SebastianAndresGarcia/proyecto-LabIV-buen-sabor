@@ -32,7 +32,7 @@ export default {
         async getmanufacturados(id) {
             if (id == 0) {
                 const res = await fetch(
-                    "http://localhost:3000/articulosmanufacturadosInsumos"
+                    "http://localhost:3000/articulosmanufacturadosInsumos" //se trae los manufacturados mas los articulos insumos(bebidas)
                 )
                 const resJson = await res.json();
                 //console.log(resJson);
@@ -40,15 +40,15 @@ export default {
             }
             else {
                 const res = await fetch(
-                    `http://localhost:3000/articulosmanufacturadosxrubro/${id}`
+                    `http://localhost:3000/articulosmanufacturadosxrubro/${id}` //busca en manufacturados 
                 )
                 const resJson = await res.json();
                 //console.log(resJson);
                 this.manufacturadosData = resJson;
             }
-            if (this.manufacturadosData.length == 0) {
+            if (this.manufacturadosData.length == 0) { 
                 const res = await fetch(
-                    `http://localhost:3000/insumosXrubro/${id}`
+                    `http://localhost:3000/insumosXrubro/${id}` //si no encontró nada anteriormente busca en los artículos insumos
                 )
                 const resJson = await res.json();
                 //console.log(resJson);

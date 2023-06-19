@@ -36,7 +36,7 @@ https://www.npmjs.com/package/jspdf
                         <tr v-for="(compra, index) in miscompras" :key="index" style="padding-top: 5px;">
 
                             <td>
-                                {{ compra.fecha }}
+                                {{ getFechaFormateada(compra.fecha) }}
                             </td>
                             <td>
                                 {{ compra.numero }}
@@ -67,9 +67,9 @@ https://www.npmjs.com/package/jspdf
                                     <div v-else>
                                         <b>En proceso...</b>
                                     </div>
-                            </div>
-                        </td>
-                        <!-- <div v-else-if="compra.estado == 'cancelado'">
+                                </div>
+                            </td>
+                            <!-- <div v-else-if="compra.estado == 'cancelado'">
                                 <td>
                                     Pedido Cancelado
                                 </td>
@@ -97,6 +97,7 @@ import { eventBus } from "../main";
 import { jsPDF } from "jspdf"
 import { autoTable } from "jspdf-autotable"
 import { borrarCarrito } from "@/funciones/BorrarCarrito.js"
+import { horaFormateada } from "@/funciones/horaFormateada.js"
 export default {
     data() {
         return {
@@ -120,6 +121,9 @@ export default {
         this.getParamsUrl(document.URL)
     },
     methods: {
+        getFechaFormateada(fecha) {
+            return horaFormateada(fecha)
+        },
         async comprasUsuario(id) {
             const res = await fetch(
                 `http://localhost:3000/pedidosxid/${id}/`,
@@ -173,10 +177,10 @@ export default {
                 method: method,
                 body: JSON.stringify({ estado: 'pendiente' }), //estado pendiente esperando que lo envíen a la cocina
                 headers: {
-                        "Content-type": "application/json",
-                        'x-access-token': this.currentUser.accessToken
-                    },
-                    mode: "cors",
+                    "Content-type": "application/json",
+                    'x-access-token': this.currentUser.accessToken
+                },
+                mode: "cors",
             });
             const resJson = await respuesta.json()
             console.log("respuestaSetPedido: ", resJson)
@@ -219,10 +223,10 @@ export default {
                     pedidoid: this.respuestaMercaPago.external_reference
                 }),
                 headers: {
-                        "Content-type": "application/json",
-                        'x-access-token': this.currentUser.accessToken
-                    },
-                    mode: "cors",
+                    "Content-type": "application/json",
+                    'x-access-token': this.currentUser.accessToken
+                },
+                mode: "cors",
             })
             const resJson = await respuesta.json()
             console.log("respuestaRegistrarPago: ", resJson)

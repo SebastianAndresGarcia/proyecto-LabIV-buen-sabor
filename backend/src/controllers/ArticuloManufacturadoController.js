@@ -76,27 +76,6 @@ exports.getArticulosManufacturadosInsumos = async (req, res) => {
     return res.json(manufacturados)
 }
 
-exports.getArticulosManufacturadosInsumos = async (req, res) => {
-    const manufacturados = await ArticuloManufacturado.find()   
-    .populate({
-        path: "detallearticulomanufacturadoid", // populate blogs
-        populate: {
-            path: "ArticuloInsumoid", // in blogs, populate comments
-            select: { denominacion: 1, stockActual: 1 }, //elijo solo los campos que quiero traer
-        }
-    })
-    const insumos = await ArticuloInsumo.find({esInsumo:false}).
-    populate({
-        path: "RubroArticuloid"
-    })
-    //console.log(insumos)
-    insumos.forEach(element => {
-        manufacturados.push(element)
-    });
-    if (!manufacturados)
-        return res.status(204).json();
-    return res.json(manufacturados)
-}
 
 exports.getArticulosManufacturadosxrubro = async (req, res) => {
     const busqueda = req.params.id;

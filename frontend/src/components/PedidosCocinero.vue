@@ -35,13 +35,13 @@
                 style="padding-top: 5px"
               >
                 <td>
-                  {{ pedido.fecha }}
+                  {{ getFechaFormateada(pedido.fecha) }}
                 </td>
                 <td>
                   {{ pedido.numero }}
                 </td>
                 <td>
-                  {{ pedido.horaEstimadaFin }}
+                  {{ getFechaFormateada(pedido.horaEstimadaFin) }}
                 </td>
                 <td>
                   <detalle-pedido :pedidoParam="pedido"></detalle-pedido>
@@ -72,7 +72,7 @@
 <script>
 import AuthService from "@/service/auth.service.js";
 import detallepedido from "@/components/DetallePedido.vue";
-
+import {horaFormateada} from "@/funciones/horaFormateada.js";
 export default {
   components: {
     "detalle-pedido": detallepedido,
@@ -92,6 +92,9 @@ export default {
   },
 
   methods: {
+    getFechaFormateada(fecha){
+      return horaFormateada(fecha)
+    },
     async getPedidos() {
       console.log("entró a getPedidos en Cocina");
       const res = await fetch(
