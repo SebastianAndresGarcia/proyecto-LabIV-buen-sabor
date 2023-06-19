@@ -1,4 +1,4 @@
-03/02/23
+18/06/23
 
 A CORREGIR/IMPLEMENTAR:
 
@@ -8,12 +8,17 @@ A CORREGIR/IMPLEMENTAR:
 
 *Validar el horario de atención, lunes a viernes de 12.00 a 22.00, sab. y dom. de 11.00 a 15.00hs.
 
-*Generar los excel de RECAUDACIONES, GANANCIAS EN PERIODO DE TIEMPO. Corregir el código, hay cosas repetidas entre los componentes de estadísticas, se pueden acortar y eliminar lineas innecesarias.
+*Generar los excel de RECAUDACIONES, GANANCIAS EN PERIODO DE TIEMPO. 
 
-*agregar dlio al elegir envío a domicilio.
 
-*implementar websockets para actualizar las bandeja de pedidos de cliente, cocinero, admin. Descartado Websockets,	 Va a quedar con setInterval o setTimeOut
-
+*implementar websockets para actualizar las bandeja de pedidos de cliente, cocinero, admin. Descartado Websockets, va a quedar con setInterval o setTimeOut
+Finalizada la carga del pedido el sistema le informara al cliente cuanto es el tiempo estimado para el retiro o entrega de su pedido, este tiempo surgirá de la siguiente formula:
+Σ Sumatoria del tiempo estimado de los artículos manufacturados solicitados por el cliente en el pedido actual
++
+Σ Sumatoria del tiempo estimado de los artículos manufacturados que se encuentran en la cocina / cantidad cocineros
++
+10 Minutos de entrega por Delivery, solo si corresponde.
+Las bajas de artículos, rubros, artículos manufacturados, pedidos, etc, deben ser bajas lógicas y no físicas, por ejemplo marcando las bajas con un campo fecha de baja.
 ________________________________________________________________________________________________________________________________________________________________________
 
 ""WARNINGs"":

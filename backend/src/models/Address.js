@@ -7,6 +7,10 @@ const Address = mongoose.model(
     type: String,
     required: true
   },
+  barrio: {
+    type: String,
+    required: true
+  },
   numero: {
     type: Number,
     required: true

@@ -1,5 +1,15 @@
 <template>
-  <v-container>
+  <v-expansion-panel>
+    <v-expansion-panel-header
+      style="height: 100px; background-color: greenyellow"
+    >
+      <template>
+        <v-row no-gutters>
+          <v-col cols="4"> RECAUDACIONES </v-col>
+        </v-row>
+      </template>
+    </v-expansion-panel-header>
+
     <v-expansion-panel-content>
       <v-divider class="mt-2"></v-divider>
       <v-row>
@@ -90,13 +100,11 @@
       >
         <h1>{{ ingresos }}</h1>
       </v-row>
-
-      <!-- ITEM RANKING -->
     </v-expansion-panel-content>
-  </v-container>
+  </v-expansion-panel>
 </template>
 <script>
-import AuthService from "@/service/auth.service.js";
+
 export default {
   data() {
     return {
@@ -108,10 +116,11 @@ export default {
       ingresos: null,
     };
   },
+  props:["user"],
   beforeMount() {
-    this.currentUser = AuthService.getCurrentUser();
+    this.currentUser = this.user;
   },
- 
+
   beforeUpdate() {
     if (this.fechaDesde && this.fechaHasta) {
       this.recaudaciones(this.fechaDesde, this.fechaHasta);

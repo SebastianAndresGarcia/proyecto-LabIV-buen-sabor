@@ -1,5 +1,13 @@
 <template>
-  <v-container>
+  <v-expansion-panel>
+    <v-expansion-panel-header style="height: 100px; background-color: aqua">
+      <template >
+        <v-row no-gutters>
+          <v-col cols="4"> GANANCIAS EN PERIODO DE TIEMPO </v-col>
+        </v-row>
+      </template>
+    </v-expansion-panel-header>
+
     <v-expansion-panel-content>
       <v-divider class="mt-2"></v-divider>
       <v-row>
@@ -77,11 +85,6 @@
             </v-date-picker>
           </v-menu>
         </v-col>
-        <!-- <v-col v-if="fechaDesde&&fechaHasta">
-                    <v-btn color="blue darken-1" @click="recaudaciones(fechaDesde,fechaHasta)">
-                            Buscar
-                    </v-btn>
-                </v-col> -->
       </v-row>
       <v-row
         align="center"
@@ -119,13 +122,11 @@
           </template>
         </v-simple-table>
       </v-row>
-
-      <!-- ITEM RANKING -->
     </v-expansion-panel-content>
-  </v-container>
+  </v-expansion-panel>
 </template>
 <script>
-import AuthService from "@/service/auth.service.js";
+
 export default {
   data() {
     return {
@@ -134,11 +135,12 @@ export default {
       fechaDesde: null,
       fechaHasta: null,
       gananciasxtiempo: { ventas: 0, costos: 0, balance: 0 },
-      currentUser: undefined
+      currentUser: undefined,
     };
   },
+  props:["user"],
   beforeMount() {
-    this.currentUser = AuthService.getCurrentUser();
+    this.currentUser = this.user;
   },
   beforeUpdate() {
     if (this.fechaDesde && this.fechaHasta) {

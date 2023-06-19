@@ -28,8 +28,8 @@ router.post("/api/auth/signin", controller.signin);
 router.post('/googlelogin', controllerGoogleLogin.googleLogin)
 
 router.get("/api/test/user", [authJwt.verifyToken], controllerUser.userBoard);
-router.post('/crearDomicilio', [authJwt.verifyToken],controllerDlio.createAddress)
-router.get('/usuarioDlios/:id',[authJwt.verifyToken], controllerDlio.getAddressbyuser);
+router.post('/crearDomicilio', controllerDlio.createAddress)
+router.get('/usuarioDlios/:id', controllerDlio.getAddressbyuser);
 
 router.post('/createRubroArticuloPadre', controllerRubroArticulo.createRubroArticuloPadre);
 //router.get('/getRubrosPadres', controllerRubroArticulo.getRubrosPadres);
