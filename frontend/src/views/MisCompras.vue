@@ -136,7 +136,7 @@ export default {
                 }
             );
             const resJson = await res.json();
-            console.log(resJson);
+            // console.log(resJson);
             if (res.status == 401) { //quiere decir que expiró el token o no está logueado
                 borrarCarrito() // ver cómo borrar el carrito antes que expire el token
                 AuthService.logout()
@@ -264,7 +264,7 @@ export default {
             var y = 10;
             doc.setLineWidth(2);
             doc.text("El Buen Sabor", doc.internal.pageSize.getWidth() / 2, 50, { align: 'center' });
-            let fechaFormateada = (new Date(compra.fecha)).toJSON().substr(0, 10)
+            let fechaFormateada = (this.getFechaFormateada(compra.fecha))
 
             doc.text(fechaFormateada, 10, 20)
             doc.autoTable({

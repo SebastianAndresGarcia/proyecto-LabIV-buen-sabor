@@ -77,6 +77,7 @@ router.get('/Roles', controllerRoles.getRoles)
 
 router.post('/crearPedido',[authJwt.verifyToken], controllerPedidos.createPedido)
 router.get('/Pedidos',[authJwt.verifyToken], controllerPedidos.getPedidos)
+router.get('/Pedidos/:estado',[authJwt.verifyToken], controllerPedidos.getPedidosxestado)
 router.get('/pedidosxid/:id',[authJwt.verifyToken], controllerPedidos.getPedidosxid) //todos los pedidos de un usuario
 router.get('/pedidoxid/:id', [authJwt.verifyToken], controllerPedidos.Pedidoxid) //un pedido por su id
 router.post('/actualizarPedido/:id', [authJwt.verifyToken], controllerPedidos.actualizarPedido)

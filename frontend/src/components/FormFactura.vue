@@ -178,9 +178,9 @@ export default {
                     `http://localhost:3000/facturaxid/${pedidoParam.facturaid}`,
                     {
                         headers: {
-                        "Content-type": "application/json",
-                        'x-access-token': this.currentUser.accessToken
-                    },
+                            "Content-type": "application/json",
+                            'x-access-token': this.currentUser.accessToken
+                        },
                     }
                 );
                 const resJson = await res.json();
@@ -192,9 +192,9 @@ export default {
                     `http://localhost:3000/pedidoxid/${pedidoParam.pedidoid}`,
                     {
                         headers: {
-                        "Content-type": "application/json",
-                        'x-access-token': this.currentUser.accessToken
-                    },
+                            "Content-type": "application/json",
+                            'x-access-token': this.currentUser.accessToken
+                        },
                     }
                 );
                 const resJson = await res.json();
@@ -215,16 +215,16 @@ export default {
             }
         },
         async cambiarEstado(pedido) {
-            
+
             let urlServer = "http://localhost:3000/actualizarPedido/" + pedido
             let method = "POST";
             const respuesta = await fetch(urlServer, {
                 method: method,
                 body: JSON.stringify({ estado: 'facturado' }),
                 headers: {
-                        "Content-type": "application/json",
-                        'x-access-token': this.currentUser.accessToken
-                    },
+                    "Content-type": "application/json",
+                    'x-access-token': this.currentUser.accessToken
+                },
                 mode: "cors",
             });
             const resJson = await respuesta.json()

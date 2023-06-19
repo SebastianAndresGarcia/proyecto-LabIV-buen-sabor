@@ -31,7 +31,7 @@
       <v-col cols="9">
         <v-card-text>
           <v-divider class="mt-2"></v-divider>
-          <p>{{ rubroSeleccionado }}</p>
+          <!-- <p>{{ rubroSeleccionado }}</p> -->
           <articulo-item
             :insumoParam="{
               insumoSeleccionado: rubroSeleccionado,

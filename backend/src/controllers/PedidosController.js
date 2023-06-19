@@ -79,6 +79,34 @@ exports.getPedidos = async (req, res) => {
         return res.json(pedidos)
 }
 
+exports.getPedidosxestado = async (req, res) => {
+    var array = [];
+    (req.params.estado=='pendientes')?array = ['terminado', 'pendiente', 'elaboracion']:
+    array.push(req.params.estado)
+    const pedidos = await Pedido.find({ estado: { $in: array } }).populate({
+        path: "detallepedidoid", 
+        populate: {
+            path: "articulomanufacturadoid", 
+            select: { denominacion: 1, _id: 1, imagen: 1 }, //elijo solo los campos que quiero traer
+        }
+        })  //acá hay dos populate con path iguales, xq depende si en la bd va a haber un manufact o un insumo
+        .populate({
+            path: "detallepedidoid", 
+            populate: {
+                path: "articuloinsumoid", 
+                select: { denominacion: 1, _id: 1 }, //elijo solo los campos que quiero traer
+            }
+        })
+        .populate({
+            path: "mercadopagodatosid",
+            select: { estado: 1 }
+        })
+            
+        if (!pedidos)
+            return res.status(204).json();
+        //console.log(pedidos);
+        return res.json(pedidos)
+}
 exports.getPedidosxid = async (req, res) => {
     const id = req.params.id
     const pedidos = await Pedido.find({ 'userid': id }).populate({

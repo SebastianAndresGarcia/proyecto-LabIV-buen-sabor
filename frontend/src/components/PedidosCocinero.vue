@@ -96,9 +96,9 @@ export default {
       return horaFormateada(fecha)
     },
     async getPedidos() {
-      console.log("entró a getPedidos en Cocina");
+
       const res = await fetch(
-        "http://localhost:3000/pedidoscocinero", //me traigo solo los pedidos que se encuentran en estado de 'elaboracion'
+        "http://localhost:3000/Pedidos/elaboracion", //me traigo solo los pedidos que se encuentran en estado de 'elaboracion'
         {
           headers: {
             "Content-type": "application/json",
@@ -140,7 +140,7 @@ export default {
         mode: "cors",
       });
       const resJson = await respuesta.json();
-      console.log("respuesta: ", resJson);
+      // console.log("respuesta: ", resJson);
       if (respuesta.status === 200) {
         console.log(respuesta.status);
       } else {

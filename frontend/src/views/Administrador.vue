@@ -11,24 +11,14 @@
         <v-menu v-if="currentUser" left bottom>
           <v-divider vertical></v-divider>
           <template v-slot:activator="{ on, attrs }">
-            <a
-              style="text-decoration: underline; color: aliceblue"
-              text
-              @click="cerrarSesion()"
-            >
+            <a style="text-decoration: underline; color: aliceblue" text @click="cerrarSesion()">
               <h4>Cerrar Sesión</h4>
             </a>
           </template>
         </v-menu>
 
         <template v-slot:extension>
-          <v-tabs
-            v-model="tab"
-            background-color="black"
-            centered
-            dark
-            icons-and-text
-          >
+          <v-tabs v-model="tab" background-color="black" centered dark icons-and-text>
             <v-tabs-slider></v-tabs-slider>
 
             <v-tab v-for="item in items" :key="item.tab">
@@ -38,29 +28,16 @@
           </v-tabs>
         </template>
       </v-app-bar>
-      <v-navigation-drawer
-        left
-        height="100vh"
-        class="app"
-        v-model="drawer"
-        app
-        temporary
-      >
+      <v-navigation-drawer left height="100vh" class="app" v-model="drawer" app temporary>
         <v-list v-if="currentUser == undefined" nav dense>
-          <v-list-item-group
-            v-model="group"
-            active-class="deep-purple--text text--accent-4"
-          >
-            <v-row
-              style="
+          <v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
+            <v-row style="
                 justify-content: flex-end;
                 margin-top: 10%;
                 margin-bottom: 10%;
-              "
-            >
-              <v-btn outlined color="white" @click="drawer = false"
-                ><v-icon medium color="black">mdi-close</v-icon></v-btn
-              >
+              ">
+              <v-btn outlined color="white" @click="drawer = false"><v-icon medium
+                  color="black">mdi-close</v-icon></v-btn>
             </v-row>
             <v-list-item style="margin-bottom: 10%">
               <login-item></login-item>
@@ -72,23 +49,18 @@
         </v-list>
 
         <v-card v-else height="100%">
-          <v-card-title
-            style="color: black; justify-content: center; padding-top: 20%"
-            >Bienvenido {{ currentUser.username }}</v-card-title
-          >
+          <v-card-title style="color: black; justify-content: center; padding-top: 20%">Bienvenido {{ currentUser.username
+          }}</v-card-title>
           <v-list-item-group>
             <v-list-item>Mi Perfil</v-list-item>
           </v-list-item-group>
           <v-card-subtitle>
-            <v-row
-              style="
+            <v-row style="
                 text-decoration: underline;
                 color: black;
                 justify-content: center;
                 margin-top: 30%;
-              "
-              class="mx-0"
-            >
+              " class="mx-0">
               <a @click="cerrarSesion()">
                 <h3>Cerrar Sesión</h3>
               </a>
@@ -125,7 +97,7 @@ export default {
         "Pedidos",
         "Empleados",
         "Comidas",
-        "Insumos",
+        "Articulos_Insumos",
         "Ingredientes",
         "Facturas",
         "Cocina",
@@ -141,7 +113,7 @@ export default {
     Empleados: abmEmpleados,
     Pedidos: abmPedidos,
     Facturas: abmFacturas,
-    Insumos: abmArticulosInsumos,
+    Articulos_Insumos: abmArticulosInsumos,
     Comidas: abmManufacturados,
     Ingredientes: abmInsumos,
     Estadisticas: estadisticas,
@@ -152,7 +124,7 @@ export default {
     this.currentUser = AuthService.getCurrentUser();
     this.verificarUsuario(this.currentUser);
   },
-  beforeUpdate() {},
+  beforeUpdate() { },
   methods: {
     async verificarUsuario(currentUser) {
       if (currentUser) {
@@ -172,7 +144,7 @@ export default {
 };
 </script>
     
-    <style>
+<style>
 .v-tabs__slider-wrapper {
   justify-content: center !important;
 }

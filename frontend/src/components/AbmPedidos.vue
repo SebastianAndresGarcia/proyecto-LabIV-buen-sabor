@@ -1,20 +1,18 @@
 <template>
   <v-container v-if="currentUser.roles.includes('ROLE_ADMIN')">
     <v-card style="margin-top: 10px; justify: center">
-      <v-row style="justify-content: center"><v-card-title>
+      <!-- <v-row style="justify-content: center"><v-card-title>
           <h2><b>Pedidos</b></h2>
         </v-card-title>
+      </v-row> -->
+      <v-row>
+        <v-col cols="10">
+          <v-select outlined v-model="select" :items="items" item-text="state" item-value="value"
+            @change="handleSelectChange"></v-select>
+        </v-col>
       </v-row>
       <div v-if="pedidosData.length > 0">
-        <v-row align="center">
-          <v-col cols="2">
-            <v-subheader> Ver </v-subheader>
-          </v-col>
 
-          <v-col cols="10">
-            <v-select v-model="select" :items="items" item-text="state" item-value="state"></v-select>
-          </v-col>
-        </v-row>
         <v-simple-table class="tabla">
           <template v-slot:default>
             <thead>
@@ -61,16 +59,15 @@
                 </td>
                 <td>
                   {{ pedido.estado }}
-                  
+
                 </td>
                 <td>
-                  <div v-if="pedido.estado === 'pendiente'">
-                    <v-row style="justify-content: center">
-                      <v-btn style="margin-right: 2px" small color="success" @click="cambiarEstado(pedido, 'elaboracion')">Enviar a
-                        Cocina</v-btn>
-                      <v-btn small color="red" @click="confirmarCancelarPedido(pedido)">Cancelar Pedido</v-btn>
-                    </v-row>
-                  </div>
+                  <v-row v-if="pedido.estado === 'pendiente'" style="justify-content: center; margin: 3px">
+                    <v-btn style="margin: 3px" small color="success" @click="cambiarEstado(pedido, 'elaboracion')">Enviar
+                      a
+                      Cocina</v-btn>
+                    <v-btn style="margin: 3px" small color="red" @click="confirmarCancelarPedido(pedido)">Cancelar</v-btn>
+                  </v-row>
                   <div v-else-if="pedido.estado === 'terminado' ||
                     pedido.estado === 'facturado'
                     ">
@@ -92,9 +89,7 @@
           </template>
         </v-simple-table>
       </div>
-      <div v-else>
-        <v-card-subtitle><b>No tienes Pedidos aún</b></v-card-subtitle>
-      </div>
+      <v-card-subtitle v-else><b>No hay pedidos con este filtro</b></v-card-subtitle>
     </v-card>
     <!-- <v-dialog v-model="dialog" scrollable max-width="50%">
       <v-card>
@@ -129,8 +124,8 @@
 import AuthService from "@/service/auth.service.js";
 import detallepedido from "@/components/DetallePedido.vue";
 import formfactura from "@/components/FormFactura.vue";
-import {horaFormateada} from "@/funciones/horaFormateada.js";
-import {borrarPedido} from "@/funciones/BorrarCarrito.js";
+import { horaFormateada } from "@/funciones/horaFormateada.js";
+import { borrarPedido } from "@/funciones/BorrarCarrito.js";
 export default {
   components: {
     "detalle-pedido": detallepedido,
@@ -141,21 +136,21 @@ export default {
   },
   mounted() {
     this.verificarUsuario(this.currentUser);
-    this.getPedidos();
+    this.handleSelectChange();
   },
   data() {
     return {
       dialog: false,
       currentUser: undefined,
       pedidosData: [],
-      select: "Pendiente",
+      select: "pendientes",
       items: [
-        { state: "Ver Todo" },
-        { state: "Pendiente" },
-        { state: "En preparación" },
-        { state: "Terminado" },
-        { state: "Facturado" },
-        { state: "Cancelado" },
+        { state: "Ver Todos", value: 'todos' },
+        { state: "Pedidos Pendientes / Sin Facturar / En la cocina", value: 'pendientes' },
+        { state: "En Elaboración", value: 'elaboracion' },
+        { state: "Pedidos Terminados sin facturar", value: 'terminado' },
+        { state: "Pedidos Facturados", value: 'facturado' },
+        { state: "Pedidos Cancelados", value: 'cancelado' },
       ],
     };
   },
@@ -166,6 +161,9 @@ export default {
         this.cambiarEstado(pedido, 'cancelado');
         borrarPedido(pedido.detallepedidoid) //lo uso para devolver al stock los insumos del pedido cancelado
       }
+    },
+    handleSelectChange() {
+      this.select == "todos" ? this.getPedidos() : this.getPedidosxestado()
     },
     async getPedidos() {
       const res = await fetch("http://localhost:3000/pedidos", {
@@ -181,7 +179,26 @@ export default {
         window.location.href = "/Home";
       }
       const resJson = await res.json();
-      console.log("resJson", resJson);
+      // console.log("resJson", resJson);
+      this.pedidosData = resJson;
+
+      //setTimeout(() => this.getPedidos(), 10000) //milisegundos, va repitiendo la llamada cada 10 seg
+    },
+    async getPedidosxestado() {
+      const res = await fetch("http://localhost:3000/Pedidos/" + this.select, {
+        headers: {
+          "Content-type": "application/json",
+          "x-access-token": this.currentUser.accessToken,
+        },
+        mode: "cors",
+      });
+      if (res.status == 401) {
+        //quiere decir que expiró el token o no está logueado
+        AuthService.logout();
+        window.location.href = "/Home";
+      }
+      const resJson = await res.json();
+      // console.log("resJson", resJson);
       this.pedidosData = resJson;
 
       //setTimeout(() => this.getPedidos(), 10000) //milisegundos, va repitiendo la llamada cada 10 seg
@@ -211,13 +228,13 @@ export default {
       const resJson = await respuesta.json();
       console.log("respuesta: ", resJson);
       if (respuesta.status === 200) {
-        console.log(respuesta.status);
+        // console.log(respuesta.status);
       } else {
         this.respuestaError = resJson.message;
         console.log("mensaje del servidor: " + this.respuestaError);
       }
     },
-     getFechaFormateada(fecha){
+    getFechaFormateada(fecha) {
       return horaFormateada(fecha)
     },
   },
