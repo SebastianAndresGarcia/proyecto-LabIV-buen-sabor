@@ -12,7 +12,10 @@ A CORREGIR/IMPLEMENTAR:
 
 *formfactura ver que hacer con campo MontoDescuento y NroTarjeta
 *ver cdo quiero modificar factura el campo fecha que no modifica la fecha de factura del cliente, deja la primera. Igual debería no modificarse si ya le mandé la factura.
-
+*activar los setinterval o settimeout en las bandejas de pedidos, descargar las imágenes de las comidas/bebidas y modificar cómo se agregan en los formularios.
+*compartir las fciones de carrito/compras etc que puedan estar repetidas.
+*crear modelos objetos pedidos, factura, persona, etc.
+*ver rutas api que puedan borrarse.
 Finalizada la carga del pedido el sistema le informara al cliente cuanto es el tiempo estimado para el retiro o entrega de su pedido, este tiempo surgirá de la siguiente formula:
 Σ Sumatoria del tiempo estimado de los artículos manufacturados solicitados por el cliente en el pedido actual
 +

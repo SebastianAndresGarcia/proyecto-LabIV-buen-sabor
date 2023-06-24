@@ -69,16 +69,7 @@ https://www.npmjs.com/package/jspdf
                                     </div>
                                 </div>
                             </td>
-                            <!-- <div v-else-if="compra.estado == 'cancelado'">
-                                <td>
-                                    Pedido Cancelado
-                                </td>
-                            </div>
-                            <div v-else>
-                                <td>
-                                            <b>En proceso...</b>
-                                        </td>
-                                    </div> -->
+                           
                         </tr>
                     </tbody>
                 </template>
@@ -113,8 +104,7 @@ export default {
         "detalle-pedido": detallePedido
     },
     mounted() {
-        //this.comprasUsuario((JSON.parse(localStorage.getItem('user'))).id)
-        //this.getParamsUrl(document.URL)
+        
     },
     beforeMount() {
         this.currentUser = AuthService.getCurrentUser()
@@ -136,7 +126,6 @@ export default {
                 }
             );
             const resJson = await res.json();
-            // console.log(resJson);
             if (res.status == 401) { //quiere decir que expiró el token o no está logueado
                 borrarCarrito() // ver cómo borrar el carrito antes que expire el token
                 AuthService.logout()
@@ -156,13 +145,7 @@ export default {
                 this.respuestaMercaPago[key] = value
             }
             console.log(this.respuestaMercaPago)
-            // for (const [key, value] of urlParams2) {
-            //     console.log(key, ':', value);
-            // }
             if (this.respuestaMercaPago.status) {
-                // if(this.respuestaMercaPago.status=="approved"){
-                //     this.limpiarCarrito()
-                // }
                 await this.setPedido(this.respuestaMercaPago.external_reference,
                     this.respuestaMercaPago.status)
             } else {
@@ -214,11 +197,8 @@ export default {
                 method: method,
                 body: JSON.stringify({
                     identificadorPago: this.respuestaMercaPago.payment_id,
-                    // fechaCreacion: this.respuestaMercaPago,
-                    // fechaAprobacion: ,
                     formaPago: this.respuestaMercaPago.payment_type,
                     metodoPago: this.respuestaMercaPago.payment_type,
-                    //nroTarjeta: ,
                     estado: this.respuestaMercaPago.status,
                     pedidoid: this.respuestaMercaPago.external_reference
                 }),
@@ -265,7 +245,6 @@ export default {
             doc.setLineWidth(2);
             doc.text("El Buen Sabor", doc.internal.pageSize.getWidth() / 2, 50, { align: 'center' });
             let fechaFormateada = (this.getFechaFormateada(compra.fecha))
-
             doc.text(fechaFormateada, 10, 20)
             doc.autoTable({
                 body: body,
@@ -286,7 +265,6 @@ export default {
                     4: { halign: 'right', cellWidth: '50', }
                 },
             })
-
             // save the data to this file
             doc.save('auto_table_header_footer');
         }

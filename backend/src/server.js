@@ -6,7 +6,6 @@ const dbConfig = require("./config/db.config")
 
 const app = express();
 
-
 var corsOptions = {
   origin: "http://localhost:8080",
   optionsSuccessStatus: 200
@@ -15,10 +14,8 @@ var corsOptions = {
 
 app.use(cors(corsOptions));
 
-// parse requests of content-type - application/json
 app.use(express.json());
 
-// parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
 const db = require("./models");
@@ -39,7 +36,6 @@ db.mongoose
     process.exit();
   });
 
-// simple route
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to BuenSabor application." });
 });
@@ -54,7 +50,6 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
 
-
 function initial() {
   Role.estimatedDocumentCount((err, count) => {
     if (!err && count === 0) {
@@ -64,7 +59,6 @@ function initial() {
         if (err) {
           console.log("error", err);
         }
-
         console.log("added 'user' to roles collection");
       });
 
@@ -74,7 +68,6 @@ function initial() {
         if (err) {
           console.log("error", err);
         }
-
         console.log("added 'employee' to roles collection");
       });
 
@@ -84,7 +77,6 @@ function initial() {
         if (err) {
           console.log("error", err);
         }
-
         console.log("added 'admin' to roles collection");
       });
     }

@@ -30,7 +30,7 @@
                                 <div v-if="item.descuento > 0">
                                     <del>${{ item.precioVenta }}</del>&nbsp-&nbsp$<b>{{
                                         item.precioVenta - (item.precioVenta * item.descuento) / 100
-                                    }}</b>
+                                    }}</b> <!--del sirve para tachar el texto, los &nbsp para agregar espacios en blanco-->
                                 </div>
                                 <div v-else>${{ item.precioVenta }}</div>
                             </v-row>
