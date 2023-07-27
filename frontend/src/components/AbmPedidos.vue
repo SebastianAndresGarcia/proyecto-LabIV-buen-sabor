@@ -203,7 +203,7 @@ export default {
       const resJson = await res.json();
       // console.log("resJson", resJson);
       this.pedidosData = resJson;
-      //setTimeout(() => this.getPedidos(), 10000) //milisegundos, va repitiendo la llamada cada 10 seg
+      setTimeout(() => this.getPedidos(), 10000) //milisegundos, va repitiendo la llamada cada 10 seg
     },
     async verificarUsuario(currentUser) {
       if (currentUser) {

@@ -155,7 +155,7 @@ export default {
                 'stockMinimo': null,
                 'unidadMedida': "",
                 'esInsumo': false,
-                'RubroArticuloid': this.idrubroarticulo
+                'RubroArticuloid': this.articuloParam.idrubroarticulo
             })
         },
         async crearInsumo() { //también cumple la función de actualizar según el props activo
@@ -163,7 +163,7 @@ export default {
             console.log("entró");
 
             console.log(this.insumo);
-            if (this.idrubroarticulo) {
+            if (this.articuloParam.idrubroarticulo) {
                 let urlServer = "http://localhost:3000/crearArticuloInsumo";
                 let method = "POST";
                 const respuesta = await fetch(urlServer, {
