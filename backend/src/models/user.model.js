@@ -37,7 +37,7 @@ const User = mongoose.model(
     pedidosid: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Pedidos"
+        ref: "Pedido"
       }
     ],
     roles: [

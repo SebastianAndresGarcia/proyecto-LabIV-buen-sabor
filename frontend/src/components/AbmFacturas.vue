@@ -18,6 +18,9 @@
                 <b>Factura N°</b>
               </th>
               <th class="text-left">
+                <b>Pedido N°</b>
+              </th>
+              <th class="text-left">
                 <b>montoDescuento</b>
               </th>
               <th class="text-left">
@@ -51,6 +54,9 @@
               </td>
               <td>
                 {{ factura.numero }}
+              </td>
+              <td>
+                {{ factura.pedidoid.numero }}
               </td>
               <td>
                 {{ factura.montoDescuento }}

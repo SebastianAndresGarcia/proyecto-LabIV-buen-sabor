@@ -73,6 +73,7 @@ router.post('/ActualizarInsumoxid/:id',[authJwt.verifyToken], controllerArticulo
 router.delete('/EliminarInsumo/:id',[authJwt.verifyToken], controllerArticuloInsumo.deleteArticuloInsumo)
 
 router.get('/empleados',[authJwt.verifyToken], controllerUser.getEmpleados)
+router.post('/bajaEmpleado/:id',[authJwt.verifyToken], controllerUser.bajaEmpleado)
 router.post('/ActualizarUsuario',[authJwt.verifyToken], controllerUser.updateUser)
 
 router.get('/Roles', controllerRoles.getRoles)

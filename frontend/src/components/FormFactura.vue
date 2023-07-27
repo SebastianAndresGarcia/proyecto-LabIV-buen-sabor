@@ -105,10 +105,7 @@ export default {
     methods: {
         async crearFactura() { //también cumple la función de actualizar según el props activo
             this.factura.pedidoid = this.pedidoParam.pedidoid
-
             this.nuevaFactura = false
-            // console.log("entró");
-            // console.log(this.factura);
             if (this.pedidoParam.facturaid) {
                 let urlServer = "http://localhost:3000/actualizarFactura/" + this.pedidoParam.facturaid;
                 let method = "POST";
@@ -122,15 +119,14 @@ export default {
                     mode: "cors",
                 });
                 const resJson = await respuesta.json()
-                // console.log("respuesta: ", resJson)
                 if (respuesta.status === 200) {
                     console.log(respuesta.status)
                     this.dialog = false;
                     this.nuevaFactura = true
                     this.cambiarEstado(this.pedidoParam.pedidoid)
+                    this.$emit('nuevaFactura',true)
                 } else {
                     this.respuestaError = resJson.message
-                    // console.log("mensaje del servidor: " + this.respuestaError)
                 }
             } else {
                 let urlServer = "http://localhost:3000/crearFactura";
@@ -151,6 +147,7 @@ export default {
                     this.dialog = false;
                     this.nuevaFactura = true
                     this.cambiarEstado(this.pedidoParam.pedidoid)
+                    this.$emit('nuevaFactura',true)
                 } else {
                     this.respuestaError = resJson.message
                     console.log("mensaje del servidor: " + this.respuestaError)

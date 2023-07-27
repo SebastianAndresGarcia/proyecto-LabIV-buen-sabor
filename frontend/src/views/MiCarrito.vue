@@ -125,6 +125,7 @@
     </v-container>
 </template>
 <script>
+import AuthService from "@/service/auth.service.js"
 import { eventBus } from "../main";
 import domicilioPedido from "@/components/DomicilioPedido.vue";
 import {
@@ -169,7 +170,8 @@ export default {
     components: {
         domicilioPedido,
     },
-    mounted() {
+    beforeMount() {
+        this.currentUser = AuthService.getCurrentUser()
         this.getLocalStorage();
     },
     beforeUpdate() {
@@ -319,6 +321,7 @@ export default {
                 body: JSON.stringify(this.pedido),
                 headers: {
                     "Content-type": "application/json",
+                    "x-access-token": this.currentUser.accessToken,
                 },
                 mode: "cors",
             });
@@ -352,8 +355,9 @@ export default {
                     "Content-type": "application/json",
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Methods":
-                        "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+                    "GET, POST, PATCH, PUT, DELETE, OPTIONS",
                     "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token",
+                    "x-access-token": this.currentUser.accessToken,
                 },
                 mode: "cors",
             });

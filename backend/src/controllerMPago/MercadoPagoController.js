@@ -6,7 +6,7 @@ mercadopago.configure({
     access_token: "TEST-7688520916959333-011315-ac6aa89652cb4ae1e81a0383af5df4ab-257082384",
 });
 exports.checkout = async (req, res) => {
-    console.log("req.body", req.body)
+    console.log("req.body mercapago", req.body)
     let preference = {
         items: [
             {

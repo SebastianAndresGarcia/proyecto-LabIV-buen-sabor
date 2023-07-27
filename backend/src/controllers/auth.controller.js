@@ -97,7 +97,7 @@ exports.signin = (req, res) => {
       var expire = 86400
       //console.log("user.roles", user.roles)
       if(user.roles[0].name=='user'){
-        expire=60
+        expire=900
       }
       var token = jwt.sign({ id: user._id }, config.secret, {
         expiresIn: expire // 24 hours = (86400)

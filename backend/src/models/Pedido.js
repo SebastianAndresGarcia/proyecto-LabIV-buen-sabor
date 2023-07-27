@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const Pedidos = mongoose.model(
-    "Pedidos",
+const Pedido = mongoose.model(
+    "Pedido",
     new mongoose.Schema({
 
         fecha: {
@@ -52,4 +52,4 @@ const Pedidos = mongoose.model(
         timestamps: true  //va a crear los campos createdAt y updatedAt
     }))
 
-module.exports = Pedidos
+module.exports = Pedido

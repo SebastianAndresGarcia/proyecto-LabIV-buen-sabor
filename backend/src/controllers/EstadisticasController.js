@@ -16,7 +16,7 @@ exports.manufacturadosVendidos = async (req, res) => {
     //SE SETEAN TODAS LAS HORAS EN 0 ASI PODEMOS COMPARAR LAS FECHAS SIN PREOCUPARNOS DE LA HORA
     //dateDesde.setHours(0,0,0,0)
     const dateHasta = new Date(fechaHasta)
-    dateHasta.setTime(dateHasta.getTime() + (1000 * 60 * 60 * 23)) //hasta las 23hs
+    dateHasta.setDate(dateHasta.getDate() + 1);
 
     console.log("dateDesde ", dateDesde)
     console.log("dateHasta ", dateHasta)
@@ -33,11 +33,12 @@ exports.manufacturadosVendidos = async (req, res) => {
         for (let i = 0; i < factura.detallefacturaid.length; i++) {
             if (factura.detallefacturaid[i].articulomanufacturadoid) { //Solo se tomaran en cuenta para el ranking articulos manufacturados
                 let comida = factura.detallefacturaid[i].articulomanufacturadoid.denominacion
-                console.log("comida " + comida)
+                console.log("comida " ,factura.detallefacturaid[i].articulomanufacturadoid)
+                console.log("cantidad " ,factura.detallefacturaid[i].cantidad)
                 let articuloEncontrado = false
                 for (let j = 0; j < rankingComidas.length; j++) { //Buscamos en el ranking si la comida ya fue agregada
                     if (rankingComidas[j].comida === comida) {
-                        rankingComidas[j].cantidad += factura.detallefacturaid[i].cantidad
+                        rankingComidas[j].cantidadPedida += factura.detallefacturaid[i].cantidad
                         articuloEncontrado = true
                         break
                     }
@@ -72,7 +73,7 @@ exports.pedidosXcliente = async (req, res) => {
     let rankingCliente = []
     const usuarios = await User.find({ "pedidosid.0": { "$exists": true } }).populate({
         path: "pedidosid",
-        match: { "estado": "terminado" },
+        match: { "estado": "facturado" },
         select: { numero: 1, total: 1, fecha: 1 }
     })
 
@@ -112,8 +113,7 @@ exports.ganancias = async (req, res) => {
     //SE SETEAN TODAS LAS HORAS EN 0 ASI PODEMOS COMPARAR LAS FECHAS SIN PREOCUPARNOS DE LA HORA
     dateDesde.setHours(0, 0, 0, 0)
     const dateHasta = new Date(fechaHasta)
-    dateHasta.setTime(dateHasta.getTime() + (1000 * 60 * 60 * 24))
-    dateHasta.setHours(0, 0, 0, 0)
+    dateHasta.setDate(dateHasta.getDate() + 1);
     let ventas = 0
     let costos = 0
     const facturas = await Factura.find({ "fecha": { $gte: dateDesde, $lte: dateHasta } }).populate({
@@ -123,6 +123,7 @@ exports.ganancias = async (req, res) => {
             select: { denominacion: 1, _id: 1, precioCompra: 1, imagen: 1 }, //elijo solo los campos que quiero traer
         }
     })
+    console.log(facturas)
     for (let i = 0; i < facturas.length; i++) {
         ventas = ventas + facturas[i].totalVenta
         costos = costos + facturas[i].totalCosto
@@ -142,8 +143,9 @@ exports.recaudaciones = async (req, res) => {
     //SE SETEAN TODAS LAS HORAS EN 0 ASI PODEMOS COMPARAR LAS FECHAS SIN PREOCUPARNOS DE LA HORA
     dateDesde.setHours(0, 0, 0, 0)
     const dateHasta = new Date(fechaHasta)
-    dateHasta.setTime(dateHasta.getTime() + (1000 * 60 * 60 * 24))
-    dateHasta.setHours(0, 0, 0, 0)
+    console.log(dateHasta)
+    dateHasta.setDate(dateHasta.getDate() + 1);
+    console.log(dateHasta)
     let ventas = 0
     const facturas = await Factura.find({ "fecha": { $gte: dateDesde, $lte: dateHasta } }).populate({
         path: "detallefacturaid", // populate blogs

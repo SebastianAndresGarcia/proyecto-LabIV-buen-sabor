@@ -6,10 +6,10 @@ const ArticuloManufacturado = require('../models/ArticuloManufacturado')
 
 exports.createFactura = async (req, res) => {
     const ultimoFactura = await Factura.find().limit(1).sort({ $natural: -1 })
-    let num=0
+    let num = 0
     console.log(req.body)
-    if(ultimoFactura.length>0){
-         num=ultimoFactura[0].numero
+    if (ultimoFactura.length > 0) {
+        num = ultimoFactura[0].numero
     }
     const factura = new Factura({
         fecha: req.body.fecha,
@@ -30,18 +30,20 @@ exports.createFactura = async (req, res) => {
     console.log(detalles)
     try {
         let tipoArticulo = ""
-        let articuloid= ""
+        let articuloid = ""
         const savedFactura = await factura.save()
-        const updatePedido = await Pedido.findByIdAndUpdate(savedFactura.pedidoid, {facturaid: savedFactura._id})
+        const updatePedido = await Pedido.findByIdAndUpdate(savedFactura.pedidoid, { facturaid: savedFactura._id })
         for (let i = 0; i < detalles.length; i++) {
             console.log("entró al for " + detalles[i])
             //const ArticuloFound = await ArticuloManufacturado.findOne({ _id: detalles[i].articulomanufacturadoid._id })
-            if (detalles[i].articulomanufacturadoid) 
-                { tipoArticulo = "articulomanufacturadoid"
-                articuloid=detalles[i].articulomanufacturadoid._id }
-            else 
-                { tipoArticulo = "articuloinsumoid" 
-                articuloid=detalles[i].articuloinsumoid._id}
+            if (detalles[i].articulomanufacturadoid) {
+                tipoArticulo = "articulomanufacturadoid"
+                articuloid = detalles[i].articulomanufacturadoid._id
+            }
+            else {
+                tipoArticulo = "articuloinsumoid"
+                articuloid = detalles[i].articuloinsumoid._id
+            }
             console.log("tipoArticulo" + tipoArticulo)
             const detalleFactura = new DetalleFactura({ "cantidad": detalles[i].cantidad, "subtotal": detalles[i].subtotal, [tipoArticulo]: articuloid, "facturaid": savedFactura._id })
             const savedDetalle = await detalleFactura.save()
@@ -58,19 +60,24 @@ exports.createFactura = async (req, res) => {
 }
 
 exports.getFacturas = async (req, res) => {
-    const facturas = await Factura.find().populate({
-        path: "detallefacturaid", // populate blogs
-        populate: {
-            path: "articulomanufacturadoid", // in blogs, populate comments
-            select: { denominacion: 1, _id: 1, precioCompra: 1, imagen: 1 }, //elijo solo los campos que quiero traer
-        }
-    })
+    const facturas = await Factura.find()
+        .populate({
+            path: "detallefacturaid", // populate blogs
+            populate: {
+                path: "articulomanufacturadoid", // in blogs, populate comments
+                select: { denominacion: 1, _id: 1, precioCompra: 1, imagen: 1 }, //elijo solo los campos que quiero traer
+            }
+        })
         .populate({
             path: "detallefacturaid", // populate blogs
             populate: {
                 path: "articuloinsumoid", // in blogs, populate comments
-                select: { denominacion: 1, _id: 1, precioCompra: 1 , imagen: 1}, //elijo solo los campos que quiero traer
+                select: { denominacion: 1, _id: 1, precioCompra: 1, imagen: 1 }, //elijo solo los campos que quiero traer
             }
+        })
+        .populate({
+            path: "pedidoid",
+            select: { _id: 1, numero: 1 }
         })
     if (!facturas)
         return res.status(204).json();
@@ -79,18 +86,18 @@ exports.getFacturas = async (req, res) => {
 
 exports.getFacturasxid = async (req, res) => {
     const id = req.params.id
-    const facturas = await Factura.find({'_id':id}).populate({
+    const facturas = await Factura.find({ '_id': id }).populate({
         path: "detallepedidoid", // populate blogs
         populate: {
             path: "articulomanufacturadoid", // in blogs, populate comments
-            select: { denominacion: 1, _id: 1, precioCompra: 1, precioVenta:1 }, //elijo solo los campos que quiero traer
+            select: { denominacion: 1, _id: 1, precioCompra: 1, precioVenta: 1 }, //elijo solo los campos que quiero traer
         }
     })
         .populate({
             path: "detallepedidoid", // populate blogs
             populate: {
                 path: "articuloinsumoid", // in blogs, populate comments
-                select: { denominacion: 1, _id: 1, precioCompra: 1, precioVenta:1 }, //elijo solo los campos que quiero traer
+                select: { denominacion: 1, _id: 1, precioCompra: 1, precioVenta: 1 }, //elijo solo los campos que quiero traer
             }
         })
     if (!facturas)
@@ -106,18 +113,18 @@ exports.actualizarFactura = async (req, res) => {
 
 exports.Facturaxid = async (req, res) => {
     const id = req.params.id
-    const pedidos = await Factura.findById({_id:id}).populate({
+    const pedidos = await Factura.findById({ _id: id }).populate({
         path: "detallefacturaid", // populate blogs
         populate: {
             path: "articulomanufacturadoid", // in blogs, populate comments
-            select: { denominacion: 1, _id: 1, precioCompra: 1, precioVenta:1 }, //elijo solo los campos que quiero traer
+            select: { denominacion: 1, _id: 1, precioCompra: 1, precioVenta: 1 }, //elijo solo los campos que quiero traer
         }
     })
         .populate({
             path: "detallefacturaid", // populate blogs
             populate: {
                 path: "articuloinsumoid", // in blogs, populate comments
-                select: { denominacion: 1, _id: 1, precioCompra: 1, precioVenta:1 }, //elijo solo los campos que quiero traer
+                select: { denominacion: 1, _id: 1, precioCompra: 1, precioVenta: 1 }, //elijo solo los campos que quiero traer
             }
         })
     if (!pedidos)
@@ -128,18 +135,18 @@ exports.Facturaxid = async (req, res) => {
 
 exports.FacturaXpedidoid = async (req, res) => {
     const id = req.params.id
-    const pedidos = await Factura.findOne({pedidoid: id}).populate({
+    const pedidos = await Factura.findOne({ pedidoid: id }).populate({
         path: "detallefacturaid", // populate blogs
         populate: {
             path: "articulomanufacturadoid", // in blogs, populate comments
-            select: { denominacion: 1, _id: 1, precioCompra: 1, precioVenta:1 }, //elijo solo los campos que quiero traer
+            select: { denominacion: 1, _id: 1, precioCompra: 1, precioVenta: 1 }, //elijo solo los campos que quiero traer
         }
     })
         .populate({
             path: "detallefacturaid", // populate blogs
             populate: {
                 path: "articuloinsumoid", // in blogs, populate comments
-                select: { denominacion: 1, _id: 1, precioCompra: 1, precioVenta:1 }, //elijo solo los campos que quiero traer
+                select: { denominacion: 1, _id: 1, precioCompra: 1, precioVenta: 1 }, //elijo solo los campos que quiero traer
             }
         })
     if (!pedidos)

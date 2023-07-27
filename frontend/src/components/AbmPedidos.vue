@@ -74,7 +74,7 @@
                     <form-factura style="justify-content: center" :pedidoParam="{
                       pedidoid: pedido._id,
                       facturaid: pedido.facturaid,
-                    }"></form-factura>
+                    }" @nuevaFactura="handleNuevaFactura"></form-factura>
                   </div>
                   <v-row style="justify-content: center" v-else-if="pedido.estado === 'cancelado'">
                     <!-- <v-btn style="margin-right: 2px" small color="warning" @click="cambiarEstado(pedido, 'pendiente')">Deshacer Cancelar</v-btn> -->
@@ -165,6 +165,9 @@ export default {
     handleSelectChange() {
       this.select == "todos" ? this.getPedidos() : this.getPedidosxestado()
     },
+    handleNuevaFactura(value){
+      value? this.getPedidos() :''
+    },
     async getPedidos() {
       const res = await fetch("http://localhost:3000/pedidos", {
         headers: {
@@ -200,7 +203,6 @@ export default {
       const resJson = await res.json();
       // console.log("resJson", resJson);
       this.pedidosData = resJson;
-
       //setTimeout(() => this.getPedidos(), 10000) //milisegundos, va repitiendo la llamada cada 10 seg
     },
     async verificarUsuario(currentUser) {

@@ -32,7 +32,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(empleado, index) in empleados" style="padding-top: 5px">
+          <tr v-for="(empleado, index) in empleados" :key="index" style="padding-top: 5px">
             <td>
               {{ empleado.nombre }}
             </td>
@@ -58,7 +58,7 @@
               ></Form-Empleado>
             </td>
             <td>
-              <v-btn icon small @click="deleteempleado(empleado.id)">
+              <v-btn icon small @click="bajaEmpleado(empleado._id)">
                 <v-icon small> mdi-delete </v-icon>
               </v-btn>
             </td>
@@ -84,19 +84,21 @@ export default {
   },
   beforeMount() {
     this.currentUser = AuthService.getCurrentUser();
+    console.log(this.empleados)
   },
   props: ["empleados"],
   methods: {
-    async bajaempleado(idempleado) {
+    async bajaEmpleado(idempleado) {
       let urlServer = `http://localhost:3000/bajaEmpleado/${idempleado}/`;
       await fetch(urlServer, {
-        method: "DELETE",
+        method: "POST",
         headers: {
           "Content-type": "application/json",
           "x-access-token": this.currentUser.accessToken,
         },
         mode: "cors",
       });
+       this.actualizadoEmpleado = true;
     },
     async handleMessage(value) {
       this.actualizadoEmpleado = value;

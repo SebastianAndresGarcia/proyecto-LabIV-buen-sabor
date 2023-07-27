@@ -39,7 +39,7 @@
               </v-col>
               <v-col class="d-flex" cols="12" sm="6">
                 <v-select :items="items" label="Rol" item-value="_id" item-text="name"
-                  v-model="empleado.roles._id"></v-select>
+                  v-model="empleado.roles[0]._id"></v-select>
               </v-col>
               <v-col cols="12">
                 <v-text-field label="email*" type="mail" v-model="empleado.email" required>
@@ -118,21 +118,18 @@ export default {
         fechaNacimiento: null,
         telefono: null,
         borrado: false,
-        roles: { name: "" },
+        roles: [{ name: "" }],
       },
     };
   },
   props: ["datoEmpleado"],
   beforeMount() {
-    this.empleado.roles = "";
+    this.empleado.roles = [{ name: "" }];
     this.currentUser = AuthService.getCurrentUser();
-  },
-  mounted() {
     this.getRoles();
     if (this.datoEmpleado) this.empleado = this.datoEmpleado;
-    //console.log("this.empleado",this.datoEmpleado)
-    this.empleado.roles = this.datoEmpleado.roles[0]; //esta línea me hace un error que se ve por consolaWeb, pero no jode el funcionamiento
   },
+
   methods: {
     cerrardialog() {
       this.dialog = false;
@@ -148,7 +145,7 @@ export default {
         fechaNacimiento: null,
         telefono: null,
         borrado: false,
-        roles: { name: "" },
+        roles: [{ name: "" }],
       });
     },
     async crearEmpleado() {

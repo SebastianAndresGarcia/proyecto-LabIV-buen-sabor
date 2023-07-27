@@ -1,6 +1,5 @@
 <template>
   <v-card
-    
     style="margin-top: 15px"
   >
     <v-card-title>
@@ -63,7 +62,7 @@ export default {
         window.location.href = "/Home";
       }
       const resJson = await res.json();
-      console.log("abmempleadosGet ", resJson);
+      // console.log("abmempleadosGet ", resJson);
       this.empleadosData = resJson;
     },
     async handleMessage(value) {

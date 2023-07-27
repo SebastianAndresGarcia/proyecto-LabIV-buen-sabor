@@ -42,7 +42,7 @@ https://www.npmjs.com/package/jspdf
                                 {{ compra.numero }}
                             </td>
                             <td>
-                                {{ compra.mercadopagodatosid.estado }}
+                              {{ compra.mercadopagodatosid.estado }}
                             </td>
                             <td>
                                 {{ compra.total }}
@@ -132,6 +132,7 @@ export default {
                 window.location.href = "/Home"
             }
             this.miscompras = resJson
+            console.log(this.miscompras)
         },
         async getParamsUrl(url) {
             console.log(url);

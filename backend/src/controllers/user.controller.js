@@ -18,6 +18,12 @@ exports.updateUser = async (req, res) =>{
   return res.json(updatedUser)
 } 
 
+exports.bajaEmpleado = async (req, res) =>{
+  
+  const updatedUser = await User.findByIdAndUpdate({ _id: req.params.id }, {borrado: true})
+  return res.json(updatedUser)
+} 
+
 exports.userBoard = (req, res) => {
   res.status(200).send("User Content.");
 }
