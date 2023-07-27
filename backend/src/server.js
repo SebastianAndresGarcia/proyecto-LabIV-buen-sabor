@@ -49,10 +49,10 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
-
+ 
 function initial() {
   Role.estimatedDocumentCount((err, count) => {
-    if (!err && count === 0) {
+    if (!err&&count==0) {
       new Role({ 
         name: "user"
       }).save(err => {
@@ -69,6 +69,15 @@ function initial() {
           console.log("error", err);
         }
         console.log("added 'employee' to roles collection");
+      });
+
+      new Role({
+        name: "chef"
+      }).save(err => {
+        if (err) {
+          console.log("error", err);
+        }
+        console.log("added 'chef' to roles collection");
       });
 
       new Role({

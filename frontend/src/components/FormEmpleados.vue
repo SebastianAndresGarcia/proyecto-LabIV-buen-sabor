@@ -188,6 +188,7 @@ export default {
           body: JSON.stringify(this.empleado),
           headers: {
             "Content-type": "application/json",
+            "x-access-token": this.currentUser.accessToken,
           },
           mode: "cors",
         });

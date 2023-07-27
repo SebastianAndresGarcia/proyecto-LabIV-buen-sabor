@@ -1,6 +1,6 @@
 <template>
   <div class="app fill-height">
-    <v-container v-if="currentUser.roles.includes('ROLE_ADMIN')" fluid>
+    <v-container v-if="currentUser.roles.includes('ROLE_ADMIN')||currentUser.roles.includes('ROLE_CHEF')" fluid>
       <v-app-bar app color="black" dark>
         <v-app-bar-nav-icon @click="drawer = true">
           <v-icon> mdi-account</v-icon>
@@ -11,7 +11,7 @@
         <v-menu v-if="currentUser" left bottom>
           <v-divider vertical></v-divider>
           <template v-slot:activator="{ on, attrs }">
-            <a style="text-decoration: underline; color: aliceblue" text @click="cerrarSesion()">
+            <a v-bind="attrs" v-on="on" style="text-decoration: underline; color: aliceblue" text @click="cerrarSesion()">
               <h4>Cerrar Sesión</h4>
             </a>
           </template>
@@ -128,7 +128,8 @@ export default {
   methods: {
     async verificarUsuario(currentUser) {
       if (currentUser) {
-        if (!currentUser.roles.includes("ROLE_ADMIN")) {
+        currentUser.roles.includes("ROLE_CHEF")?this.items=["Cocina","Comidas"]:''
+        if (!currentUser.roles.includes("ROLE_ADMIN")&&!currentUser.roles.includes('ROLE_CHEF')) {
           window.location.href = "/Home";
         }
       }

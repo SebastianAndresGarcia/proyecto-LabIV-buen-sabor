@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="currentUser.roles.includes('ROLE_ADMIN')">
+  <v-container v-if="currentUser.roles.includes('ROLE_ADMIN')||currentUser.roles.includes('ROLE_CHEF')">
     <v-card style="margin-top: 10px; justify: center">
       <v-row style="justify-content: center; margin-bottom: 10px"
         ><v-card-title>
@@ -119,7 +119,7 @@ export default {
     },
     async verificarUsuario(currentUser) {
       if (currentUser) {
-        if (!currentUser.roles.includes("ROLE_ADMIN")) {
+        if (!currentUser.roles.includes("ROLE_ADMIN")&&!currentUser.roles.includes('ROLE_CHEF')) {
           window.location.href = "/Home";
         }
       } else {

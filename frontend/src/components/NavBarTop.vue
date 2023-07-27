@@ -36,7 +36,7 @@ https://materialdesignicons.com/  ÍCONOS
       <v-menu v-if="currentUser" left bottom>
         <v-divider vertical></v-divider>
         <template v-slot:activator="{ on, attrs }">
-          <a
+          <a v-bind="attrs" v-on="on"
             style="text-decoration: underline; color: aliceblue"
             text
             @click="cerrarSesion()"
@@ -200,7 +200,7 @@ export default {
     this.user = AuthService.getCurrentUser();
     if (this.user) {
       this.currentUser = this.user;
-      if (this.user.roles.includes("ROLE_ADMIN")) {
+      if (this.user.roles.includes("ROLE_ADMIN")||this.currentUser.roles.includes('ROLE_CHEF')) {
         this.showAdminBoard = true;
       }
     }
