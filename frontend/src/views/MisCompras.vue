@@ -2,8 +2,8 @@
 https://www.npmjs.com/package/jspdf 
 -->
 <template>
-    <v-container>
-        <v-card style="margin-top: 10px; justify:center">
+    <v-container style="height:100%">
+        <v-card style="margin-top: 10px; justify:center" v-if="!showPDF">
             <v-card-title>Mis Compras</v-card-title>
             <v-simple-table class="tabla" v-if="miscompras.length > 0">
                 <template v-slot:default>
@@ -42,7 +42,9 @@ https://www.npmjs.com/package/jspdf
                                 {{ compra.numero }}
                             </td>
                             <td>
-                              {{ compra.mercadopagodatosid.estado }}
+                                <span v-if="compra.mercadopagodatosid != undefined">{{ compra.mercadopagodatosid.estado
+                                }}</span>
+                                <span v-else>no registrado, comuníquese con el comercio</span>
                             </td>
                             <td>
                                 {{ compra.total }}
@@ -58,7 +60,7 @@ https://www.npmjs.com/package/jspdf
                                 <div align="center">
                                     <div v-if="compra.estado == 'facturado'">
                                         <v-btn color="success" @click="facturaPDF(compra)">
-                                            DESCARGAR
+                                            VER FACTURA
                                         </v-btn>
                                     </div>
                                     <div v-else-if="compra.estado == 'cancelado'">
@@ -69,7 +71,7 @@ https://www.npmjs.com/package/jspdf
                                     </div>
                                 </div>
                             </td>
-                           
+
                         </tr>
                     </tbody>
                 </template>
@@ -79,6 +81,10 @@ https://www.npmjs.com/package/jspdf
                         pedido</v-card-title></v-row>
             </div>
         </v-card>
+        <div align="center" v-show="showPDF" color="red" style="height:90%"><v-btn outlined  elevation="2" color="red" icon
+                @click="showPDF = false"><v-icon>mdi-close</v-icon></v-btn>
+            <embed id="pdfEmbed" width="100%" height="100%" type="application/pdf" />
+        </div>
     </v-container>
 </template>
 <script>
@@ -92,6 +98,7 @@ import { horaFormateada } from "@/funciones/horaFormateada.js"
 export default {
     data() {
         return {
+            showPDF: false,
             miscompras: [],
             respuestaMercaPago: {
                 external_reference: "",
@@ -104,7 +111,7 @@ export default {
         "detalle-pedido": detallePedido
     },
     mounted() {
-        
+
     },
     beforeMount() {
         this.currentUser = AuthService.getCurrentUser()
@@ -127,6 +134,7 @@ export default {
             );
             const resJson = await res.json();
             if (res.status == 401) { //quiere decir que expiró el token o no está logueado
+                alert('sesion expirada, vuelva a iniciar sesión')
                 borrarCarrito() // ver cómo borrar el carrito antes que expire el token
                 AuthService.logout()
                 window.location.href = "/Home"
@@ -221,6 +229,7 @@ export default {
             this.comprasUsuario((JSON.parse(localStorage.getItem('user'))).id)
         },
         async facturaPDF(compra) {
+
             var doc = new jsPDF('p', 'pt', 'letter')
             // generate the above data table
             var body = []
@@ -266,8 +275,12 @@ export default {
                     4: { halign: 'right', cellWidth: '50', }
                 },
             })
-            // save the data to this file
-            doc.save('auto_table_header_footer');
+            // para crear el pdf
+            //doc.save('auto_table_header_footer');
+            const pdfDataUri = doc.output('datauristring');
+            const pdfEmbedElement = document.getElementById('pdfEmbed');
+            pdfEmbedElement.setAttribute('src', pdfDataUri);
+            this.showPDF = true;
         }
     }
 }    

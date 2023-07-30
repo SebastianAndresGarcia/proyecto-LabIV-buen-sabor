@@ -190,6 +190,7 @@ export default {
       );
       if (res.status == 401) {
         //quiere decir que expiró el token o no está logueado
+        alert('sesion expirada, vuelva a iniciar sesión')
         AuthService.logout();
         window.location.href = "/Home";
       }

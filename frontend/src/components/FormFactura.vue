@@ -198,9 +198,9 @@ export default {
                 // console.log("datos para crear factura", resJson);
                 this.factura = {
                     fecha: new Date(),
-                    montoDescuento: null,
+                    montoDescuento: 0,
                     formaPago: resJson.mercadopagodatosid.formaPago,
-                    //nroTarjeta: no la tengo,
+                    nroTarjeta: resJson.mercadopagodatosid.formaPago,
                     totalVenta: resJson.total,
                     totalCosto: resJson.totalCosto,
                     detallefacturaid: resJson.detallepedidoid,

@@ -16,9 +16,9 @@
                     <v-row v-for="(item, i) in items" :key="i" style="align-content: center; justify-content: center; ">
                         <v-col cols="2" style="justify-content: center">
                             <v-row style="justify-content: center"><v-avatar style="justify-content: center" size="80" tile>
-                                    <v-img v-if="String(item.imagen).indexOf('http') >= 0"
+                                    <v-img v-if="item.imagen"
                                         :src="item.imagen"></v-img>
-                                    <v-img v-else :src="`../images/` + item.imagen"></v-img>
+                                    <v-img v-else src="/images/logotipo.jpg"></v-img>
                                 </v-avatar></v-row>
                         </v-col>
                         <v-col cols="4" style="justify-content: center">

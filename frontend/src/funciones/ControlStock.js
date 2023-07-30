@@ -58,6 +58,9 @@ async function calcularInsumos(detalle, j) {
             }
             if (respuesta.status == 401) {
                 alert('Sesión expirada')
+                localStorage.removeItem("user");
+                localStorage.clear()
+                window.location.href = '/Home'
             }
             const resJson = await respuesta.json()
             console.log("resJson calcularInsumos", resJson)

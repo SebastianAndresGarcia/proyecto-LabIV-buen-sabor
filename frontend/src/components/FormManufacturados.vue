@@ -38,13 +38,18 @@
                                 </v-text-field>
                             </v-col>
                             <v-col cols="12">
-                                <v-text-field label="Imagen*" v-model="ArticuloManufacturado.imagen" required>
-                                </v-text-field>
+                                <v-row> <v-text-field class="ml-4 " label="seleccione imagen local o pegue una url web"
+                                        v-model="ArticuloManufacturado.imagen" required>
+                                    </v-text-field>
+                                    <v-btn class="mr-4 mt-2" color="primary"
+                                        @click="openFilePicker">Adjuntar</v-btn></v-row>
                             </v-col>
-                            <!-- <v-col cols="12">
-                                <v-text-field label="Activo?*" v-model="ArticuloManufacturado.activo" required>
-                                </v-text-field>
-                            </v-col> -->
+                            <v-col cols="12" >
+                                <v-textarea label="Descripcion" outlined no-resize rows="2"
+                                   v-model="ArticuloManufacturado.descripcion"></v-textarea>
+                            </v-col>
+                            <input type="file" ref="fileInput" style="display: none" @change="handleFileChange">
+
                             <v-col cols="12">
                                 <v-select label="¿Está Activo?" outlined item-text="state" item-value="value"
                                     v-model="ArticuloManufacturado.activo" :items="items">
@@ -155,6 +160,7 @@ export default {
             ArticuloManufacturado: {
                 tiempoEstimadoCocina: null,
                 denominacion: "",
+                descripcion: '',
                 precioVenta: null,
                 imagen: "",
                 activo: null,
@@ -163,28 +169,36 @@ export default {
             },
             DetalleArticuloManufacturado: [],
             enabled: false,
-            currentUser: undefined
+            currentUser: undefined,
+            imagenRutaLocal: null
         };
     },
     props: { idrubrogral: Array, idmanufacturado: String },
     //props: ["manufacturadoid"],
     beforeUpdate() {
-        //console.log("datos select ", this.insumoSeleccionado)
-        //this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
-        // console.log("idrubrogral beforeUpdate ", this.idrubrogral)
-        // console.log("idmanufacturado beforeUpdate", this.idmanufacturado)
+ 
     },
     mounted() {
         this.currentUser = AuthService.getCurrentUser()
-        // console.log("idrubrogral props ", this.idrubrogral)
-        // console.log("idmanufacturado props " + this.idmanufacturado)
+ 
         this.getInsumos(),
             this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
-        //console.log(this.idrubrogral)
+        
         this.getRubrosGeneral()
         //this.getManufacturadoXdenominacion(this.idrubrogral[1]) 
     },
     methods: {
+        openFilePicker() {
+            this.$refs.fileInput.click();
+        },
+        handleFileChange(event) {
+            const fileInput = this.$refs.fileInput;
+            if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                const filename = fileInput.files[0].name;
+                this.ArticuloManufacturado.imagen = "/images/" + filename;
+                // console.log(this.imagenRutaLocal)
+            }
+        },
         crearSelectInsumo() {
             this.DetalleArticuloManufacturado.push({ 'unidadMedida': "", 'articuloInsumoid': "", 'cantidad': null })
             this.cantidadInsumos = this.cantidadInsumos + 1;
@@ -229,6 +243,7 @@ export default {
             this.ArticuloManufacturado = new Object({
                 'tiempoEstimadoCocina': null,
                 'denominacion': "",
+                'descripcion': '',
                 'precioVenta': null,
                 'imagen': "",
                 'activo': null, 'rubrogeneralid': this.idrubrogral,
@@ -291,6 +306,7 @@ export default {
             this.ArticuloManufacturado = new Object({
                 'tiempoEstimadoCocina': null,
                 'denominacion': "",
+                'descripcion': "",
                 'precioVenta': null,
                 'imagen': "",
                 'activo': null,
@@ -345,6 +361,7 @@ export default {
 
                 'tiempoEstimadoCocina': resJson.tiempoEstimadoCocina,
                 'denominacion': resJson.denominacion,
+                'descripcion': resJson.descripcion,
                 'precioVenta': resJson.precioVenta,
                 'imagen': resJson.imagen,
                 'activo': resJson.activo,

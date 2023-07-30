@@ -120,7 +120,7 @@ exports.getPedidosxid = async (req, res) => {
             path: "detallepedidoid", // populate blogs
             populate: {
                 path: "articuloinsumoid", // in blogs, populate comments
-                select: { denominacion: 1, _id: 1 }, //elijo solo los campos que quiero traer
+                select: { denominacion: 1, _id: 1, imagen:1 }, //elijo solo los campos que quiero traer
             }
         })
         .populate({

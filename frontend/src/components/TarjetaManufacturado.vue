@@ -1,13 +1,13 @@
 <template>
-
     <v-card class="justify-center" max-width="350" :disabled="!conStock && cantidad == 0" elevation="5">
         <template slot="progress">
             <v-progress-linear color="deep-purple" height="10" indeterminate></v-progress-linear>
         </template>
 
-        <div v-if="manufacturadoParam.imagen" style="text-decoration:none; cursor:pointer" @click="abrirDetalleManufacturado(manufacturadoParam)">
-            <span v-if="manufacturadoParam.imagen.indexOf('http') >= 0">
-                <v-img height="250" :src="this.manufacturadoParam.imagen">
+        <div style="text-decoration:none; cursor:pointer"
+            @click="manufacturadoParam.tiempoEstimadoCocina ? abrirDetalleManufacturado(manufacturadoParam) : null">
+            <span v-if="manufacturadoParam.imagen">
+                <v-img height="250" :src="manufacturadoParam.imagen" contain>
                     <v-row v-if="manufacturadoParam.descuento > 0">
                         <div class="circle " style="font: bold; color: red;">
                             <h4><b>-{{ manufacturadoParam.descuento }} % OFF</b></h4>
@@ -15,7 +15,7 @@
                     </v-row></v-img>
             </span>
             <span v-else>
-                <v-img height="250" :src="'/images/' + manufacturadoParam.imagen" alt="Image">
+                <v-img height="250" :src="fallbackImage">
                     <v-row justify="center" v-if="manufacturadoParam.descuento > 0">
                         <div class="text-h3" style="font-weight: bold">
                             <h3>-{{ manufacturadoParam.descuento }} %</h3>
@@ -23,7 +23,7 @@
                     </v-row></v-img>
             </span>
         </div>
-        <detalle-manufacturado :manufacturado="art" @limpiarObjeto="handlefunction"></detalle-manufacturado>
+        <detalle-manufacturado style="max-height: max-content;" :manufacturado="art" @limpiarObjeto="handlefunction"></detalle-manufacturado>
         <v-card-title>{{ manufacturadoParam.denominacion }}</v-card-title>
 
         <v-card-text>
@@ -33,11 +33,12 @@
                     4.5 (413)
                 </div>
             </v-row>
-            <div v-if="manufacturadoParam.descuento>0" class="my-4 text-subtitle-1">
-                <del>${{ manufacturadoParam.precioVenta }}</del>&nbsp&nbsp$<b>{{ manufacturadoParam.precioVenta-(manufacturadoParam.precioVenta*manufacturadoParam.descuento)/100 }}</b>
+            <div v-if="manufacturadoParam.descuento > 0" class="my-4 text-subtitle-1">
+                <del>${{ manufacturadoParam.precioVenta }}</del>&nbsp&nbsp$<b>{{
+                    manufacturadoParam.precioVenta - (manufacturadoParam.precioVenta * manufacturadoParam.descuento) / 100 }}</b>
             </div>
             <div v-else class="my-4 text-subtitle-1">${{ manufacturadoParam.precioVenta }}</div>
-            <div>Alguna descripción</div>
+            <div>{{manufacturadoParam.descripcion}}</div>
         </v-card-text>
 
         <v-divider class="mx-4"></v-divider>
@@ -80,7 +81,6 @@
             </v-col>
         </v-card-actions>
     </v-card>
-
 </template>
 <script>
 import detallemanufacturado from "@/components/DetalleManufacturado.vue"
@@ -91,6 +91,7 @@ export default {
 
     data() {
         return {
+            fallbackImage: '/images/logotipo.jpg',
             art: null,
             reserve: false,
             cantidad: 0,
@@ -154,7 +155,7 @@ export default {
             }
             this.getLocalStorage(this.manufacturadoParam._id) //está línea actualiza la vista gral del componente padre cuando se elimina desde el carrito
             this.cambioCarrito = true
-            
+
         },
         async getLocalStorage(id) {
             if (localStorage.getItem(id)) {

@@ -3,12 +3,14 @@
         <v-dialog v-model="alert" max-width="400px"><v-alert color="red" prominent type="warning">Inicie sesión para
                 cargar su
                 carrito<v-btn text @click="alert = false">X</v-btn></v-alert></v-dialog>
-        <div style="margin:20px; display:inline-flex;" v-for="(manufacturado, index) in manufacturadosData" :key="index">
+        <div style="margin:20px; display:inline-table;" v-for="(manufacturado, index) in manufacturadosData" :key="index">
+            <!-- <div v-if="manufacturado.esInsumo!=null">BEBIDAS</div> -->
             <manufacturado-item :manufacturadoParam="manufacturado" @abrirAlert="handleMessage"></manufacturado-item>
+            
         </div>
     </div>
 </template>
-<script >
+<script>
 import tarjetamanufacturado from "@/components/TarjetaManufacturado.vue";
 import AuthService from "@/service/auth.service.js"
 export default {
@@ -28,6 +30,7 @@ export default {
             alert: false
         };
     },
+
     methods: {
         async getmanufacturados(id) {
             if (id == 0) {

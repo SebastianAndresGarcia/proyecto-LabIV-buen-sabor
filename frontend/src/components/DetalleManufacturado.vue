@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialog" persistent max-width="700px">
+    <v-dialog v-model="dialog" persistent fullscreen hide-overlay transition="dialog-bottom-transition">
 
         <template v-slot:activator="{ on, attrs }"></template>
         <v-card v-if="manufacturado">
@@ -7,7 +7,7 @@
             <template slot="progress">
                 <v-progress-linear color="deep-purple" height="10" indeterminate></v-progress-linear>
             </template>
-            <v-img height="250" :src="manufacturado.imagen">
+            <v-img max-height="400" :src="manufacturado.imagen">
                 <v-row style="justify-content: left" v-if="manufacturado.descuento > 0">
                     <div class="circle " style="font: bold; color: red;">
                         <h4><b>-{{ manufacturado.descuento }} % OFF</b></h4>
@@ -29,23 +29,21 @@
                     }}</b>
                 </div>
                 <div v-else class="my-4 text-subtitle-1">${{ manufacturado.precioVenta }}</div>
-                <div>Alguna descripción</div>
+                <div><b>{{ manufacturado.descripcion }}</b></div>
             </v-card-text>
 
             <v-divider class="mx-4"></v-divider>
 
             <v-card-actions>
                 <v-col>
-                    <v-row style="justify-content:center">
-                        <div v-if="reserve == false" style="display: flex">
+                    <v-row style="justify-content:center;">
+                        <div v-if="reserve == false" style="display: flex; margin-right: 2px">
                             <v-btn color="success" @click="agregar(manufacturado._id)">
                                 Agregar al Carrito
                             </v-btn>
                         </div>
-                    </v-row>
 
-                    <v-row>
-                        <div v-if="reserve == true" class="buttons_buy" style="display: flex;">
+                        <div v-else class="buttons_buy" style="display: flex; margin: 1px">
                             <a class="arrow-down_touch" @click="agregarProducto(manufacturado._id, -1)"></a>
                             <input readonly class="inputpromohome" v-model="cantidad">
                             <div v-if="conStock"> <a class="arrow-up_touch"
@@ -54,13 +52,14 @@
                                 <h5><b>No hay más</b></h5>
                             </div>
                         </div>
+                        <div style="margin:1px"><v-btn color="red" outlined @click="cerrar()">
+                                CERRAR
+                            </v-btn></div>
                     </v-row>
 
-                    <v-row style="justify-content:left">
-                        <v-btn text color="black" @click="cerrar()">
-                            CERRAR
-                        </v-btn>
-                    </v-row>
+                    <!-- <v-row style="justify-content:left">
+                        
+                    </v-row> -->
                 </v-col>
             </v-card-actions>
 
@@ -145,7 +144,7 @@ export default {
                 eventBus.$emit("carrito-changed", this.cambioCarrito)
                 //this.cambioCarrito=false
             }
-            this.manufacturado!=null? await this.getLocalStorage(this.manufacturado._id):await this.getLocalStorage() //está línea actualiza la vista gral del componente padre cuando se elimina desde el carrito
+            this.manufacturado != null ? await this.getLocalStorage(this.manufacturado._id) : await this.getLocalStorage() //está línea actualiza la vista gral del componente padre cuando se elimina desde el carrito
 
         },
         async getLocalStorage(id) {

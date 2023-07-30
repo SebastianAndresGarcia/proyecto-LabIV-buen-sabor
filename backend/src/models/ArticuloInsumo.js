@@ -41,6 +41,11 @@ const ArticuloInsumo = mongoose.model(
         required: true,
         default: null
     },
+    imagen: {
+        type: String,
+        required: false,
+        default: null
+    },
     detallefacturaid: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'DetalleFactura'

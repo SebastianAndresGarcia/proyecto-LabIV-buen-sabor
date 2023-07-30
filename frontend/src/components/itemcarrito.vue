@@ -39,8 +39,8 @@
                             </div>
                             <div v-if="item.imagen">
                                 <v-avatar class="ma-3" size="70" tile>
-                                    <v-img v-if="String(item.imagen).indexOf('http') >= 0" :src="item.imagen"></v-img>
-                                    <v-img v-else :src="`../images/` + item.imagen"></v-img>
+                                    <v-img v-if="item.imagen" :src="item.imagen"></v-img>
+                                    <v-img v-else src="/images/logotipo.jpg"></v-img>
                                 </v-avatar>
                             </div>
                         </div>

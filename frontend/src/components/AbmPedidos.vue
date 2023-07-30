@@ -49,7 +49,8 @@
                   {{ pedido.numero }}
                 </td>
                 <td>
-                  {{ pedido.mercadopagodatosid.estado }}
+                  <span v-if="pedido.mercadopagodatosid!=null">{{ pedido.mercadopagodatosid.estado }}</span>
+                  <span v-else>pendiente</span>
                 </td>
                 <td>
                   {{ getFechaFormateada(pedido.horaEstimadaFin) }}
@@ -77,7 +78,7 @@
                     }" @nuevaFactura="handleNuevaFactura"></form-factura>
                   </div>
                   <v-row style="justify-content: center" v-else-if="pedido.estado === 'cancelado'">
-                    <!-- <v-btn style="margin-right: 2px" small color="warning" @click="cambiarEstado(pedido, 'pendiente')">Deshacer Cancelar</v-btn> -->
+                   
                     <b>SIN EFECTO</b>
                   </v-row>
                   <div v-else>
@@ -166,7 +167,7 @@ export default {
       this.select == "todos" ? this.getPedidos() : this.getPedidosxestado()
     },
     handleNuevaFactura(value){
-      value? this.getPedidos() :''
+      value? (this.getPedidos(),this.select='pendientes') :''
     },
     async getPedidos() {
       const res = await fetch("http://localhost:3000/pedidos", {
@@ -178,6 +179,7 @@ export default {
       });
       if (res.status == 401) {
         //quiere decir que expiró el token o no está logueado
+        alert('sesion expirada, vuelva a iniciar sesión')
         AuthService.logout();
         window.location.href = "/Home";
       }
@@ -197,6 +199,7 @@ export default {
       });
       if (res.status == 401) {
         //quiere decir que expiró el token o no está logueado
+        alert('sesion expirada, vuelva a iniciar sesión')
         AuthService.logout();
         window.location.href = "/Home";
       }

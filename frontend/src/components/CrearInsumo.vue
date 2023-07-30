@@ -90,7 +90,6 @@ export default {
         this.error = true;
         return;
       }
-
       let urlServer = "http://localhost:3000/createRubroArticuloPadre";
       let method = "POST";
 
@@ -99,7 +98,6 @@ export default {
         body: JSON.stringify(this.rubro),
         headers: {
           "Content-type": "application/json",
-
           "x-access-token": this.currentUser.accessToken,
         },
         mode: "cors",

@@ -51,6 +51,14 @@
                                     v-model="insumo.esInsumo" :items="items">
                                 </v-select>
                             </v-col>
+                            <v-col v-if="insumo.esInsumo == false" cols="12">
+                                <v-row> <v-text-field class="ml-4 " label="seleccione imagen local o pegue una url web"
+                                        v-model="insumo.imagen" required>
+                                    </v-text-field>
+                                    <v-btn class="mr-4 mt-2" color="primary"
+                                        @click="openFilePicker">Adjuntar</v-btn></v-row>
+                            </v-col>
+                            <input type="file" ref="fileInput" style="display: none" @change="handleFileChange">
                             <v-col cols="12">
                                 <v-text-field label="unidadMedida" v-model="insumo.unidadMedida" required>
                                 </v-text-field>
@@ -94,7 +102,7 @@
 </template>
 <script>
 import AuthService from "@/service/auth.service.js"
-import {eventBus} from '../main'
+import { eventBus } from '../main'
 export default {
 
     data() {
@@ -116,7 +124,7 @@ export default {
                 stockMinimo: null,
                 unidadMedida: "",
                 esInsumo: false,
-                //detallefacturaid:
+                // imagen: null,
                 //detallepedidoid:
                 //detallearticulomanufacturadoid:
                 RubroArticuloid: ""
@@ -138,14 +146,24 @@ export default {
         //console.log("idinsumo props " + this.idinsumo)
         // this.insumo.RubroArticuloid = this.idrubroarticulo
         this.insumo.RubroArticuloid = this.articuloParam.idrubroarticulo
-        this.getRubrosArticulos()    
+        this.getRubrosArticulos()
         //this.getManufacturadoXdenominacion(this.idrubrogral[1]) 
     },
-    beforeMount(){
-        this.currentUser=AuthService.getCurrentUser()
+    beforeMount() {
+        this.currentUser = AuthService.getCurrentUser()
     },
     methods: {
-
+        openFilePicker() {
+            this.$refs.fileInput.click();
+        },
+        handleFileChange(event) {
+            const fileInput = this.$refs.fileInput;
+            if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                const filename = fileInput.files[0].name;
+                this.insumo.imagen = "/images/" + filename;
+                // console.log(this.imagenRutaLocal)
+            }
+        },
         cerrardialog() {
             this.dialog = false
             this.insumo = new Object({
@@ -239,11 +257,11 @@ export default {
 
         },
         async getRubrosArticulos() {
-            let url=''
-            if(this.articuloParam.esInsumo==true){
-                url="http://localhost:3000/rubrosdeinsumos"
-            }else{
-                url="http://localhost:3000/getRubrosSubrubros"
+            let url = ''
+            if (this.articuloParam.esInsumo == true) {
+                url = "http://localhost:3000/rubrosdeinsumos"
+            } else {
+                url = "http://localhost:3000/getRubrosSubrubros"
             }
             const res = await fetch(
                 url,

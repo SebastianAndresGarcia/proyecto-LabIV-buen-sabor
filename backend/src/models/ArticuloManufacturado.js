@@ -30,6 +30,11 @@ const ArticuloManufacturado = mongoose.model(
         type: Number,
         default: 0
     },
+    descripcion: {
+        type: String,
+        required: false,
+        default: null
+    },
     detallefacturaid: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'DetalleFactura'
