@@ -52,6 +52,8 @@
 </template>
   
 <script>
+import { eventBus } from "../main";
+import AuthService from "@/service/auth.service.js"
 export default {
   data() {
     return {
@@ -64,8 +66,8 @@ export default {
       nuevoRubro: false
     }
   },
-  beforeUpdate() {
-
+  beforeMount() {
+    this.currentUser=AuthService.getCurrentUser()
   },
   methods: {
     async crearRubro() {
@@ -79,6 +81,7 @@ export default {
         body: JSON.stringify(this.rubro),
         headers: {
           "Content-type": "application/json",
+          'x-access-token': this.currentUser.accessToken
         },
         mode: "cors",
 
@@ -100,6 +103,7 @@ export default {
   watch: {
     nuevoRubro: function () {
       this.$emit('nuevoRubro', this.nuevoRubro)
+      eventBus.$emit('nuevoRubro', true) //tuve que usar eventBus porque había que emitir también a la tabla de manufacturados
     }
   }
 };

@@ -82,9 +82,9 @@ export default {
             factura: {
                 fecha: new Date(),
                 número: null,
-                montoDescuento: null,
+                montoDescuento: 0,
                 formaPago: "",
-                nroTarjeta: "",
+                nroTarjeta: "0",
                 totalVenta: null,
                 totalCosto: null,
                 detallefacturaid: [],
@@ -181,7 +181,7 @@ export default {
                     }
                 );
                 const resJson = await res.json();
-                // console.log("datosFactura", resJson);
+                //console.log("datosFactura", resJson);
                 this.factura = resJson
             }
             else {

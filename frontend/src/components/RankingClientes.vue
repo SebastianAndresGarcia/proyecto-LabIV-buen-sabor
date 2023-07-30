@@ -124,10 +124,10 @@
                   {{ i + 1 }}
                 </td>
                 <td>
-                  {{ item.nombreusuario }}
+                  {{ item.nombreusuario }} 
                 </td>
                 <td>
-                  {{ item.usermail }}
+                  {{ item.usermail }} 
                 </td>
                 <td>
                   {{ item.cantidadpedidos }}

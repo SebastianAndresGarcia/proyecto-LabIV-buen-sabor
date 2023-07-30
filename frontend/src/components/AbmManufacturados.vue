@@ -29,6 +29,7 @@
 import articuloManufacturado from "@/components/ArticuloManufacturado.vue";
 import CrearRubro from "@/components/CrearRubro.vue";
 import AuthService from "@/service/auth.service.js"
+
 export default {
     name: "abm-manufacturados",
     components: {
@@ -73,6 +74,7 @@ export default {
             if (this.nuevoArt) {
                 this.getRubrosGeneral()
                 this.nuevoArt = false
+                
             }
         },
 

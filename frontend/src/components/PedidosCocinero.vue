@@ -115,7 +115,7 @@ export default {
       const resJson = await res.json();
       //console.log(resJson);
       this.pedidosData = resJson;
-      setTimeout(() => this.getPedidos(), 10000) //milisegundos
+      // setTimeout(() => this.getPedidos(), 10000) //milisegundos
     },
     async verificarUsuario(currentUser) {
       if (currentUser) {

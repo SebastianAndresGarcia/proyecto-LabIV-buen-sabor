@@ -41,9 +41,14 @@
                                 <v-text-field label="Imagen*" v-model="ArticuloManufacturado.imagen" required>
                                 </v-text-field>
                             </v-col>
-                            <v-col cols="12">
+                            <!-- <v-col cols="12">
                                 <v-text-field label="Activo?*" v-model="ArticuloManufacturado.activo" required>
                                 </v-text-field>
+                            </v-col> -->
+                            <v-col cols="12">
+                                <v-select label="¿Está Activo?" outlined item-text="state" item-value="value"
+                                    v-model="ArticuloManufacturado.activo" :items="items">
+                                </v-select>
                             </v-col>
                             <v-col>
                                 <v-container>
@@ -129,13 +134,16 @@
     </v-row>
 </template>
 <script>
-
+import AuthService from "@/service/auth.service.js"
+import { eventBus } from '@/main';
 export default {
     name: "register-item",
-
     data() {
-      
         return {
+            items: [
+                { state: 'NO', value: false },
+                { state: 'SI', value: true },
+            ],
             rubros: [],
             dialog: false,
             cantidadInsumos: null,
@@ -155,7 +163,7 @@ export default {
             },
             DetalleArticuloManufacturado: [],
             enabled: false,
-
+            currentUser: undefined
         };
     },
     props: { idrubrogral: Array, idmanufacturado: String },
@@ -163,12 +171,13 @@ export default {
     beforeUpdate() {
         //console.log("datos select ", this.insumoSeleccionado)
         //this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
-        console.log("idrubrogral beforeUpdate ", this.idrubrogral)
-        console.log("idmanufacturado beforeUpdate", this.idmanufacturado)
+        // console.log("idrubrogral beforeUpdate ", this.idrubrogral)
+        // console.log("idmanufacturado beforeUpdate", this.idmanufacturado)
     },
     mounted() {
-        console.log("idrubrogral props ", this.idrubrogral)
-        console.log("idmanufacturado props " + this.idmanufacturado)
+        this.currentUser = AuthService.getCurrentUser()
+        // console.log("idrubrogral props ", this.idrubrogral)
+        // console.log("idmanufacturado props " + this.idmanufacturado)
         this.getInsumos(),
             this.ArticuloManufacturado.rubrogeneralid = this.idrubrogral
         //console.log(this.idrubrogral)
@@ -192,7 +201,8 @@ export default {
                     "method": 'DELETE',
                     "headers": {
                         "Content-type": 'application/json',
-                        'Access-Control-Allow-Origin': '*'
+                        'Access-Control-Allow-Origin': '*',
+                        'x-access-token': this.currentUser.accessToken
                     },
                     mode: 'cors'
                 });
@@ -238,6 +248,7 @@ export default {
                     body: JSON.stringify({ 'ArticuloManufacturado': this.ArticuloManufacturado, 'DetalleArticuloManufacturado': this.DetalleArticuloManufacturado }),
                     headers: {
                         "Content-type": "application/json",
+                        'x-access-token': this.currentUser.accessToken
                     },
                     mode: "cors",
                 });
@@ -259,6 +270,7 @@ export default {
                     body: JSON.stringify({ 'ArticuloManufacturado': this.ArticuloManufacturado, 'DetalleArticuloManufacturado': this.DetalleArticuloManufacturado }),
                     headers: {
                         "Content-type": "application/json",
+                        'x-access-token': this.currentUser.accessToken
                     },
                     mode: "cors",
                 });
@@ -360,6 +372,13 @@ export default {
                 this.ArticuloManufacturado.descuento = 0
             }
         }
+    },
+    created() {
+        eventBus.$on("nuevoRubro", async (data) => {
+            if (data == true) {
+                this.getRubrosGeneral();
+            }
+        });
     },
     watch: {
         nuevoManufacturado: function () {

@@ -47,7 +47,7 @@
                             </v-col>
 
                             <v-col cols="12">
-                                <v-select label="¿Es Insumo?" outlined item-text="state" item-value="value"
+                                <v-select label="¿Es Ingrediente?" outlined item-text="state" item-value="value"
                                     v-model="insumo.esInsumo" :items="items">
                                 </v-select>
                             </v-col>
@@ -94,6 +94,7 @@
 </template>
 <script>
 import AuthService from "@/service/auth.service.js"
+import {eventBus} from '../main'
 export default {
 
     data() {
@@ -101,8 +102,8 @@ export default {
             dialog: false,
             modal: false,
             items: [
-                { state: 'false', value: false },
-                { state: 'true', value: true },
+                { state: 'NO', value: false },
+                { state: 'SI', value: true },
             ],
             nuevoInsumo: false,
             rubros: [],
@@ -260,6 +261,13 @@ export default {
 
 
         },
+    },
+    created() {
+        eventBus.$on("nuevoRubroInsumo", async (data) => {
+            if (data) {
+                this.getRubrosArticulos();
+            }
+        });
     },
     watch: {
         nuevoInsumo: function () {

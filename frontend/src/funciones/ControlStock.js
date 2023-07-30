@@ -1,4 +1,4 @@
-import { AuthService } from '../service/auth.service'
+import  AuthService  from '../service/auth.service'
 import { borrarCarrito } from './BorrarCarrito'
 //control stock
 function controlStock(insumos) { //no le puedo poner async porque me quedaba la promesa pendiente en donde yo invocaba la fcion
@@ -11,7 +11,7 @@ function controlStock(insumos) { //no le puedo poner async porque me quedaba la 
                 return false
                 break
             }
-        }
+        } 
     } else {
         if (insumos.stockActual < 1)
             return false
@@ -34,6 +34,7 @@ function controlStock(insumos) { //no le puedo poner async porque me quedaba la 
 async function calcularInsumos(detalle, j) {
     console.log("detalle calcularInsumos..", detalle)
     const user = JSON.parse(localStorage.getItem('user'));
+    console.log(user)
     if (detalle.detallearticulomanufacturadoid[0]) {
         for (let i = 0; i < detalle.detallearticulomanufacturadoid.length; i++) {
             let stock = detalle.detallearticulomanufacturadoid[i].ArticuloInsumoid.stockActual - (detalle.detallearticulomanufacturadoid[i].cantidad * j)
@@ -54,6 +55,9 @@ async function calcularInsumos(detalle, j) {
             if (respuesta.status == 403) {
                 borrarCarrito()
                 AuthService.logout()
+            }
+            if (respuesta.status == 401) {
+                alert('Sesión expirada')
             }
             const resJson = await respuesta.json()
             console.log("resJson calcularInsumos", resJson)

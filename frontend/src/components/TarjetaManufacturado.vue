@@ -46,7 +46,7 @@
             <v-col v-if="conStock">
                 <v-row>
                     <div v-if="reserve == false">
-                        <v-btn color="deep-purple lighten-2" text @click="agregar(manufacturadoParam._id)">
+                        <v-btn color="success" @click="agregar(manufacturadoParam._id)">
                             Agregar al Carrito
                         </v-btn>
                     </div>
@@ -75,7 +75,7 @@
                     </div>
                 </v-row>
             </v-col>
-            <v-col v-else>
+            <v-col class="red--text" v-else>
                 <b> SIN STOCK</b>
             </v-col>
         </v-card-actions>

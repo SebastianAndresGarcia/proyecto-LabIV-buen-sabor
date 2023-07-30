@@ -65,6 +65,7 @@
   
 <script>
 import AuthService from "@/service/auth.service";
+import { eventBus } from '@/main';
 export default {
   data() {
     return {
@@ -120,6 +121,7 @@ export default {
   watch: {
     nuevoRubroInsumo: function () {
       this.$emit("nuevoRubroInsumo", this.nuevoRubroInsumo);
+      eventBus.$emit('nuevoRubroInsumo', true)
     },
   },
 };

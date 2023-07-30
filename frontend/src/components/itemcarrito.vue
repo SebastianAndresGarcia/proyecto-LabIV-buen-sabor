@@ -144,6 +144,7 @@ export default {
             this.items = []
             localStorage.removeItem(item._id)
             this.getLocalStorage()
+            console.log(item._id)
             eventBus.$emit("elimina-itemcarrito", item._id)
         },
         async agregarProducto(item, j, index) {

@@ -18,7 +18,7 @@
             <v-card-subtitle>
               <h2><p>Contacto</p></h2>
 
-              <p><v-icon>mdi-phone</v-icon> 261xxxxxxx</p>
+              <p><v-icon>mdi-phone</v-icon> 2615901167</p>
               <p><v-icon>mdi-home</v-icon>Aristides Villanueva 424 - Mendoza</p>
               <p><v-icon>mdi-mail</v-icon> sebagxeneize@mail.com</p>
             </v-card-subtitle>

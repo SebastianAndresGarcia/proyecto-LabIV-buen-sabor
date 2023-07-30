@@ -220,10 +220,11 @@ export default {
       this.rubros.push({ denominacion: "Ver todo", _id: 0 });
     },
     async cerrarSesion() {
-      borrarCarrito();
+      const carroVacio = await borrarCarrito();
+      console.log("carroVacio? ",carroVacio)
       AuthService.logout();
-      this.showAdminBoard = false;
-      this.currentUser = undefined;
+      // this.showAdminBoard = false;
+      // this.currentUser = undefined;
       window.location.href = "/Home";
     },
     openMenu() {

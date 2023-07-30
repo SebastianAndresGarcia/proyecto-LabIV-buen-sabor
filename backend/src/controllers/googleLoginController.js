@@ -8,7 +8,7 @@ exports.googleLogin = async (req, res) => {
     const { token, user, googleUser } = req.body;
     console.log("entró a googleLogin ", req.body)
     // Verifica si el usuario existe en la base de datos
-    User.findOne({ 'username': user.lw }, (err, existingUser) => {
+    User.findOne({ 'username': user.Nf }, (err, existingUser) => {
         if (err) {
             console.log(err)
             return res.status(500).send({ message: 'Error interno del servidor' });
@@ -17,10 +17,10 @@ exports.googleLogin = async (req, res) => {
         // Si el usuario no existe, crea uno nuevo
         if (!existingUser) {
             const newUser = new User({
-                nombre: user.c_,
-                apellido: user.yf,
-                email: user.lw,
-                username: user.lw,
+                username: user.Nf,
+                apellido: user.xx,
+                email: user.xx,
+                nombre: user.Nf,
                 password: bcrypt.hashSync('clavealeatoria', 8),
                 borrado: false
                  
@@ -39,7 +39,7 @@ exports.googleLogin = async (req, res) => {
                     }
                     // Crea un token de acceso para el usuario
                     //const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
-                    var expire=60
+                    var expire=900
                     const token = jwt.sign({ id: user._id }, config.secret, {
                         expiresIn: expire // 24 hours = (86400)
                     });
@@ -63,14 +63,14 @@ exports.googleLogin = async (req, res) => {
             //const token = jwt.sign({ userId: existingUser._id }, process.env.JWT_SECRET);
             var authorities = [];
             authorities.push("ROLE_USER");
-            var expire=60
+            var expire=900
             const token = jwt.sign({ id: existingUser._id }, config.secret, {
                 expiresIn: expire // 24 hours = (86400)
             });
             // Devuelve el token y la información del usuario al frontend
             return res.send({ 
                 id: existingUser._id,
-                username: existingUser.username,
+                username: existingUser.username, 
                 email: existingUser.email,
                 roles: authorities,
                 accessToken: token,

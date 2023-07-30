@@ -34,7 +34,7 @@
                         </th>
 
                         <th class="text-left">
-                            <b>Es Insumo</b>
+                            <b>Es Ingrediente</b>
                         </th>
 
                         <th class="text-left">

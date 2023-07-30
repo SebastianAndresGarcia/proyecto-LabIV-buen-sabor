@@ -145,7 +145,7 @@ export default {
                 eventBus.$emit("carrito-changed", this.cambioCarrito)
                 //this.cambioCarrito=false
             }
-            await this.getLocalStorage(this.manufacturado._id) //está línea actualiza la vista gral del componente padre cuando se elimina desde el carrito
+            this.manufacturado!=null? await this.getLocalStorage(this.manufacturado._id):await this.getLocalStorage() //está línea actualiza la vista gral del componente padre cuando se elimina desde el carrito
 
         },
         async getLocalStorage(id) {
