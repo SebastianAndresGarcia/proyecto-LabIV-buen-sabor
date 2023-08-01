@@ -99,6 +99,7 @@
     </div>
 </template>
 <script >
+import AuthService from "@/service/auth.service.js";
 import forminsumo from "@/components/FormInsumos.vue";
 export default {
     data() {
@@ -123,6 +124,7 @@ export default {
         "Form-Insumo": forminsumo
     },
     beforeUpdate() {
+        
         console.log("asdasdasdasdasdsa")
             //console.log("insumoParam", this.insumoParam)
         if(this.insumoParam.insumoSeleccionado)
@@ -130,6 +132,7 @@ export default {
     },
     props: ["insumoParam"],
     mounted() {
+        this.currentUser = AuthService.getCurrentUser();
         console.log("insumoParam", this.insumoParam)
         this.getInsumosXrubro(this.insumoParam.insumoSeleccionado)
     },
@@ -167,7 +170,8 @@ export default {
                 "method": 'DELETE',
                 "headers": {
                     "Content-type": 'application/json',
-                    'Access-Control-Allow-Origin': '*'
+                    'Access-Control-Allow-Origin': '*',
+                    "x-access-token": this.currentUser.accessToken,
                 },
                 mode: 'cors'
             });

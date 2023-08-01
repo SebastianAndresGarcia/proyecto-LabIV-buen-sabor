@@ -221,7 +221,7 @@ export default {
             console.log("respuestaRegistrarPago: ", resJson)
             if (respuesta.status === 200) {
                 console.log(respuesta.status)
-
+                window.location.href = "/MisCompras";
             } else {
                 this.respuestaError = resJson.message
                 console.log("mensaje del servidor: " + this.respuestaError)

@@ -167,7 +167,7 @@ export default {
       this.select == "todos" ? this.getPedidos() : this.getPedidosxestado()
     },
     handleNuevaFactura(value){
-      value? (this.getPedidos(),this.select='pendientes') :''
+      value? (this.getPedidosxestado(),this.select='pendientes') :''
     },
     async getPedidos() {
       const res = await fetch("http://localhost:3000/pedidos", {
@@ -206,7 +206,7 @@ export default {
       const resJson = await res.json();
       // console.log("resJson", resJson);
       this.pedidosData = resJson;
-      // setTimeout(() => this.getPedidos(), 10000) //milisegundos, va repitiendo la llamada cada 10 seg
+      setTimeout(() => this.getPedidosxestado(), 10000) //milisegundos, va repitiendo la llamada cada 10 seg
     },
     async verificarUsuario(currentUser) {
       if (currentUser) {
@@ -234,6 +234,8 @@ export default {
       console.log("respuesta: ", resJson);
       if (respuesta.status === 200) {
         // console.log(respuesta.status);
+        this.getPedidos()
+        this.select='todos'
       } else {
         this.respuestaError = resJson.message;
         console.log("mensaje del servidor: " + this.respuestaError);

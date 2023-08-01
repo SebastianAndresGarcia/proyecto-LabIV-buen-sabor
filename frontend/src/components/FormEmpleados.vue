@@ -58,8 +58,9 @@
                 </v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field label="Borrado*" v-model="empleado.borrado" required>
-                </v-text-field>
+                <v-select label="Dado de Baja?" outlined item-text="state" item-value="value"
+                  v-model="empleado.borrado" :items="opcion">
+                </v-select>
               </v-col>
               <v-col cols="12" sm="12">
                 <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="fechaNacimiento"
@@ -102,6 +103,10 @@ import AuthService from "@/service/auth.service.js";
 export default {
   data() {
     return {
+      opcion: [
+        { state: 'SI', value: true },
+        { state: 'NO', value: false },
+      ],
       items: [],
       dialog: false,
       modal: false,

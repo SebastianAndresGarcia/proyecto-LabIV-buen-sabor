@@ -59,9 +59,14 @@
                                         @click="openFilePicker">Adjuntar</v-btn></v-row>
                             </v-col>
                             <input type="file" ref="fileInput" style="display: none" @change="handleFileChange">
-                            <v-col cols="12">
+                            <!-- <v-col cols="12">
                                 <v-text-field label="unidadMedida" v-model="insumo.unidadMedida" required>
                                 </v-text-field>
+                            </v-col> -->
+                            <v-col cols="12">
+                                <v-select label="unidadMedida" outlined item-text="state" item-value="value"
+                                    v-model="insumo.unidadMedida" :items="unidades">
+                                </v-select>
                             </v-col>
                             <v-col v-if="articuloParam.idrubroarticulo">
                                 <v-select label="Seleccione un Rubro" outlined v-model="insumo.RubroArticuloid"
@@ -110,9 +115,10 @@ export default {
             dialog: false,
             modal: false,
             items: [
-                { state: 'NO', value: false },
                 { state: 'SI', value: true },
+                { state: 'NO', value: false },
             ],
+            unidades: ['kilo', 'unidad', 'litro'],
             nuevoInsumo: false,
             rubros: [],
 
@@ -123,7 +129,7 @@ export default {
                 stockActual: null,
                 stockMinimo: null,
                 unidadMedida: "",
-                esInsumo: false,
+                esInsumo: true,
                 // imagen: null,
                 //detallepedidoid:
                 //detallearticulomanufacturadoid:

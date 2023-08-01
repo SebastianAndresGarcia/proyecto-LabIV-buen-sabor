@@ -50,17 +50,18 @@ export default {
             this.art = item
         },
         async handlefunction(value) {
-            console.log("value", value)
+            console.log("value ", value)
             if (value.close) {
                 this.art = null
                 this.getPromociones()
             }
             if (value.actualizarCarrousel) {
+                try{
                 const res = await fetch(
                     `http://localhost:3000/getManufacturadoXid/${this.art._id}`
                 )
                 const resJson = await res.json();
-                this.art = resJson
+                this.art = resJson}catch(e){console.log(e)}
             }
         }
     }
